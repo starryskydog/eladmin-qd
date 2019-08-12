@@ -1,6 +1,11 @@
 /**
  * @description 系统全局配置
  */
+function getYear() {
+  var date=new Date
+  var year=date.getFullYear()
+  return year;
+}
 export default {
   /**
    * @description 记住密码状态下的token在Cookie中存储的天数，默认1天
@@ -56,7 +61,7 @@ export default {
   /**
    * 底部文字，支持html语法
    */
-  footerTxt: '© 2019 Zheng Jie <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License 2.0</a>',
+  footerTxt: '© '+getYear()+' test <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License 2.0</a>',
 
   /**
    * 备案号
