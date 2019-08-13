@@ -15,7 +15,6 @@
 <script>
 import { getDepts } from '@/api/dept'
 import { add, edit } from '@/api/measureUnit'
-import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 export default {
   props: {
@@ -40,16 +39,16 @@ export default {
       this.resetForm()
     },
     doSubmit() {
-        this.$refs['form'].validate((valid) => {
-          if (valid) {
-            this.loading = true
-            if (this.isAdd) {
-              this.doAdd()
-            } else this.doEdit()
-          } else {
-            return false
-          }
-        })
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          this.loading = true
+          if (this.isAdd) {
+            this.doAdd()
+          } else this.doEdit()
+        } else {
+          return false
+        }
+      })
     },
     doAdd() {
       add(this.form).then(res => {
