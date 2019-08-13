@@ -25,3 +25,11 @@ export function edit(data) {
     data
   })
 }
+
+// 删除单位
+export function del(id) {
+  return request({
+    url: 'api/measureUnit/' + id,
+    method: 'delete'
+  })
+}
