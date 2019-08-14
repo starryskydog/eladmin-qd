@@ -1,7 +1,7 @@
 <template>
-  <el-dialog :visible.sync="dialog" :title="isAdd ? '新增物料类别' : '编辑物料类别'" append-to-body width="500px">
+  <el-dialog :visible.sync="dialog" :title="isAdd ? '新增收入类别' : '编辑收入类别'" append-to-body width="500px">
     <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
-      <el-form-item label="名称" prop="name">
+      <el-form-item label="收入类别名称" prop="name">
         <el-input v-model="form.name" style="width: 370px;"/>
       </el-form-item>
     </el-form>
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { add, edit } from '@/api/materialCategory'
+import { add, edit } from '@/api/incomeCategory'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 export default {
   props: {
@@ -81,7 +81,7 @@ export default {
     resetForm() {
       this.dialog = false
       this.$refs['form'].resetFields()
-      this.form = { name: '' }
+      this.form = { name: ''}
     },
     changeScope() {
       if (this.form.dataScope === '自定义') {
