@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialog" :title="isAdd ? '新增收入类别' : '编辑收入类别'" append-to-body width="500px">
+  <el-dialog :visible.sync="dialog" :title="isAdd ? '新增支出类别' : '编辑支出类别'" append-to-body width="500px">
     <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" style="width: 370px;"/>
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { add, edit } from '@/api/incomeCategory'
+import { add, edit } from '@/api/spendCategory'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 export default {
   props: {

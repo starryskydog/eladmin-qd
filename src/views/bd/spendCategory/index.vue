@@ -18,7 +18,7 @@
       </div>
     </div>
     <el-row :gutter="5">
-      <!--计量单位管理-->
+      <!--支出类别管理-->
       <el-col :xs="8" :sm="8" :md="4" :lg="8" :xl="7">
         <el-card class="box-card" shadow="never">
           <el-table v-loading="loading" :data="data" border highlight-current-row size="small" style="width: 100%;" @current-change="handleCurrentChange" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
@@ -59,9 +59,9 @@
   import checkPermission from '@/utils/permission'
   import initData from '@/mixins/initData'
   import eForm from './form'
-  import { del } from '@/api/incomeCategory'
+  import { del } from '@/api/spendCategory'
   export default {
-    name:'incomeCategory',
+    name:'spendCategory',
     components: { eForm },
     mixins: [initData],
     data() {
@@ -79,7 +79,7 @@
       checkPermission,
       beforeInit() {
         this.showButton = false
-        this.url = 'api/queryIncomeCategoryPage'
+        this.url = 'api/querySpendCategoryPage'
         const query = this.query
         const value = query.value
         this.params = { page: this.page, size: this.size }
