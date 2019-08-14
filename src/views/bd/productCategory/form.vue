@@ -1,7 +1,7 @@
 <template>
-  <el-dialog :visible.sync="dialog" :title="isAdd ? '新增计量单位' : '编辑计量单位'" append-to-body width="500px">
+  <el-dialog :visible.sync="dialog" :title="isAdd ? '新增产品类别 ' : '编辑产品类别'" append-to-body width="500px">
     <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
-      <el-form-item label="计量单位名称" prop="name">
+      <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" style="width: 370px;"/>
       </el-form-item>
     </el-form>
@@ -14,7 +14,7 @@
 
 <script>
 import { getDepts } from '@/api/dept'
-import { add, edit } from '@/api/measureUnit'
+import { add, edit } from '@/api/productCategory'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 export default {
   props: {
