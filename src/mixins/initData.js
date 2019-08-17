@@ -17,7 +17,6 @@ export default {
           this.total = res.totalElements
           this.data = res.content
           setTimeout(() => {
-            console.log(this.loading)
             this.loading = false
           }, this.time)
           resolve(res)

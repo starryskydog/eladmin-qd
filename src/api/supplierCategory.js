@@ -8,6 +8,14 @@ export function querySupplierCategoryPage() {
   })
 }
 
+// 供应商类别
+export function queryAllCategoryList() {
+  return request({
+    url: 'api/queryAllCategoryList',
+    method: 'get'
+  })
+}
+
 // 添加供应商类别
 export function add(data) {
   return request({

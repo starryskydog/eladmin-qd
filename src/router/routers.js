@@ -72,6 +72,20 @@ export const constantRouterMap = [
         meta: { title: '个人中心', icon: 'user' }
       }
     ]
+  },
+  {
+    path: '/file',
+    component: Layout,
+    hidden: true,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'supplierInfo',
+        component: () => import('@/views/file/supplierInfo'),
+        name: '供应商信息',
+        meta: { title: '供应商信息', icon: 'user' }
+      }
+    ]
   }
   // { path: '*', redirect: '/404', hidden: true }
 ]
