@@ -8,6 +8,7 @@
       <!--<el-input v-model="query.value" clearable placeholder="输入名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />-->
       <!--<el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>-->
       <!-- 新增 -->
+      <span>仓库</span>
       <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
         <el-button
           class="filter-item"
@@ -61,9 +62,10 @@
   import initData from '@/mixins/initData'
   import eForm from './form'
   import { del, initWareHouseCode } from '@/api/wareHouse'
+  import ElSlPanel from 'element-ui/packages/color-picker/src/components/sv-panel'
   export default {
     name:'wareHouse',
-    components: { eForm },
+    components: { ElSlPanel, eForm },
     mixins: [initData],
     data() {
       return {
