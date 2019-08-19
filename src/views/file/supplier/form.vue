@@ -60,11 +60,28 @@
         dialog: false,
         categoryList: [],
         form: {
-          supplierContact: [],
+          supplierContact: [
+            {
+              "name": "",
+              "phone": "",
+              "mobile": "",
+              "email": "",
+              "weixin": "",
+              "qq": "",
+              "firstTag": "",
+            }
+          ],
           supplierName: '',
           initialPreMoney: null,
           supplierCode: null,
-          supplierAddress: [],
+          supplierAddress: [
+            {
+              province: '',
+              city: '',
+              area: '',
+              addressDetail: ''
+            }
+          ],
           supplierCategoryId: null,
           remark: ''
         },

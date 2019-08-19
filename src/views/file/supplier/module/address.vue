@@ -69,6 +69,7 @@
     created: function () {
       this.getCityData()
       this.addressList=this.propList
+      console.log(this.addressList)
     },
     methods: {
       // 加载china地点数据，三级
@@ -155,7 +156,7 @@
           province: '',
           city: '',
           area: '',
-          address_detail: ''
+          addressDetail: ''
         })
       },
       subDelete(i) {
