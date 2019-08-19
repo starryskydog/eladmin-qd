@@ -28,7 +28,7 @@ export function add(data) {
 // 修改供应商资料
 export function edit(data) {
   return request({
-    url: 'api/supplierInfo',
+    url: 'api/updateSupplierInfo',
     method: 'put',
     data
   })
