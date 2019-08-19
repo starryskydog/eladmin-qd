@@ -63,10 +63,12 @@
         qu1: [],
         cityList: [],
         block: [],
+        addressList:[]
       }
     },
     created: function () {
       this.getCityData()
+      this.addressList=this.propList
     },
     methods: {
       // 加载china地点数据，三级
