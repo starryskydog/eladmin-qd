@@ -19,7 +19,7 @@ export function getSupplierInfo() {
 // 添加供应商资料
 export function add(data) {
   return request({
-    url: 'api/supplier',
+    url: 'api/supplierInfo',
     method: 'post',
     data
   })
@@ -28,7 +28,7 @@ export function add(data) {
 // 修改供应商资料
 export function edit(data) {
   return request({
-    url: 'api/supplier',
+    url: 'api/supplierInfo',
     method: 'put',
     data
   })
@@ -37,7 +37,15 @@ export function edit(data) {
 // 删除供应商资料
 export function del(id) {
   return request({
-    url: 'api/supplier/' + id,
+    url: 'api/supplierInfo/' + id,
     method: 'delete'
+  })
+}
+
+// 查询供应商资料
+export function getSupplierInfoById(id) {
+  return request({
+    url: 'api/supplierInfo/' + id,
+    method: 'get'
   })
 }
