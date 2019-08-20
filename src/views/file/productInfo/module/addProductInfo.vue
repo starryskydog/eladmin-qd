@@ -25,7 +25,7 @@
 
     <el-row :gutter="5">
       <el-col >
-        <el-form ref="form" :inline="true" :model="form" size="large" label-width="100px">
+        <el-form ref="form" :inline="true" :model="form" size="large" label-position="left" label-width="100px">
           <el-form-item label="产品类别" prop="productCategoryId">
             <el-select v-model="form.productCategoryId" style="width: 150px;" placeholder="请选择" size="small">
               <el-option
@@ -80,8 +80,16 @@ export default {
         name: '',
         specifications: '',
         unitPrice: null,
-        productCategoryId : null,
+        productCategoryId: null,
         measureUnitId: null
+      },
+      rules: {
+        productCategoryId: [
+          { required: true, message: '请选择产品类别', trigger: 'blur' }
+        ],
+        measureUnitId: [
+          { required: true, message: '请选择计量单位', trigger: 'change', type: 'number' }
+        ]
       }
     }
   },
