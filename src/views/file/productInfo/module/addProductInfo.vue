@@ -9,7 +9,7 @@
           size="mini"
           type="text"
           icon="el-icon-plus"
-          @click="$router.back(-1)"
+          @click="cancelAndGoList"
         >取消</el-button>
       </div>
       <!-- 保存 -->
@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     cancelAndGoList() {
-      this.$router.go(-1)
+      this.$router.push({ path: '/file/productInfo' })
     }
   }
 }

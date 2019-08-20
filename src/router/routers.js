@@ -80,10 +80,16 @@ export const constantRouterMap = [
     redirect: 'noredirect',
     children: [
       {
-        path: 'productInfo',
+        path: 'productInfo/addProductInfo',
         component: () => import('@/views/file/productInfo/module/addProductInfo'),
         name: '新增产品资料',
         meta: { title: '新增产品资料', icon: 'user' }
+      },
+      {
+        path: 'productInfo',
+        component: () => import('@/views/file/productInfo'),
+        name: '产品资料',
+        meta: { title: '产品资料', icon: 'user' }
       }
     ]
   }

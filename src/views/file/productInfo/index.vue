@@ -4,7 +4,7 @@
     <div class="head-container">
       <!-- 新增 -->
       <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
-        <router-link to="/file/productInfo">
+        <router-link to="/file/productInfo/addProductInfo">
           <el-button
             class="filter-item"
             size="mini"
