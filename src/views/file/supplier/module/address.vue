@@ -1,6 +1,6 @@
 <template>
   <div class="linkage">
-    <div v-for="(v, i) in propList" :key="i" style="margin-bottom: 20px">
+    <div v-for="(v, i) in addressList" :key="i" style="margin-bottom: 20px">
       <span class="label">
         联系地址{{i+1}}：
       </span>
@@ -69,7 +69,11 @@
     created: function () {
       this.getCityData()
       this.addressList=this.propList
-      console.log(this.addressList)
+    },
+    watch: {
+      propList: function (val) {
+        this.addressList=val
+      },
     },
     methods: {
       // 加载china地点数据，三级
