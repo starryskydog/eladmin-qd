@@ -25,8 +25,8 @@
 
     <el-row :gutter="5">
       <el-col >
-        <el-form ref="form" :inline="true" :model="form" size="large" label-position="left" label-width="100px">
-          <span style="display:block">基础资料</span>
+        <el-form ref="form" :inline="true" :model="form" size="large" label-position="left" label-width="100px" :rules="rules">
+          <span class="sub-title">基础资料</span>
           <el-form-item label="产品类别" prop="productCategoryId">
             <el-select v-model="form.productCategoryId" style="width: 150px;" placeholder="请选择" size="small">
               <el-option
@@ -122,5 +122,12 @@ export default {
 </script>
 
 <style scoped>
-
+.sub-title{
+  display: block;
+  line-height: 30px;
+  background-color: #efefef;
+  margin: 20px auto;
+  padding-left: 10px;
+  font-size: 14px;
+}
 </style>

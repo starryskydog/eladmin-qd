@@ -29,9 +29,9 @@ const user = {
   actions: {
     // 登录
     Login({ commit }, userInfo) {
-      console.log(userInfo)
       const username = userInfo.username
-      const password = decrypt(userInfo.password)
+      // const password = decrypt(userInfo.password)
+      const password =userInfo.password
       const code = userInfo.code
       const uuid = userInfo.uuid
       const rememberMe = userInfo.rememberMe
