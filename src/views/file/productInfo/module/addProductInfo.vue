@@ -9,7 +9,7 @@
           size="mini"
           type="text"
           icon="el-icon-plus"
-          @click="cancleAddProductInfo"
+          @click="$router.back(-1)"
         >取消</el-button>
       </div>
       <!-- 保存 -->
@@ -56,7 +56,8 @@ export default {
     })
   },
   methods: {
-    cancleAddProductInfo() {
+    cancelAndGoList() {
+      this.$router.go(-1)
     }
   }
 }

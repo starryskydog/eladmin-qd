@@ -10,7 +10,6 @@
             size="mini"
             type="primary"
             icon="el-icon-plus"
-            @click="add"
           >新增</el-button>
         </router-link>
       </div>
@@ -30,15 +29,6 @@ export default {
     }
   },
   methods: {
-    beforeInit() {
-      this.showButton = false
-      this.url = 'api/querySupplierInfoPage'
-      const query = this.query
-      const value = query.value
-      this.params = { page: this.page, size: this.size }
-      if (value) { this.params['name'] = value }
-      return true
-    }
   }
 }
 </script>
