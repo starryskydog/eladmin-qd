@@ -103,7 +103,7 @@ export default {
   },
   methods: {
     cancelAndGoList() {
-      this.$router.push({ path: '/file/productInfo' })
+      this.$router.push({ path: '/files/productInfo' })
     },
     queryMeasureUnitList() {
       queryMeasureUnitList().then(res => {
