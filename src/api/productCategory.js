@@ -1,9 +1,17 @@
 import request from '@/utils/request'
 
 // 分页查询产品类别
-export function getProductCategory() {
+export function queryProductCategoryPage() {
   return request({
-    url: 'api/productCategory',
+    url: 'api/queryProductCategoryPage',
+    method: 'get'
+  })
+}
+
+// 查询产品类别列表
+export function queryProductCategoryList() {
+  return request({
+    url: 'api/queryProductCategoryList',
     method: 'get'
   })
 }

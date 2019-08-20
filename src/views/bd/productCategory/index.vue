@@ -80,7 +80,7 @@
       checkPermission,
       beforeInit() {
         this.showButton = false
-        this.url = 'api/productCategory'
+        this.url = 'api/queryProductCategoryPage'
         const query = this.query
         const value = query.value
         this.params = { page: this.page, size: this.size }
