@@ -111,13 +111,17 @@
         this.dialog = false
       },
       doSubmit() {
-        const length1 = this.form.supplierContact.length
-        if (length1 > 0 && !this.form.supplierContact[length1 - 1].name) {
-          this.form.supplierContact.pop()
+        if(this.form.supplierContact){
+          const length1 = this.form.supplierContact.length
+          if (length1 > 0 && !this.form.supplierContact[length1 - 1].name) {
+            this.form.supplierContact.pop()
+          }
         }
-        const length2 = this.form.supplierAddress.length
-        if (length2 > 0 && !this.form.supplierAddress[length2 - 1].province) {
-          this.form.supplierAddress.pop()
+        if(this.form.supplierAddress){
+          const length2 = this.form.supplierAddress.length
+          if (length2 > 0 && !this.form.supplierAddress[length2 - 1].province) {
+            this.form.supplierAddress.pop()
+          }
         }
         if(this.isAdd){
           add(this.form).then(res => {
