@@ -31,7 +31,7 @@ const user = {
     Login({ commit }, userInfo) {
       console.log(userInfo)
       const username = userInfo.username
-      const password = userInfo.password
+      const password = decrypt(userInfo.password)
       const code = userInfo.code
       const uuid = userInfo.uuid
       const rememberMe = userInfo.rememberMe
