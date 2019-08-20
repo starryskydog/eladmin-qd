@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialog" :title="isAdd ? '新增供应商资料' : '编辑供应商资料'" append-to-body width="1000px">
+  <el-dialog :visible.sync="dialog" :title="isAdd ? '新增供应商资料' : '编辑供应商资料'" append-to-body width="1000px" :show-close=false>
     <el-form ref="form" :inline="true" :model="form" size="large" label-width="100px">
       <el-form-item label="供应商编号" prop="supplierCode">
         <el-input v-model="form.supplierCode" disabled size="small"/>
@@ -62,13 +62,13 @@
         form: {
           supplierContact: [
             {
-              "name": "",
-              "phone": "",
-              "mobile": "",
-              "email": "",
-              "weixin": "",
-              "qq": "",
-              "firstTag": "",
+              name: "",
+              phone: "",
+              mobile: "",
+              email: "",
+              weixin: "",
+              qq: "",
+              firstTag: "",
             }
           ],
           supplierName: '',
@@ -100,27 +100,15 @@
       this.queryAllCategoryList()
     },
     watch: {
-      isAdd: function (val) {
-        if(val){
+      dialog:function (val) {
+        if(val&&this.isAdd){
           this.initCode()
-        }else{
-          console.log(222)
         }
-      },
-      form:function (val) {
-        console.log(val)
       }
     },
     methods: {
       cancel() {
-        this.resetForm()
-      },
-      doSubmit(){
-        if(this.isAdd){
-          this.add()
-        }else{
-          this.edit()
-        }
+        this.dialog = false
       },
       doSubmit() {
         const length1 = this.form.supplierContact.length
@@ -150,11 +138,13 @@
         }
         this.loading = false
         this.resetForm()
+        this.dialog = false
         this.$parent.init()
       },
       initCode() {
         initCode().then(res => {
-          this.form.supplierCode = res
+          this.resetForm()
+          this.form.supplierCode=res
         })
       },
       queryAllCategoryList() {
@@ -163,13 +153,28 @@
         })
       },
       resetForm() {
-        this.dialog = false
         this.form = {
-          supplierContact: [],
+          supplierContact: [
+            {
+              name: "",
+              phone: "",
+              mobile: "",
+              email: "",
+              weixin: "",
+              qq: "",
+              firstTag: "",
+            }
+          ],
           supplierName: '',
           initialPreMoney: null,
-          supplierCode: null,
-          supplierAddress: [],
+          supplierAddress: [
+            {
+              province: '',
+              city: '',
+              area: '',
+              addressDetail: ''
+            }
+          ],
           supplierCategoryId: null,
           remark: ''
         }

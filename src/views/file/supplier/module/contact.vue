@@ -1,7 +1,7 @@
 <template>
   <el-row>
     <el-col>
-      <el-table size="mini" :data="contactList" border style="width: 100%" highlight-current-row
+      <el-table size="mini" :data="master_user.data" border style="width: 100%" highlight-current-row
                 :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
         <el-table-column label="操作" width="100" fixed>
           <template slot-scope="scope">
@@ -69,6 +69,11 @@
       this.addMasterUser()
       this.master_user.data=this.contactList
     },
+    watch: {
+      contactList: function (val) {
+        this.master_user.data=val
+      },
+    },
     methods: {
       setContact(){
         this.$emit('setContacts',this.master_user.data)
@@ -76,13 +81,13 @@
       //添加账号
       addMasterUser() {
         let j = {
-          "name": "",
-          "phone": "",
-          "mobile": "",
-          "email": "",
-          "weixin": "",
-          "qq": "",
-          "firstTag": "",
+          name: "",
+          phone: "",
+          mobile: "",
+          email: "",
+          weixin: "",
+          qq: "",
+          firstTag: "",
         };
         this.master_user.data.push(j);
         this.master_user.sel = JSON.parse(JSON.stringify(j));
