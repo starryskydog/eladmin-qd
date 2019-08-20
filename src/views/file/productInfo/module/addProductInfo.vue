@@ -23,17 +23,34 @@
       </div>
     </div>
 
-    <div>
-      <el-form ref="form" :inline="true" :model="form" size="large" label-width="100px">
-        <el-form-item label="产品编号" prop="productCode">
-          <el-input v-model="form.productCode" disabled size="small"/>
-        </el-form-item>
+    <el-row :gutter="5">
+      <el-col >
+        <el-form ref="form" :inline="true" :model="form" size="large" label-width="100px">
+          <el-form-item label="产品编号" prop="productCode">
+            <el-input v-model="form.productCode" disabled size="small"/>
+          </el-form-item>
+          <el-form-item label="产品名称" prop="name">
+            <el-input v-model="form.name" size="small"/>
+          </el-form-item>
 
-        <el-form-item label="产品名称" prop="name">
-          <el-input v-model="form.name" size="small"/>
-        </el-form-item>
-      </el-form>
-    </div>
+          <el-form-item label="规格" prop="specifications">
+            <el-input v-model="form.specifications" size="small"/>
+          </el-form-item>
+          <el-form-item label="计量单位" prop="measureUnitId">
+            <el-select v-model="form.measureUnitId" style="width: 150px;" placeholder="请选择" size="small">
+              <el-option
+                v-for="(item, index) in categoryList"
+                :key="item.name + index"
+                :label="item.name"
+                :value="item.id"/>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="单价" prop="unitPrice">
+            <el-input v-model="form.unitPrice" size="small"/>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -46,7 +63,9 @@ export default {
     return {
       form: {
         productCode: null,
-        name: ''
+        name: '',
+        specifications: '',
+        unitPrice: null
       }
     }
   },
@@ -54,6 +73,7 @@ export default {
     initProductCode().then(res => {
       this.form.productCode = res
     })
+    this.queryAllCategoryList()
   },
   methods: {
     cancelAndGoList() {

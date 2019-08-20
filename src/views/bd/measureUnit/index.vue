@@ -58,7 +58,7 @@
 
 <script>
   import checkPermission from '@/utils/permission'
-  import { getMeasureUnit } from '@/api/measureUnit'
+  import { queryMeasureUnitPage } from '@/api/measureUnit'
   import initData from '@/mixins/initData'
   import eForm from './form'
   import { del } from '@/api/measureUnit'
@@ -81,7 +81,7 @@
       checkPermission,
       beforeInit() {
         this.showButton = false
-        this.url = 'api/measureUnit'
+        this.url = 'api/queryMeasureUnitPage'
         const query = this.query
         const value = query.value
         this.params = { page: this.page, size: this.size }

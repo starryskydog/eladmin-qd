@@ -1,9 +1,17 @@
 import request from '@/utils/request'
 
 // 分页查询计量单位
-export function getMeasureUnit() {
+export function queryMeasureUnitPage() {
   return request({
-    url: 'api/measureUnit',
+    url: 'api/queryMeasureUnitPage',
+    method: 'get'
+  })
+}
+
+// 查询计量单位列表
+export function queryMeasureUnitList() {
+  return request({
+    url: 'api/queryMeasureUnitList',
     method: 'get'
   })
 }
