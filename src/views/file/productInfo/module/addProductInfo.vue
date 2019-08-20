@@ -58,6 +58,9 @@
           <el-form-item label="单价" prop="unitPrice">
             <el-input v-model="form.unitPrice" size="small"/>
           </el-form-item>
+
+          <span class="sub-title">库存预警</span>
+          <ProductInventoryWarning @setProductInventoryWarningList="updateProductInventoryWarning" :productInventoryWarningList="form.productInventoryWarning"/>
         </el-form>
       </el-col>
     </el-row>
@@ -68,8 +71,10 @@
 import { initProductCode } from '@/api/productInfo'
 import { queryMeasureUnitList } from '@/api/measureUnit'
 import { queryProductCategoryList } from '@/api/productCategory'
+import ProductInventoryWarning from './productInventoryWarning'
 
 export default {
+  components: { ProductInventoryWarning },
   props: {
   },
   data() {
@@ -82,15 +87,17 @@ export default {
         specifications: '',
         unitPrice: null,
         productCategoryId: null,
-        measureUnitId: null
+        measureUnitId: null,
+        productInventoryWarning: [
+          {
+            wareHouseCode: '',
+            wareHouseName: '',
+            minimumInventory: '',
+            highestInventory: ''
+          }
+        ]
       },
       rules: {
-        productCategoryId: [
-          { required: true, message: '请选择产品类别', trigger: 'blur' }
-        ],
-        measureUnitId: [
-          { required: true, message: '请选择计量单位', trigger: 'change', type: 'number' }
-        ]
       }
     }
   },
@@ -105,17 +112,20 @@ export default {
     cancelAndGoList() {
       this.$router.push({ path: '/files/productInfo' })
     },
+    // 查询所有计量单位列表
     queryMeasureUnitList() {
       queryMeasureUnitList().then(res => {
-        console.log(res)
         this.measureUnitList = res
       })
     },
+    // 查询产品类别列表
     queryProductCategoryList() {
       queryProductCategoryList().then(res => {
-        console.log(res)
         this.productCategoryList = res
       })
+    },
+    updateProductInventoryWarning(data) {
+      this.form.productInventoryWarning = data
     }
   }
 }
