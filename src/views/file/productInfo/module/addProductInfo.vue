@@ -22,15 +22,41 @@
         >保存</el-button>
       </div>
     </div>
+
+    <div>
+      <el-form ref="form" :inline="true" :model="form" size="large" label-width="100px">
+        <el-form-item label="产品编号" prop="productCode">
+          <el-input v-model="form.productCode" disabled size="small"/>
+        </el-form-item>
+
+        <el-form-item label="产品名称" prop="name">
+          <el-input v-model="form.name" size="small"/>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 
 <script>
-
+import { initProductCode } from '@/api/productInfo'
 export default {
+  props: {
+  },
+  data() {
+    return {
+      form: {
+        productCode: null,
+        name: ''
+      }
+    }
+  },
+  created() {
+    initProductCode().then(res => {
+      this.form.productCode = res
+    })
+  },
   methods: {
     cancleAddProductInfo() {
-      console.log('取消')
     }
   }
 }
