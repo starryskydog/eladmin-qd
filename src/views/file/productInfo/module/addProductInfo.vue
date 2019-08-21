@@ -60,7 +60,7 @@
           </el-form-item>
 
           <span class="sub-title">库存预警</span>
-          <ProductInventoryWarning @setProductInventoryWarningList="updateProductInventoryWarning" :productInventoryWarningList="form.productInventoryWarning"/>
+          <ProductInventoryWarning @setProductInventoryWarning="updateProductInventoryWarning" :productInventoryWarningList="form.productInventoryWarning"/>
         </el-form>
       </el-col>
     </el-row>
