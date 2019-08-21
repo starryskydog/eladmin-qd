@@ -12,7 +12,7 @@
           <template slot-scope="scope">
             <span >
               <el-input v-if="!v.type" v-model="productInventoryWarningList[scope.$index][v.field]" size="mini" placeholder="请输入内容" @change="((val)=>{setProductInventoryWarning(val,scope.$index,v.field)})"/>
-              <el-select v-else v-model="wareHouseList[scope.$index][v.field]" size="small" style="width: 250px;" @change="((val)=>{setProductInventoryWarning(val,scope.$index,v.field)})">
+              <el-select v-else v-model="productInventoryWarningList[scope.$index][v.field]" size="small" style="width: 250px;" @change="((val)=>{setProductInventoryWarning(val,scope.$index,v.field)})">
                 <el-option
                   v-for="(item, index) in wareHouseList"
                   :key="item.id"
@@ -36,6 +36,7 @@ export default {
   data() {
     return {
       wareHouseList: [],
+      wareHouseId:'',
       product_inventory_warning: {
         sel: null,
         columns: [
@@ -59,8 +60,11 @@ export default {
     this.queryWareHouseList()
   },
   methods: {
-    setProductInventoryWarning() {
-      console.log('点击仓库下拉框')
+    setProductInventoryWarning(val,i) {
+      var list=this.wareHouseList.filter(item=>{
+        return item.wareHouseCode==val
+      })
+      this.productInventoryWarningList[i].wareHouseName=list[0].name
       // setProductInventoryWarning事件触发后，自动触发setProductInventoryWarningList事件
       this.$emit('setProductInventoryWarning', this.product_inventory_warning.data)
     },
@@ -83,8 +87,8 @@ export default {
     },
     queryWareHouseList() {
       queryWareHouseList().then(res => {
-        console.log('仓库列表' + res)
         this.wareHouseList = res
+        console.log(this.wareHouseList)
       })
     }
   }
