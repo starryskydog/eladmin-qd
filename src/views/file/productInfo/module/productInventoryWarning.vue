@@ -61,7 +61,7 @@ export default {
   methods: {
     setProductInventoryWarning() {
       console.log('点击仓库下拉框')
-      //setProductInventoryWarning事件触发后，自动触发setProductInventoryWarningList事件
+      // setProductInventoryWarning事件触发后，自动触发setProductInventoryWarningList事件
       this.$emit('setProductInventoryWarningList', this.product_inventory_warning.data)
     },
     addProductInventoryWarning() {
