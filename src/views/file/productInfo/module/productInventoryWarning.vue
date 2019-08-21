@@ -12,12 +12,12 @@
           <template slot-scope="scope">
             <span >
               <el-input v-if="!v.type" v-model="productInventoryWarningList[scope.$index][v.field]" size="mini" placeholder="请输入内容" @change="((val)=>{setProductInventoryWarning(val,scope.$index,v.field)})"/>
-              <el-select v-else v-model="wareHouseList[scope.$index][v.field]" size="small" style="width: 150px;" @change="((val)=>{setProductInventoryWarning(val,scope.$index,v.field)})">
+              <el-select v-else v-model="wareHouseList[scope.$index][v.field]" size="small" style="width: 250px;" @change="((val)=>{setProductInventoryWarning(val,scope.$index,v.field)})">
                 <el-option
                   v-for="(item, index) in wareHouseList"
                   :key="item.id"
-                  :label="item.name"
-                  :value="item.id"/>
+                  :label="item.wareHouseCode"
+                  :value="item.wareHouseCode"/>
               </el-select>
             </span>
           </template>

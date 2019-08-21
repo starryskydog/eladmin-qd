@@ -127,6 +127,7 @@ export default {
     // 触发子组件城市选择-选择城市的事件
     updateProductInventoryWarning(data) {
       // 改变了父组件的值
+      console.log('-------' + data);
       this.form.productInventoryWarning = data
     }
   }
