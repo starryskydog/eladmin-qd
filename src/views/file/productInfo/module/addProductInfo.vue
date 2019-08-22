@@ -19,6 +19,7 @@
           size="mini"
           type="primary"
           icon="el-icon-plus"
+          @click="doSubmit"
         >保存</el-button>
       </div>
     </div>
@@ -37,7 +38,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="产品编号" prop="productCode">
-            <el-input v-model="form.productCode" disabled size="small"/>
+            <el-input v-model="form.productCode" size="small"/>
           </el-form-item>
           <el-form-item label="产品名称" prop="name">
             <el-input v-model="form.name" size="small"/>
@@ -68,7 +69,7 @@
 </template>
 
 <script>
-import { initProductCode } from '@/api/productInfo'
+import { initProductCode, add, edit } from '@/api/productInfo'
 import { queryMeasureUnitList } from '@/api/measureUnit'
 import { queryProductCategoryList } from '@/api/productCategory'
 import ProductInventoryWarning from './productInventoryWarning'
@@ -76,6 +77,10 @@ import ProductInventoryWarning from './productInventoryWarning'
 export default {
   components: { ProductInventoryWarning },
   props: {
+    isAdd: {
+      type: Boolean,
+      required: true
+    }
   },
   data() {
     return {
@@ -129,6 +134,23 @@ export default {
       // 改变了父组件的值
       console.log('-------' + data)
       this.form.productInventoryWarning = data
+    },
+    doSubmit() {
+      if (this.form.supplierContact) {
+        const productInventoryWarningLength = this.form.productInventoryWarning.length
+        if (productInventoryWarningLength > 0 && !this.form.supplierContact[productInventoryWarningLength - 1].name) {
+          this.form.productInventoryWarning.pop()
+        }
+      }
+      add(this.form).then(res => {
+        this.$notify({
+          title: '添加成功',
+          type: 'success',
+          duration: 2500
+        })
+      })
+      this.resetForm()
+      this.$parent.init()
     }
   }
 }
