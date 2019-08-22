@@ -4,15 +4,13 @@
     <div class="head-container">
       <!-- 新增 -->
       <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
-        <router-link to="/file/productInfo/addProductInfo">
-          <el-button
-            class="filter-item"
-            size="mini"
-            type="primary"
-            icon="el-icon-plus"
-            @click="add"
-          >新增</el-button>
-        </router-link>
+        <el-button
+          class="filter-item"
+          size="mini"
+          type="primary"
+          icon="el-icon-plus"
+          @click="add"
+        >新增</el-button>
       </div>
     </div>
 
@@ -61,12 +59,12 @@
 <script>
 import checkPermission from '@/utils/permission'
 import eForm from './form'
-import { queryProductInfoPage, deleteProductInfoById } from '@/api/productInfo'
+import { queryProductInfoPage, deleteProductInfoById, getProductInfoById } from '@/api/productInfo'
 import initData from '@/mixins/initData'
 
 export default {
-  components: { eForm },
   mixins: [initData],
+  components: { eForm },
   data() {
     return {
       isAdd: false,
@@ -91,6 +89,16 @@ export default {
     },
     add() {
       this.isAdd = true
+      this.$refs.form.dialog = true
+    },
+    edit(data) {
+      getProductInfoById(data.id).then(res => {
+        this.isAdd = false
+        this.id = data.id
+        const _this = this.$refs.form
+        _this.dialog = true
+        _this.form = res
+      })
     },
     handleCurrentChange(val) {
     },

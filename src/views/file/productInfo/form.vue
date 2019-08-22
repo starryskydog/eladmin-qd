@@ -1,22 +1,71 @@
 <template>
-  <el-dialog :visible.sync="dialog" :title="isAdd ? '新增计量单位' : '编辑计量单位'" append-to-body width="500px">
-    <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
-      <el-form-item label="计量单位名称" prop="name">
-        <el-input v-model="form.name" style="width: 370px;"/>
+  <el-dialog :visible.sync="dialog" :title="isAdd ? '新增供应商资料' : '编辑供应商资料'" append-to-body width="1000px" :show-close=false>
+    <el-form ref="form" :inline="true" :model="form" size="large" label-width="100px">
+      <span class="sub-title">基础资料</span>
+      <el-form-item label="产品类别" prop="productCategoryId">
+        <el-select v-model="form.productCategoryId" style="width: 150px;" placeholder="请选择" size="small">
+          <el-option
+            v-for="(item, index) in productCategoryList"
+            :key="item.name + index"
+            :label="item.name"
+            :value="item.id"/>
+        </el-select>
       </el-form-item>
+      <el-form-item label="产品编号" prop="productCode">
+        <el-input v-model="form.productCode" size="small"/>
+      </el-form-item>
+      <el-form-item label="产品名称" prop="name">
+        <el-input v-model="form.name" size="small"/>
+      </el-form-item>
+
+      <el-form-item label="规格" prop="specifications">
+        <el-input v-model="form.specifications" size="small"/>
+      </el-form-item>
+      <el-form-item label="计量单位" prop="measureUnitId">
+        <el-select v-model="form.measureUnitId" style="width: 150px;" placeholder="请选择" size="small">
+          <el-option
+            v-for="(item, index) in measureUnitList"
+            :key="item.name + index"
+            :label="item.name"
+            :value="item.id"/>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="单价" prop="unitPrice">
+        <el-input v-model="form.unitPrice" size="small"/>
+      </el-form-item>
+
+      <span class="sub-title">库存预警</span>
+      <ProductInventoryWarning @setProductInventoryWarning="updateProductInventoryWarning" :productInventoryWarningList="form.productInventoryWarning"/>
     </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="text" @click="cancel">取消</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
+
+    <el-button
+      class="filter-item"
+      size="mini"
+      type="text"
+      icon="el-icon-plus"
+      @click="cancelAndGoList"
+    >取消</el-button>
+    <!-- 保存 -->
+    <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
+      <el-button
+        class="filter-item"
+        size="mini"
+        type="primary"
+        icon="el-icon-plus"
+        @click="doSubmit"
+      >保存</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
-import { getDepts } from '@/api/dept'
-import { add, edit } from '@/api/productInfo'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import { initProductCode, add, edit } from '@/api/productInfo'
+import { queryMeasureUnitList } from '@/api/measureUnit'
+import { queryProductCategoryList } from '@/api/productCategory'
+import ProductInventoryWarning from './module/productInventoryWarning'
+
 export default {
+  components: { ProductInventoryWarning },
   props: {
     isAdd: {
       type: Boolean,
@@ -25,81 +74,105 @@ export default {
   },
   data() {
     return {
-      loading: false, dialog: false,
-      form: { name: '' },
-      rules: {
-        name: [
-          { required: true, message: '请输入名称', trigger: 'blur' }
+      dialog: false,
+      measureUnitList: [],
+      productCategoryList: [],
+      form: {
+        productCode: null,
+        name: '',
+        specifications: '',
+        unitPrice: null,
+        productCategoryId: null,
+        measureUnitId: null,
+        productInventoryWarning: [
+          {
+            wareHouseCode: '',
+            wareHouseName: '',
+            minimumInventory: '',
+            highestInventory: ''
+          }
         ]
+      },
+      rules: {
       }
     }
   },
+  watch: {
+    dialog: function(val) {
+      if (val && this.isAdd) {
+        this.initCode()
+      }
+    }
+  },
+  created() {
+    initProductCode().then(res => {
+      this.form.productCode = res
+    })
+    this.queryMeasureUnitList()
+    this.queryProductCategoryList()
+  },
   methods: {
-    cancel() {
-      this.resetForm()
+    cancelAndGoList() {
+      this.dialog = false
+    },
+    // 查询所有计量单位列表
+    queryMeasureUnitList() {
+      queryMeasureUnitList().then(res => {
+        this.measureUnitList = res
+      })
+    },
+    // 查询产品类别列表
+    queryProductCategoryList() {
+      queryProductCategoryList().then(res => {
+        this.productCategoryList = res
+      })
+    },
+    // 触发子组件城市选择-选择城市的事件
+    updateProductInventoryWarning(data) {
+      // 改变了父组件的值
+      console.log('-------' + data)
+      this.form.productInventoryWarning = data
     },
     doSubmit() {
-      this.$refs['form'].validate((valid) => {
-        if (valid) {
-          this.loading = true
-          if (this.isAdd) {
-            this.doAdd()
-          } else this.doEdit()
-        } else {
-          return false
+      if (this.form.supplierContact) {
+        const productInventoryWarningLength = this.form.productInventoryWarning.length
+        if (productInventoryWarningLength > 0 && !this.form.supplierContact[productInventoryWarningLength - 1].name) {
+          this.form.productInventoryWarning.pop()
         }
-      })
-    },
-    doAdd() {
-      add(this.form).then(res => {
-        this.resetForm()
-        this.$notify({
-          title: '添加成功',
-          type: 'success',
-          duration: 2500
-        })
-        this.loading = false
-        this.$parent.init()
-      }).catch(err => {
-        this.loading = false
-      })
-    },
-    doEdit() {
-      edit(this.form).then(res => {
-        this.resetForm()
-        this.$notify({
-          title: '修改成功',
-          type: 'success',
-          duration: 2500
-        })
-        this.loading = false
-        this.$parent.init()
-      }).catch(err => {
-        this.loading = false
-        console.log(err.response.data.message)
-      })
-    },
-    resetForm() {
-      this.dialog = false
-      this.$refs['form'].resetFields()
-      this.form = { name: ''}
-    },
-    getDepts() {
-      getDepts({ enabled: true }).then(res => {
-        this.depts = res.content
-      })
-    },
-    changeScope() {
-      if (this.form.dataScope === '自定义') {
-        this.getDepts()
       }
+      if (this.isAdd) {
+        add(this.form).then(res => {
+          this.$notify({
+            title: '添加成功',
+            type: 'success',
+            duration: 2500
+          })
+        })
+      } else {
+        edit(this.form).then(res => {
+          this.$notify({
+            title: '修改成功',
+            type: 'success',
+            duration: 2500
+          })
+        })
+      }
+      this.loading = false
+      this.resetForm()
+      this.dialog = false
+      this.$parent.init()
     }
   }
 }
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
-  /deep/ .el-input-number .el-input__inner {
-    text-align: left;
+<style scoped>
+  .sub-title{
+    display: block;
+    line-height: 30px;
+    background-color: #efefef;
+    margin: 20px auto;
+    padding-left: 10px;
+    font-size: 14px;
   }
 </style>

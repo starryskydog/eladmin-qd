@@ -42,3 +42,11 @@ export function deleteProductInfoById(id) {
   })
 }
 
+// 查询产品资料
+export function getProductInfoById(id) {
+  return request({
+    url: 'api/productInfo/' + id,
+    method: 'get'
+  })
+}
+
