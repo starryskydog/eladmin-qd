@@ -134,10 +134,28 @@ export default {
       this.form.productInventoryWarning = data
     },
     initCode() {
-      initCode().then(res => {
+      initProductCode().then(res => {
         this.resetForm()
         this.form.productCode = res
       })
+    },
+    resetForm() {
+      this.form = {
+        productCode: null,
+        name: '',
+        specifications: '',
+        unitPrice: null,
+        productCategoryId: null,
+        measureUnitId: null,
+        productInventoryWarning: [
+          {
+            wareHouseCode: '',
+            wareHouseName: '',
+            minimumInventory: '',
+            highestInventory: ''
+          }
+        ]
+      }
     },
     doSubmit() {
       if (this.form.supplierContact) {
