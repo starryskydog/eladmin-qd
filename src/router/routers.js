@@ -60,6 +60,19 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/orders',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/order/list'),
+        name: '新增订单',
+        meta: { title: '新增订单', icon: 'add' }
+      }
+    ]
+  },
+  {
     path: '/user',
     component: Layout,
     hidden: true,
