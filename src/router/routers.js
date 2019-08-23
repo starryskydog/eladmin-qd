@@ -85,20 +85,6 @@ export const constantRouterMap = [
         meta: { title: '个人中心', icon: 'user' }
       }
     ]
-  },
-  {
-    path: '/file',
-    component: Layout,
-    hidden: true,
-    redirect: 'noredirect',
-    children: [
-      {
-        path: 'productInfo/addProductInfo',
-        component: () => import('@/views/file/productInfo/module/addProductInfo'),
-        name: '新增产品资料',
-        meta: { title: '新增产品资料', icon: 'user' }
-      }
-    ]
   }
   // { path: '*', redirect: '/404', hidden: true }
 ]
