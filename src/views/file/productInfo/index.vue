@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <eForm ref="form" :is-add="isAdd" />
     <!--工具栏-->
     <div class="head-container">
       <!-- 新增 -->
@@ -58,9 +59,9 @@
 
 <script>
 import checkPermission from '@/utils/permission'
-import eForm from './form'
 import { queryProductInfoPage, deleteProductInfoById, getProductInfoById } from '@/api/productInfo'
 import initData from '@/mixins/initData'
+import eForm from './form'
 
 export default {
   mixins: [initData],
@@ -69,7 +70,8 @@ export default {
     return {
       isAdd: false,
       id: '',
-      delLoading: false
+      delLoading: false,
+      dialog: false
     }
   },
   created() {

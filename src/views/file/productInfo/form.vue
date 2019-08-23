@@ -133,6 +133,12 @@ export default {
       console.log('-------' + data)
       this.form.productInventoryWarning = data
     },
+    initCode() {
+      initCode().then(res => {
+        this.resetForm()
+        this.form.productCode = res
+      })
+    },
     doSubmit() {
       if (this.form.supplierContact) {
         const productInventoryWarningLength = this.form.productInventoryWarning.length
