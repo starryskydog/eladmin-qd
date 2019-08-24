@@ -1,17 +1,14 @@
 <template>
-  <el-dialog :visible.sync="dialog" :title="isAdd ? '新增客户资料' : '编辑客户资料'" append-to-body width="1000px" :show-close=false>
+  <el-dialog :visible.sync="dialog" :title="isAdd ? '新增委外公司资料' : '编辑委外公司资料'" append-to-body width="1000px" :show-close=false>
     <el-form ref="form" :inline="true" :model="form" size="large" label-width="100px">
-      <el-form-item label="客户编号" prop="customerCode">
-        <el-input v-model="form.customerCode" disabled size="small"/>
+      <el-form-item label="委外公司编号" prop="outSourceCompanyCode">
+        <el-input v-model="form.outSourceCompanyCode" disabled size="small"/>
       </el-form-item>
-      <el-form-item label="客户名称" prop="customerName">
-        <el-input v-model="form.customerName" size="small"/>
+      <el-form-item label="委外公司名称" prop="outSourceCompanyName">
+        <el-input v-model="form.outSourceCompanyName" size="small"/>
       </el-form-item>
-      <el-form-item label="期初应付款" prop="initialPreMoney" style="display:block;margin-top: 20px">
-        <el-input v-model="form.initialPreMoney" size="small" placeholder="请输入"/>
-      </el-form-item>
-      <Address @setAddress="updateAddress" :propList="form.customerAddress"/>
-      <contact @setContacts="updateContact" :contactList="form.customerContact"/>
+      <Address @setAddress="updateAddress" :propList="form.outSourceCompanyAddress"/>
+      <contact @setContacts="updateContact" :contactList="form.outSourceCompanyContact"/>
       <el-form-item prop="remark">
         <el-input
           :rows="4"
@@ -30,7 +27,7 @@
 </template>
 
 <script>
-import { initCustomerCode, add, edit } from '@/api/customerInfo'
+import { initOutSourceCompanyCode, add, edit } from '@/api/outSourceCompanyInfo'
 import contact from './module/contact'
 import Address from './module/address'
 
@@ -48,9 +45,8 @@ export default {
   data() {
     return {
       dialog: false,
-      categoryList: [],
       form: {
-        customerContact: [
+        outSourceCompanyContact: [
           {
             name: '',
             phone: '',
@@ -61,10 +57,10 @@ export default {
             firstTag: ''
           }
         ],
-        customerName: '',
+        outSourceCompanyName: '',
         initialPreMoney: null,
-        customerCode: null,
-        customerAddress: [
+        outSourceCompanyCode: null,
+        outSourceCompanyAddress: [
           {
             province: '',
             city: '',
@@ -72,11 +68,10 @@ export default {
             addressDetail: ''
           }
         ],
-        supplierCategoryId: null,
         remark: ''
       },
       rules: {
-        customerName: [
+        outSourceCompanyName: [
           { required: true, message: '请输入用户名', trigger: 'blur'},
           { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur'}
         ]
@@ -97,16 +92,16 @@ export default {
       this.dialog = false
     },
     doSubmit() {
-      if (this.form.customerContact) {
-        const length1 = this.form.customerContact.length
-        if (length1 > 0 && !this.form.customerContact[length1 - 1].name) {
-          this.form.customerContact.pop()
+      if (this.form.outSourceCompanyContact) {
+        const length1 = this.form.outSourceCompanyContact.length
+        if (length1 > 0 && !this.form.outSourceCompanyContact[length1 - 1].name) {
+          this.form.outSourceCompanyContact.pop()
         }
       }
-      if (this.form.customerAddress) {
-        const length2 = this.form.customerAddress.length
-        if (length2 > 0 && !this.form.customerAddress[length2 - 1].province) {
-          this.form.customerAddress.pop()
+      if (this.form.outSourceCompanyAddress) {
+        const length2 = this.form.outSourceCompanyAddress.length
+        if (length2 > 0 && !this.form.outSourceCompanyAddress[length2 - 1].province) {
+          this.form.outSourceCompanyAddress.pop()
         }
       }
       if (this.isAdd) {
@@ -132,14 +127,14 @@ export default {
       this.$parent.init()
     },
     initCode() {
-      initCustomerCode().then(res => {
+      initOutSourceCompanyCode().then(res => {
         this.resetForm()
-        this.form.customerCode = res
+        this.form.outSourceCompanyCode = res
       })
     },
     resetForm() {
       this.form = {
-        customerContact: [
+        outSourceCompanyContact: [
           {
             name: '',
             phone: '',
@@ -150,9 +145,9 @@ export default {
             firstTag: '',
           }
         ],
-        customerName: '',
+        outSourceCompanyrName: '',
         initialPreMoney: null,
-        customerAddress: [
+        outSourceCompanyAddress: [
           {
             province: '',
             city: '',
@@ -160,15 +155,14 @@ export default {
             addressDetail: ''
           }
         ],
-        customerCategoryId: null,
         remark: ''
       }
     },
     updateContact(data) {
-      this.form.customerContact = data
+      this.form.outSourceCompanyContact = data
     },
     updateAddress(data) {
-      this.form.customerAddress = data
+      this.form.outSourceCompanyAddress = data
     }
   }
 }
