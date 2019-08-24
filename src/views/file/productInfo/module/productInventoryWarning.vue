@@ -12,7 +12,7 @@
           <template slot-scope="scope">
             <span >
               <el-input v-if="!v.type" v-model="productInventoryWarningList[scope.$index][v.field]" size="mini" placeholder="请输入内容" @change="((val)=>{setProductInventoryWarning(val,scope.$index,v.field)})"/>
-              <el-select v-else v-model="productInventoryWarningList[scope.$index][v.field]" size="small" style="width: 250px;" @change="((val)=>{setProductInventoryWarning(val,scope.$index,v.field)})">
+              <el-select v-else v-model="productInventoryWarningList[scope.$index][v.field]" size="small" style="width: 180px;" @change="((val)=>{setProductInventoryWarning(val,scope.$index,v.field)})">
                 <el-option
                   v-for="(item, index) in wareHouseList"
                   :key="item.id"
@@ -40,7 +40,7 @@ export default {
       product_inventory_warning: {
         sel: null,
         columns: [
-          { field: 'wareHouseCode', title: '仓库编号', width: 220, type: 'select' },
+          { field: 'wareHouseCode', title: '仓库编号', width: 180, type: 'select' },
           { field: 'wareHouseName', title: '仓库名称', width: 120 },
           { field: 'minimumInventory', title: '最低库存', width: 160 },
           { field: 'highestInventory', title: '最高库存', width: 160 }
