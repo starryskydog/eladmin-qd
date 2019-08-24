@@ -31,7 +31,7 @@
         </el-select>
       </el-form-item>
       <span class="sub-title">库存预警</span>
-      <MaterialInventoryWarning @setProductInventoryWarning="updateProductInventoryWarning" :productInventoryWarningList="form.productInventoryWarning"/>
+      <MaterialInventoryWarning @setMaterialInventoryWarning="updateMaterialInventoryWarning" :materialInventoryWarningList="form.materialInventoryWarning"/>
     </el-form>
 
     <div slot="footer" class="dialog-footer">
@@ -66,7 +66,7 @@ export default {
         specifications: '',
         materialCategoryId: null,
         measureUnitId: null,
-        productInventoryWarning: [
+        materialInventoryWarning: [
           {
             wareHouseCode: '',
             wareHouseName: '',
@@ -127,10 +127,10 @@ export default {
       })
     },
     // 触发子组件城市选择-选择城市的事件
-    updateProductInventoryWarning(data) {
+    updateMaterialInventoryWarning(data) {
       // 改变了父组件的值
       console.log('-------' + data)
-      this.form.productInventoryWarning = data
+      this.form.materialInventoryWarning = data
     },
     initCode() {
       initMaterialInfoCode().then(res => {
@@ -143,9 +143,9 @@ export default {
         materialCode: null,
         name: '',
         specifications: '',
-        productCategoryId: null,
+        materialCategoryId: null,
         measureUnitId: null,
-        productInventoryWarning: [
+        materialInventoryWarning: [
           {
             wareHouseCode: '',
             wareHouseName: '',
@@ -170,10 +170,10 @@ export default {
       })
     },
     addMaterialInfo() {
-      if (this.form.supplierContact) {
-        const productInventoryWarningLength = this.form.productInventoryWarning.length
-        if (productInventoryWarningLength > 0 && !this.form.supplierContact[productInventoryWarningLength - 1].name) {
-          this.form.productInventoryWarning.pop()
+      if (this.form.materialContact) {
+        const materialInventoryWarningLength = this.form.materialInventoryWarning.length
+        if (materialInventoryWarningLength > 0 && !this.form.materialContact[materialInventoryWarningLength - 1].name) {
+          this.form.materialInventoryWarning.pop()
         }
       }
       if (this.isAdd) {
