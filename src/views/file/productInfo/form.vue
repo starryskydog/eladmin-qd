@@ -1,6 +1,6 @@
 <template>
-  <el-dialog :visible.sync="dialog" :title="isAdd ? '新增供应商资料' : '编辑供应商资料'" append-to-body width="1000px" :show-close=false>
-    <el-form ref="form" :inline="true" :model="form" size="large" label-width="100px">
+  <el-dialog :visible.sync="dialog" :title="isAdd ? '新增产品资料' : '编辑产品资料'" :show-close="false" append-to-body width="1000px">
+    <el-form ref="form" :inline="true" :model="form" :rules="rules" size="large" label-width="100px">
       <span class="sub-title">基础资料</span>
       <el-form-item label="产品类别" prop="productCategoryId">
         <el-select v-model="form.productCategoryId" style="width: 150px;" placeholder="请选择" size="small">
@@ -30,7 +30,7 @@
             :value="item.id"/>
         </el-select>
       </el-form-item>
-      <el-form-item label="单价" prop="unitPrice">
+      <el-form-item label="单价(元)" prop="unitPrice">
         <el-input v-model="form.unitPrice" size="small"/>
       </el-form-item>
 
@@ -38,22 +38,9 @@
       <ProductInventoryWarning @setProductInventoryWarning="updateProductInventoryWarning" :productInventoryWarningList="form.productInventoryWarning"/>
     </el-form>
 
-    <el-button
-      class="filter-item"
-      size="mini"
-      type="text"
-      icon="el-icon-plus"
-      @click="cancelAndGoList"
-    >取消</el-button>
-    <!-- 保存 -->
-    <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
-      <el-button
-        class="filter-item"
-        size="mini"
-        type="primary"
-        icon="el-icon-plus"
-        @click="doSubmit"
-      >保存</el-button>
+    <div slot="footer" class="dialog-footer">
+      <el-button type="text" @click="cancelAndGoList">取消</el-button>
+      <el-button type="primary" @click="doSubmit">保存</el-button>
     </div>
   </el-dialog>
 </template>
@@ -94,6 +81,10 @@ export default {
         ]
       },
       rules: {
+        specifications: [
+          { required: true, message: '规格不能为空!', trigger: 'blur' },
+          { min: 1, max: 20, message: '长度在 1 到 20 个字符!', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -134,10 +125,28 @@ export default {
       this.form.productInventoryWarning = data
     },
     initCode() {
-      initCode().then(res => {
+      initProductCode().then(res => {
         this.resetForm()
         this.form.productCode = res
       })
+    },
+    resetForm() {
+      this.form = {
+        productCode: null,
+        name: '',
+        specifications: '',
+        unitPrice: null,
+        productCategoryId: null,
+        measureUnitId: null,
+        productInventoryWarning: [
+          {
+            wareHouseCode: '',
+            wareHouseName: '',
+            minimumInventory: '',
+            highestInventory: ''
+          }
+        ]
+      }
     },
     doSubmit() {
       if (this.form.supplierContact) {
