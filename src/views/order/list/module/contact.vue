@@ -2,7 +2,19 @@
   <el-row>
     <el-col>
       <el-table size="mini" :data="master_user.data" border style="width: 100%" highlight-current-row
-                :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
+                :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" show-summary :summary-method="getSummaries">
+        <el-table-column v-for="(v,i) in master_user.columns" :key="v.field" :prop="v.field" :label="v.title"
+                         :width="v.width">
+          <template slot-scope="scope">
+                            <span >
+                              <span v-if="v.field==='allMoney'">
+                                {{dataList[scope.$index].allMoney}}
+                              </span>
+                                <el-input v-else size="mini" placeholder="请输入内容" v-model="dataList[scope.$index][v.field]" @change="((val)=>{setContact(val,scope.$index,v.field)})" :disabled="v.disabled">
+                                </el-input>
+                            </span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="100" fixed>
           <template slot-scope="scope">
             <span class="el-tag el-tag--danger el-tag--mini" style="cursor: pointer;" @click="del(scope.$index)">
@@ -14,22 +26,6 @@
                             </span>
           </template>
         </el-table-column>
-        <el-table-column v-for="(v,i) in master_user.columns" :key="v.field" :prop="v.field" :label="v.title"
-                         :width="v.width">
-          <template slot-scope="scope">
-                            <span >
-                                <el-input  v-if="!v.type" size="mini" placeholder="请输入内容" v-model="contactList[scope.$index][v.field]" @change="((val)=>{setContact(val,scope.$index,v.field)})">
-                                </el-input>
-                              <el-select v-else size="small" v-model="contactList[scope.$index][v.field]" style="width: 150px;" @change="((val)=>{setContact(val,scope.$index,v.field)})">
-                                <el-option
-                                  v-for="(item, index) in master_user.options"
-                                  :key="item.id"
-                                  :label="item.name"
-                                  :value="item.id"/>
-                              </el-select>
-                            </span>
-          </template>
-        </el-table-column>
       </el-table>
     </el-col>
   </el-row>
@@ -37,60 +33,52 @@
 
 <script>
   export default {
-    props:['contactList'],
+    props:['dataList'],
     data() {
       return {
         master_user: {
           sel: null,//选中行
           columns: [
-            {field: "name", title: "联系人", width: 120},
-            {field: "mobile", title: "手机", width: 120},
-            {field: "phone", title: "座机", width: 160},
-            {field: "email", title: "邮箱", width: 160},
-            {field: "weixin", title: "微信", width: 120},
-            {field: "qq", title: "QQ", width: 120},
-            {field: "firstTag", title: "首要联系人", width: 120, type: 'select'},
+            {field: "productCode", title: "产品编号", width: 120},
+            {field: "productName", title: "产品名称", width: 120},
+            {field: "specifications", title: "规格", width: 160},
+            {field: "unitPrice", title: "*单价", width: 160},
+            {field: "productNumber", title: "*数量", width: 120,},
+            {field: "allMoney", title: "销售金额", width: 120,disabled:true},
+            {field: "remark", title: "备注", width: 120,},
           ],
           data: [],
-          options: [
-            {
-              id: 1,
-              name: '是'
-            },
-            {
-              id: 0,
-              name: '否'
-            }
-          ]
         },
       }
     },
     created:function(){
-      this.addMasterUser()
-      this.master_user.data=this.contactList
+      this.master_user.data=this.dataList
     },
     watch: {
-      contactList: function (val) {
+      dataList: function (val) {
         this.master_user.data=val
       },
     },
     methods: {
-      setContact(){
+      setContact(val,index,field){
+        console.log(val,index,field)
+        if(field==='unitPrice'||'productNumber'){
+          this.master_user.data[index].allMoney=this.master_user.data[index].unitPrice*this.master_user.data[index].productNumber
+        }
         this.$emit('setContacts',this.master_user.data)
       },
       //添加账号
       addMasterUser() {
         let j = {
-          name: "",
-          phone: "",
-          mobile: "",
-          email: "",
-          weixin: "",
-          qq: "",
-          firstTag: "",
+          productCode: "",
+          productName: "",
+          specifications: "",
+          unitPrice: "",
+          productNumber: "",
+          allMoney: "",
+          remark: "",
         };
         this.master_user.data.push(j);
-        this.master_user.sel = JSON.parse(JSON.stringify(j));
       },
       del(index) {
         if(this.master_user.data.length>1){
@@ -99,6 +87,32 @@
           this.$message.warning("至少保留一项");
         }
       },
+      getSummaries(param) {
+        const { columns, data } = param
+        const sums = []
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = '总计'
+          } else if (index === 5 || index === 6) {
+            const values = data.map(item => Number(item[column.property]))
+            if (!values.every(value => isNaN(value))) {
+              sums[index] = values.reduce((prev, curr) => {
+                const value = Number(curr)
+                if (!isNaN(value)) {
+                  return prev + curr
+                } else {
+                  return prev
+                }
+              }, 0)
+            } else {
+              sums[index] = 'N/A'
+            }
+          } else {
+            sums[index] = '--'
+          }
+        })
+        return sums
+      }
     }
   }
 </script>

@@ -1,35 +1,27 @@
 <template>
-  <el-dialog :visible.sync="dialog" :title="isAdd ? '新增供应商资料' : '编辑供应商资料'" append-to-body width="1000px" :show-close=false>
-    <el-form ref="form" :inline="true" :model="form" size="large" label-width="100px">
-      <el-form-item label="供应商编号" prop="supplierCode">
-        <el-input v-model="form.supplierCode" disabled size="small"/>
-      </el-form-item>
-      <el-form-item label="供应商名称" prop="supplierName">
-        <el-input v-model="form.supplierName" size="small"/>
-      </el-form-item>
-      <el-form-item label="类型" prop="supplierCategoryId">
-        <el-select v-model="form.supplierCategoryId" style="width: 150px;" placeholder="请选择" size="small">
-          <el-option
-            v-for="(item, index) in categoryList"
-            :key="item.name + index"
-            :label="item.name"
-            :value="item.id"/>
-        </el-select>
-      </el-form-item>
-      <Address @setAddress="updateAddress" :propList="form.supplierAddress"></Address>
-      <el-form-item label="期初应付款" prop="initialPreMoney" style="display:block;margin-top: 20px">
-        <el-input v-model="form.initialPreMoney" size="small" placeholder="请输入"/>
-      </el-form-item>
-      <contact @setContacts="updateContact" :contactList="form.supplierContact"></contact>
-      <el-form-item prop="remark">
-        <el-input
-          type="textarea"
-          :rows="4"
-          style="width: 500px;margin-top: 20px"
-          placeholder="备注信息"
-          v-model="form.remark">
-        </el-input>
-      </el-form-item>
+  <el-dialog :visible.sync="dialog" :title="formType==='personnelList' ? '选择客户名称' : '编辑供应商资料'" append-to-body width="800px" :show-close=false>
+    <el-form ref="form" :inline="true" :model="form" size="small" label-width="100px">
+      <el-table v-loading="loading" :data="data" size="small" style="width: 100%;" :header-cell-style="{'text-align':'center'}" border>
+        <el-table-column type="index" width="50" align="center" label="编号">
+        </el-table-column>
+        <el-table-column label="选择" width="50px" align="center">
+          <template slot-scope="scope">
+            <el-radio v-model="form.radio" :label="scope.row.customerCode">&nbsp;</el-radio>
+          </template>
+        </el-table-column>
+        <el-table-column prop="customerCode" label="客户编号"/>
+        <el-table-column prop="customerName" label="客户名称"/>
+        <el-table-column prop="phone" label="业务员"/>
+        <el-table-column prop="customerContact" label="联系人"/>
+        <el-table-column prop="createTime" label="手机号" width="220px" align="center"/>
+      </el-table>
+      <el-pagination
+        :total="total"
+        :current-page="page + 1"
+        style="margin-top: 8px;"
+        layout="total, prev, pager, next, sizes"
+        @size-change="sizeChange"
+        @current-change="pageChange"/>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
@@ -39,156 +31,50 @@
 </template>
 
 <script>
-  import {del, initCode, add, edit,getSupplierInfoById} from '@/api/supplier'
-  import {queryAllCategoryList} from '@/api/supplierCategory'
-  import contact from './module/contact'
-  import Address from './module/address'
-
+  import initData from '@/mixins/initData'
   export default {
-    components: {contact, Address},
+    components: {},
     props: {
-      isAdd: {
-        type: Boolean,
-        required: true
-      },
-      uid: {
-        type: Number,
+      formType:{
+        type:String
       }
     },
+    mixins: [initData],
     data() {
       return {
         dialog: false,
         categoryList: [],
         form: {
-          supplierContact: [
-            {
-              name: "",
-              phone: "",
-              mobile: "",
-              email: "",
-              weixin: "",
-              qq: "",
-              firstTag: "",
-            }
-          ],
-          supplierName: '',
-          initialPreMoney: null,
-          supplierCode: null,
-          supplierAddress: [
-            {
-              province: '',
-              city: '',
-              area: '',
-              addressDetail: ''
-            }
-          ],
-          supplierCategoryId: null,
-          remark: ''
-        },
-        rules: {
-          supplierName: [
-            {required: true, message: '请输入用户名', trigger: 'blur'},
-            {min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur'}
-          ],
-          supplierCategoryId: [
-            {required: true, message: '请选择供应商类型', trigger: 'change', type: 'number'},
-          ],
+          radio:''
         }
       }
     },
     created() {
-      this.queryAllCategoryList()
-    },
-    watch: {
-      dialog:function (val) {
-        if(val&&this.isAdd){
-          this.initCode()
-        }
-      }
+      this.$nextTick(() => {
+        this.init()
+      })
     },
     methods: {
+      beforeInit() {
+        this.url = 'api/queryCustomerInfoPage'
+        this.params = { page: this.page, size: this.size, }
+        return true
+      },
       cancel() {
         this.dialog = false
       },
       doSubmit() {
-        if(this.form.supplierContact){
-          const length1 = this.form.supplierContact.length
-          if (length1 > 0 && !this.form.supplierContact[length1 - 1].name) {
-            this.form.supplierContact.pop()
-          }
+        if(this.form.radio){
+          this.dialog=false
+          this.$emit('setRadio',this.form.radio)
         }
-        if(this.form.supplierAddress){
-          const length2 = this.form.supplierAddress.length
-          if (length2 > 0 && !this.form.supplierAddress[length2 - 1].province) {
-            this.form.supplierAddress.pop()
-          }
-        }
-        if(this.isAdd){
-          add(this.form).then(res => {
-            this.$notify({
-              title: '添加成功',
-              type: 'success',
-              duration: 2500
-            })
-          })
-        }else{
-          edit(this.form).then(res=>{
-            this.$notify({
-              title: '修改成功',
-              type: 'success',
-              duration: 2500
-            })
-          })
-        }
-        this.loading = false
-        this.resetForm()
-        this.dialog = false
-        this.$parent.init()
-      },
-      initCode() {
-        initCode().then(res => {
-          this.resetForm()
-          this.form.supplierCode=res
-        })
-      },
-      queryAllCategoryList() {
-        queryAllCategoryList().then(res => {
-          this.categoryList = res
-        })
+
       },
       resetForm() {
         this.form = {
-          supplierContact: [
-            {
-              name: "",
-              phone: "",
-              mobile: "",
-              email: "",
-              weixin: "",
-              qq: "",
-              firstTag: "",
-            }
-          ],
-          supplierName: '',
-          initialPreMoney: null,
-          supplierAddress: [
-            {
-              province: '',
-              city: '',
-              area: '',
-              addressDetail: ''
-            }
-          ],
-          supplierCategoryId: null,
-          remark: ''
+          radio:''
         }
       },
-      updateContact(data) {
-        this.form.supplierContact = data
-      },
-      updateAddress(data) {
-        this.form.supplierAddress = data
-      }
     }
   }
 </script>
