@@ -8,6 +8,14 @@ export function queryMaterialCategoryPage() {
   })
 }
 
+// 查询物料类别
+export function queryMaterialCategoryList() {
+  return request({
+    url: 'api/queryMaterialCategoryList',
+    method: 'get'
+  })
+}
+
 // 添加物料类别
 export function add(data) {
   return request({
