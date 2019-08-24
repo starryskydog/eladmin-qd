@@ -34,8 +34,8 @@
         v-model="v.area"
         size="small"
         style="width: 100px"
-        @change="((val)=>{choseBlock(val,i)})"
-        placeholder="区级地区">
+        placeholder="区级地区"
+        @change="((val)=>{choseBlock(val,i)})">
         <el-option
           v-for="item in qu1"
           :key="item.id"
@@ -43,9 +43,9 @@
           :value="item.id">
         </el-option>
       </el-select>
-      <el-input v-model="v.addressDetail" @change="setAddress" placeholder="详细地址" size="small" style="width: 250px"/>
-      <el-button type="primary" @click="add" size="small">添加</el-button>
-      <el-button type="danger" @click="subDelete(i)" size="small">删除</el-button>
+      <el-input v-model="v.addressDetail" placeholder = "详细地址" size = "small" style="width: 250px" @change="setAddress" />
+      <el-button type="primary" size="small" @click="add">添加</el-button>
+      <el-button type="danger" size="small" @click="subDelete(i)">删除</el-button>
     </div>
   </div>
 </template>
@@ -77,22 +77,22 @@ export default {
   },
   methods: {
     // 加载china地点数据，三级
-    getCityData: function () {
+    getCityData: function() {
       var that = this
       axios.get(this.mapJson).then(function(response) {
-        if (response.status == 200) {
+        if (response.status === 200) {
           var data = response.data
           that.provinceList = []
           that.cityList = []
           that.block = []
           // 省市区数据分类
           for (var item in data) {
-            if (item.match(/0000$/)) {//省
-              that.provinceList.push({id: item, value: data[item], children: []})
-            } else if (item.match(/00$/)) {//市
-              that.cityList.push({id: item, value: data[item], children: []})
-            } else {//区
-              that.block.push({id: item, value: data[item]})
+            if (item.match(/0000$/)) {
+              that.provinceList.push({ id: item, value: data[item], children: []})
+            } else if (item.match(/00$/)) {
+              that.cityList.push({ id: item, value: data[item], children: [] })
+            } else {
+              that.block.push({ id: item, value: data[item]})
             }
           }
           // 分类市级

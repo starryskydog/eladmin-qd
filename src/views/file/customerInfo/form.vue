@@ -10,15 +10,15 @@
       <el-form-item label="期初应付款" prop="initialPreMoney" style="display:block;margin-top: 20px">
         <el-input v-model="form.initialPreMoney" size="small" placeholder="请输入"/>
       </el-form-item>
-      <Address @setAddress="updateAddress" :propList="form.customerAddress"></Address>
-      <contact @setContacts="updateContact" :contactList="form.customerContact"></contact>
+      <Address @setAddress="updateAddress" :propList="form.customerAddress"/>
+      <contact @setContacts="updateContact" :contactList="form.customerContact"/>
       <el-form-item prop="remark">
         <el-input
-          type="textarea"
           :rows="4"
+          v-model="form.remark">
+          type="textarea"
           style="width: 500px;margin-top: 20px"
           placeholder="备注信息"
-          v-model="form.remark">
         </el-input>
       </el-form-item>
     </el-form>
@@ -58,7 +58,7 @@ export default {
             email: '',
             weixin: '',
             qq: '',
-            firstTag: '',
+            firstTag: ''
           }
         ],
         supplierName: '',
@@ -86,8 +86,8 @@ export default {
   created() {
   },
   watch: {
-    dialog: function (val) {
-      if ( val && this.isAdd) {
+    dialog: function(val) {
+      if (val && this.isAdd) {
         this.initCode()
       }
     }
