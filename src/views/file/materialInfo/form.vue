@@ -157,14 +157,31 @@ export default {
     },
     doSubmit() {
       this.$refs['form'].validate((valid) => {
+        console.log(valid)
         if (valid) {
-          this.loading = true
           if (this.isAdd) {
-            this.addMaterialInfo()
+            add(this.form).then(res => {
+              this.$notify({
+                title: '添加成功',
+                type: 'success',
+                duration: 2500
+              })
+            })
           } else {
-            this.doEdit()
+            edit(this.form).then(res => {
+              this.$notify({
+                title: '修改成功',
+                type: 'success',
+                duration: 2500
+              })
+            })
           }
+          this.loading = false
+          this.resetForm()
+          this.dialog = false
+          this.$parent.init()
         } else {
+          console.log('false')
           return false
         }
       })

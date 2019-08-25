@@ -1,7 +1,7 @@
 <template>
   <el-row>
     <el-col>
-      <el-table size="mini" :data="material_inventory_warning.data" border style="width: 100%" highlight-current-row :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
+      <el-table :data="material_inventory_warning.data" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" size="mini" border style="width: 100%" highlight-current-row >
         <el-table-column label="操作" width="100" fixed>
           <template slot-scope="scope">
             <span class="el-tag el-tag--danger el-tag--mini" style="cursor: pointer;" @click="delMaterialInventoryWarning(scope.$index)">删除</span>
@@ -42,7 +42,7 @@ export default {
         columns: [
           { field: 'wareHouseCode', title: '仓库编号', width: 180, type: 'select' },
           { field: 'wareHouseName', title: '仓库名称', width: 120 },
-          { field: 'minimumInventory', title: '最低库存', width: 160 },
+          { field: 'miniNumInventory', title: '最低库存', width: 160 },
           { field: 'highestInventory', title: '最高库存', width: 160 }
         ],
         data: []
@@ -50,7 +50,7 @@ export default {
     }
   },
   watch: {
-    contactList: function(val) {
+    materialInventoryWarningList: function(val) {
       this.material_inventory_warning.data = val
     }
   },
@@ -71,7 +71,7 @@ export default {
       let j = {
         wareHouseCode: '',
         wareHouseName: '',
-        minimumInventory: '',
+        miniNumInventory: '',
         highestInventory: ''
       }
       this.material_inventory_warning.data.push(j)

@@ -83,14 +83,14 @@ export default {
       }
     }
   },
-  created() {
-  },
   watch: {
     dialog: function(val) {
       if (val && this.isAdd) {
         this.initCode()
       }
     }
+  },
+  created() {
   },
   methods: {
     cancel() {

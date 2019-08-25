@@ -36,7 +36,7 @@ export default {
   data() {
     return {
       wareHouseList: [],
-      wareHouseId:'',
+      wareHouseId: '',
       product_inventory_warning: {
         sel: null,
         columns: [
@@ -50,7 +50,7 @@ export default {
     }
   },
   watch: {
-    contactList: function(val) {
+    productInventoryWarningList: function(val) {
       this.product_inventory_warning.data = val
     }
   },
@@ -60,11 +60,11 @@ export default {
     this.queryWareHouseList()
   },
   methods: {
-    setProductInventoryWarning(val,i) {
-      var list=this.wareHouseList.filter(item=>{
-        return item.wareHouseCode==val
+    setProductInventoryWarning(val, i) {
+      var list = this.wareHouseList.filter(item => {
+        return item.wareHouseCode === val
       })
-      this.productInventoryWarningList[i].wareHouseName=list[0].name
+      this.productInventoryWarningList[i].wareHouseName = list[0].name
       // setProductInventoryWarning事件触发后，自动触发setProductInventoryWarningList事件
       this.$emit('setProductInventoryWarning', this.product_inventory_warning.data)
     },
