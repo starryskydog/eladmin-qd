@@ -42,7 +42,7 @@ export default {
         columns: [
           { field: 'wareHouseCode', title: '仓库编号', width: 180, type: 'select' },
           { field: 'wareHouseName', title: '仓库名称', width: 120 },
-          { field: 'minimumInventory', title: '最低库存', width: 160 },
+          { field: 'miniNumInventory', title: '最低库存', width: 160 },
           { field: 'highestInventory', title: '最高库存', width: 160 }
         ],
         data: []
@@ -71,7 +71,7 @@ export default {
       let j = {
         wareHouseCode: '',
         wareHouseName: '',
-        minimumInventory: '',
+        miniNumInventory: '',
         highestInventory: ''
       }
       this.material_inventory_warning.data.push(j)

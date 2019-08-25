@@ -64,8 +64,8 @@ import initData from '@/mixins/initData'
 import eForm from './form'
 
 export default {
-  mixins: [initData],
   components: { eForm },
+  mixins: [initData],
   data() {
     return {
       isAdd: false,
