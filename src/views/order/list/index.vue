@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <eForm ref="eform" :formType="type" @setRadio="handleRadio"/>
+    <eForm ref="eform" @setRadio="handleRadio" @setType="changeType"/>
     <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
       <el-button
         class="filter-item"
@@ -20,9 +20,9 @@
         订单日期：{{date}}
       </p>
       <el-form-item label="客户" prop="customerId" label-width="50px">
-        <el-input v-model="form.customerId" size="small" @focus="handleFocus('personnelList')">
-          <span class="el-tag  el-tag--mini" v-if="type==='personnelList'" slot="suffix" style="cursor: pointer;"
-                @click="addCustom()">
+        <el-input v-model="customerName" size="small" @focus="handleFocus()">
+          <span class="el-tag  el-tag--mini" v-if="focus" slot="suffix" style="cursor: pointer;"
+                @click="addCode()">
                                 选择
                             </span>
         </el-input>
@@ -59,17 +59,19 @@
 
   export default {
     mixins: [initData],
-    components: {eForm,Contact},
+    components: {eForm, Contact},
     data() {
       return {
         isAdd: false,
         delLoading: false,
         id: '',
+        focus: false,
+        customerName: '',
         form: {
-          customerId:'',
-          deliveryDate:'',
-          customerOrderCode:'11111',
-          customerOrderProductList:[
+          customerId: '',
+          deliveryDate: '',
+          customerOrderCode: '11111',
+          customerOrderProductList: [
             {
               productCode: "",
               productName: "",
@@ -80,42 +82,46 @@
               remark: "",
             }
           ],
-          username:''
+          username: ''
         },
         date: '',
-        type:''
+        type: 'custom'
       }
     },
     created() {
       this.getDate()
-      this.form.username=this.$store.state.user.user.username
+      this.form.username = this.$store.state.user.user.username
     },
     methods: {
       checkPermission,
       add() {
         console.log(this.form)
       },
-      handleRadio(radio){
-        this.form.customerId=radio
+      handleRadio(radio) {
+        this.customerName=radio.customerName
+        this.form.customerId=radio.customerId
+      },
+      changeType(type) {
+        this.type = type
       },
       getDate() {
         const date = new Date();
         const today = date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日'
         this.date = today
       },
-      addCustom() {
+      addCode() {
         this.$refs.eform.dialog = true
-        this.$refs.eform.dataSourceType='custom'
+        this.$refs.eform.dataType = 'custom'
       },
-      handleFocus(type){
-        this.type=type
+      handleFocus() {
+        this.focus = true
       }
     }
   }
 </script>
 
 <style scoped>
-  .tips{
+  .tips {
     background-color: #efefef;
     height: 30px;
     line-height: 30px;

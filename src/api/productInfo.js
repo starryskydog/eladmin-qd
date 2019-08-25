@@ -27,10 +27,11 @@ export function edit(data) {
 }
 
 // 分页查询产品资料列表
-export function queryProductInfoPage() {
+export function queryProductInfoPage(params) {
   return request({
     url: 'api/queryProductInfoPage',
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 

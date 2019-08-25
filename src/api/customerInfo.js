@@ -9,10 +9,11 @@ export function initCustomerCode() {
 }
 
 // 分页查询客户资料列表
-export function queryCustomerInfoPage() {
+export function queryCustomerInfoPage(params) {
   return request({
     url: 'api/queryCustomerInfoPage',
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 

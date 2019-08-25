@@ -1,6 +1,7 @@
 <template>
   <el-row>
     <el-col>
+      <eForm ref="eform" :formType="type" @setContact="handleSet"/>
       <el-table size="mini" :data="master_user.data" border style="width: 100%" highlight-current-row
                 :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" show-summary
                 :summary-method="getSummaries">
@@ -17,7 +18,7 @@
                                           :disabled="v.disabled" @focus="handleFocus(v.field)">
                                   <span class="el-tag  el-tag--mini" v-if="v.field==='productCode'&&showBtn"
                                         slot="suffix" style="cursor: pointer;margin-top: 4px"
-                                        @click="addCustom()">
+                                        @click="addCode(scope.$index)">
                                 选择
                             </span>
                                 </el-input>
@@ -41,8 +42,10 @@
 </template>
 
 <script>
+  import eForm from '../form'
   export default {
     props: ['dataList'],
+    components: {eForm},
     data() {
       return {
         master_user: {
@@ -58,7 +61,8 @@
           ],
           data: [],
         },
-        showBtn: false
+        showBtn: false,
+        type:'product',index:null,
       }
     },
     created: function () {
@@ -71,11 +75,16 @@
     },
     methods: {
       setContact(val, index, field) {
-        console.log(val, index, field)
         if (field === 'unitPrice' || 'productNumber') {
           this.master_user.data[index].allMoney = this.master_user.data[index].unitPrice * this.master_user.data[index].productNumber
         }
         this.$emit('setContacts', this.master_user.data)
+      },
+      handleSet(data){
+        this.master_user.data[this.index].productCode=data.productCode
+        this.master_user.data[this.index].productName=data.name
+        this.master_user.data[this.index].specifications=data.specifications
+        this.master_user.data[this.index].unitPrice=data.unitPrice
       },
       handleFocus(field) {
         if (field === 'productCode') {
@@ -104,9 +113,10 @@
           this.$message.warning("至少保留一项");
         }
       },
-      addCustom() {
-        this.$parent.$parent.$refs.eform.dialog = true
-        this.$parent.$parent.$refs.eform.dataSourceType = 'product'
+      addCode(index) {
+        this.$refs.eform.dialog = true
+        this.$refs.eform.dataType = 'product'
+        this.index=index
       },
       getSummaries(param) {
         const {columns, data} = param

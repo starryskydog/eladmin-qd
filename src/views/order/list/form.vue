@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialog" :title="dataSourceType==='custom' ? '选择客户名称' : '选择产品'" append-to-body width="800px"
+  <el-dialog :visible.sync="dialog" :title="dataType==='custom' ? '选择客户名称' : '选择产品'" append-to-body width="800px"
              :show-close=false>
     <el-form ref="form" :inline="true" :model="form" size="small" label-width="100px">
       <el-table v-loading="loading" :data="data" size="small" style="width: 100%;"
@@ -8,14 +8,10 @@
         </el-table-column>
         <el-table-column label="选择" width="50px" align="center">
           <template slot-scope="scope">
-            <el-radio v-model="form.radio" :label="scope.row.customerCode">&nbsp;</el-radio>
+            <el-radio v-model="form.radio" :label="scope.row">&nbsp;</el-radio>
           </template>
         </el-table-column>
-        <el-table-column prop="customerCode" label="客户编号"/>
-        <el-table-column prop="customerName" label="客户名称"/>
-        <el-table-column prop="phone" label="业务员"/>
-        <el-table-column prop="customerContact" label="联系人"/>
-        <el-table-column prop="createTime" label="手机号" width="220px" align="center"/>
+        <el-table-column v-for="(v,i) in dataType==='custom' ?customColumns:productColumns" :key="v.field" :prop="v.field" :label="v.title"></el-table-column>
       </el-table>
       <el-pagination
         :total="total"
@@ -33,8 +29,8 @@
 </template>
 
 <script>
-  import initData from '@/mixins/initData'
   import {queryCustomerInfoPage} from '@/api/customerInfo'
+  import { queryProductInfoPage } from '@/api/productInfo'
 
   export default {
     components: {},
@@ -43,64 +39,97 @@
         type: String
       },
     },
-    mixins: [initData],
     data() {
       return {
         dialog: false,
+        page: 0, size: 10,
         loading: false,
         categoryList: [],
         form: {
           radio: ''
         },
-        dataSourceType: '',
         url: '',
         data: [],
-        total: 0
+        total: 0,
+        dataType:'',
+        customColumns: [
+          {field: "customerCode", title: "客户编号", width: 220},
+          {field: "customerName", title: "客户名称", width: 120},
+          {field: "firstContactName", title: "联系人", width: 100},
+          {field: "firstContactMobile", title: "手机号", width: 100,},
+        ],
+        productColumns:[
+          {field: "productCode", title: "产品编号", width: 220},
+          {field: "name", title: "产品名称", width: 120},
+          {field: "specifications", title: "规格", width: 160},
+          {field: "unitPrice", title: "单价", width: 100},
+          {field: "measureUnitName", title: "单位", width: 100},
+          {field: "productCategoryName", title: "类别", width: 100},
+        ]
       }
     },
     created() {
-
     },
     watch: {
-      dataSourceType: function (val) {
-        if (val === 'custom') {
-          this.queryCustom()
-        } else {
-          this.url = 'api/queryProductInfoList'
-        }
+      dataType: function (val) {
+        this.loading = true
+        this.getData()
       },
     },
     methods: {
-      // beforeInit() {
-      //   this.url = this.dataSourceType==='custom'?'api/queryCustomerInfoPage':'api/queryProductInfoList'
-      //   this.params = { page: this.page, size: this.size, }
-      //   return true
-      // },
-      queryCustom() {
-        this.loading = true
-        queryCustomerInfoPage().then(res => {
+      getData(){
+        const params={
+          page:this.page, size:this.size
+        }
+        if(this.dataType==='custom'){
+          this.queryCustom(params)
+        }else{
+          this.queryProduct(params)
+        }
+      },
+      queryCustom(params) {
+        queryCustomerInfoPage(params).then(res => {
           this.data = res.content
           this.total = res.totalElements
           this.loading = false
         })
       },
-      queryProduct() {
-
+      pageChange(e) {
+        this.page = e - 1
+        this.getData()
+      },
+      sizeChange(e) {
+        this.page = 0
+        this.size = e
+        this.getData()
+      },
+      queryProduct(params) {
+        queryProductInfoPage(params).then(res => {
+          this.data = res.content
+          this.total = res.totalElements
+          this.loading = false
+        })
       },
       cancel() {
-        this.dialog = false
+        this.resetForm()
       },
       doSubmit() {
         if (this.form.radio) {
-          this.dialog = false
-          this.$emit('setRadio', this.form.radio)
+          if(this.dataType==='product'){
+            this.$emit('setContact',this.form.radio)
+          }else{
+            this.$emit('setRadio',this.form.radio)
+          }
         }
-
+        this.resetForm()
       },
       resetForm() {
         this.form = {
           radio: ''
         }
+        this.dialog = false
+        this.page=0;
+        this.size=10
       },
     }
   }
