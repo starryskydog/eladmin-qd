@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <eForm ref="eform" :is-add="isAdd" :formType="type" @setRadio="handleRadio"/>
+    <eForm ref="eform" :formType="type" @setRadio="handleRadio"/>
     <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
       <el-button
         class="filter-item"
@@ -83,8 +83,7 @@
           username:''
         },
         date: '',
-        type:'',
-
+        type:''
       }
     },
     created() {
@@ -106,6 +105,7 @@
       },
       addCustom() {
         this.$refs.eform.dialog = true
+        this.$refs.eform.dataSourceType='custom'
       },
       handleFocus(type){
         this.type=type

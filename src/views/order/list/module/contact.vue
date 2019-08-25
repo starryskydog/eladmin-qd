@@ -2,15 +2,24 @@
   <el-row>
     <el-col>
       <el-table size="mini" :data="master_user.data" border style="width: 100%" highlight-current-row
-                :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" show-summary :summary-method="getSummaries">
+                :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" show-summary
+                :summary-method="getSummaries">
         <el-table-column v-for="(v,i) in master_user.columns" :key="v.field" :prop="v.field" :label="v.title"
                          :width="v.width">
           <template slot-scope="scope">
-                            <span >
+                            <span>
                               <span v-if="v.field==='allMoney'">
                                 {{dataList[scope.$index].allMoney}}
                               </span>
-                                <el-input v-else size="mini" placeholder="请输入内容" v-model="dataList[scope.$index][v.field]" @change="((val)=>{setContact(val,scope.$index,v.field)})" :disabled="v.disabled">
+                                <el-input v-else size="mini" placeholder="请输入内容"
+                                          v-model="dataList[scope.$index][v.field]"
+                                          @change="((val)=>{setContact(val,scope.$index,v.field)})"
+                                          :disabled="v.disabled" @focus="handleFocus(v.field)">
+                                  <span class="el-tag  el-tag--mini" v-if="v.field==='productCode'&&showBtn"
+                                        slot="suffix" style="cursor: pointer;margin-top: 4px"
+                                        @click="addCustom()">
+                                选择
+                            </span>
                                 </el-input>
                             </span>
           </template>
@@ -33,39 +42,47 @@
 
 <script>
   export default {
-    props:['dataList'],
+    props: ['dataList'],
     data() {
       return {
         master_user: {
           sel: null,//选中行
           columns: [
-            {field: "productCode", title: "产品编号", width: 120},
+            {field: "productCode", title: "产品编号", width: 220},
             {field: "productName", title: "产品名称", width: 120},
             {field: "specifications", title: "规格", width: 160},
-            {field: "unitPrice", title: "*单价", width: 160},
-            {field: "productNumber", title: "*数量", width: 120,},
-            {field: "allMoney", title: "销售金额", width: 120,disabled:true},
-            {field: "remark", title: "备注", width: 120,},
+            {field: "unitPrice", title: "*单价", width: 100},
+            {field: "productNumber", title: "*数量", width: 100,},
+            {field: "allMoney", title: "销售金额", width: 120, disabled: true},
+            {field: "remark", title: "备注"},
           ],
           data: [],
         },
+        showBtn: false
       }
     },
-    created:function(){
-      this.master_user.data=this.dataList
+    created: function () {
+      this.master_user.data = this.dataList
     },
     watch: {
       dataList: function (val) {
-        this.master_user.data=val
+        this.master_user.data = val
       },
     },
     methods: {
-      setContact(val,index,field){
-        console.log(val,index,field)
-        if(field==='unitPrice'||'productNumber'){
-          this.master_user.data[index].allMoney=this.master_user.data[index].unitPrice*this.master_user.data[index].productNumber
+      setContact(val, index, field) {
+        console.log(val, index, field)
+        if (field === 'unitPrice' || 'productNumber') {
+          this.master_user.data[index].allMoney = this.master_user.data[index].unitPrice * this.master_user.data[index].productNumber
         }
-        this.$emit('setContacts',this.master_user.data)
+        this.$emit('setContacts', this.master_user.data)
+      },
+      handleFocus(field) {
+        if (field === 'productCode') {
+          this.showBtn = true
+        } else {
+          this.showBtn = false
+        }
       },
       //添加账号
       addMasterUser() {
@@ -81,14 +98,18 @@
         this.master_user.data.push(j);
       },
       del(index) {
-        if(this.master_user.data.length>1){
+        if (this.master_user.data.length > 1) {
           this.master_user.data.splice(index, 1);
-        }else{
+        } else {
           this.$message.warning("至少保留一项");
         }
       },
+      addCustom() {
+        this.$parent.$parent.$refs.eform.dialog = true
+        this.$parent.$parent.$refs.eform.dataSourceType = 'product'
+      },
       getSummaries(param) {
-        const { columns, data } = param
+        const {columns, data} = param
         const sums = []
         columns.forEach((column, index) => {
           if (index === 0) {
