@@ -1,7 +1,7 @@
 <template>
   <el-row>
     <el-col>
-      <el-table size="mini" :data="material_inventory_warning.data" border style="width: 100%" highlight-current-row :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
+      <el-table :data="material_inventory_warning.data" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" size="mini" border style="width: 100%" highlight-current-row >
         <el-table-column label="操作" width="100" fixed>
           <template slot-scope="scope">
             <span class="el-tag el-tag--danger el-tag--mini" style="cursor: pointer;" @click="delMaterialInventoryWarning(scope.$index)">删除</span>
