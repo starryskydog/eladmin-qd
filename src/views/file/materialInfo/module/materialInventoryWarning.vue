@@ -50,7 +50,7 @@ export default {
     }
   },
   watch: {
-    contactList: function(val) {
+    materialInventoryWarningList: function(val) {
       this.material_inventory_warning.data = val
     }
   },
