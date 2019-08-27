@@ -14,11 +14,12 @@
       <contact @setContacts="updateContact" :contactList="form.customerContact"/>
       <el-form-item prop="remark">
         <el-input
-          :rows="4"
-          v-model="form.remark">
+          v-model="form.remark"
           type="textarea"
-          style="width: 500px;margin-top: 20px"
-          placeholder="备注信息"
+          placeholder="请输入备注"
+          style="margin: 20px auto;width: 500px"
+          :autosize="{ minRows: 4, maxRows: 8}"
+        >
         </el-input>
       </el-form-item>
     </el-form>

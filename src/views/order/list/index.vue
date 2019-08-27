@@ -47,6 +47,48 @@
       <p class="tips">
         交货信息
       </p>
+      <el-form-item label="交货方式" style="margin: 20px 20px 20px 0">
+        <el-select v-model="form.deliveryWayCode" placeholder="请选择" size="mini">
+          <el-option
+            v-for="item in deliveryWayOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="付款方式" style="margin: 20px 20px 20px 0">
+        <el-select v-model="form.payWayCode" placeholder="请选择" size="mini">
+          <el-option
+            v-for="item in payWayOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="账期" prop="deliveryDate" style="display: block">
+        <el-date-picker
+          v-model="form.orderDate"
+          type="date"
+          size="mini"
+          format="yyyy 年 MM 月 dd 日"
+          value-format="yyyy-MM-dd"
+          placeholder="选择日期">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="收货地址" style="margin: 0 20px 20px 0">
+        <el-input v-model="form.deliveryAddress" size="mini" placeholder="请填写收货地址">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="收货人" style="margin: 0 20px 20px 0">
+        <el-input v-model="form.deliveryUser" size="mini" placeholder="请填写收货人">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="联系方式" style="margin: 0 20px 20px 0">
+        <el-input v-model="form.deliveryUserContact" size="mini" placeholder="请填写联系方式">
+        </el-input>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -85,7 +127,27 @@
           username: ''
         },
         date: '',
-        type: 'custom'
+        type: 'custom',
+        deliveryWayOptions: [
+          {
+            label: '物流',
+            value: '0',
+          },
+          {
+            label: '自提',
+            value: '1',
+          }
+        ],
+        payWayOptions: [
+          {
+            label: '支付宝',
+            value: '0',
+          },
+          {
+            label: '微信',
+            value: '1',
+          },
+        ]
       }
     },
     created() {
@@ -98,8 +160,11 @@
         console.log(this.form)
       },
       handleRadio(radio) {
-        this.customerName=radio.customerName
-        this.form.customerId=radio.customerId
+        this.customerName = radio.customerName
+        this.form.customerId = radio.customerCode
+        this.form.deliveryAddress = radio.firstContactAddress
+        this.form.deliveryUser = radio.customerName
+        this.form.deliveryUserContact = radio.firstContactMobile
       },
       changeType(type) {
         this.type = type
