@@ -98,6 +98,7 @@
   import initData from '@/mixins/initData'
   import eForm from './form'
   import Contact from './module/contact'
+  import {initCustomerOrderCode} from '@/api/customerOrder'
 
   export default {
     mixins: [initData],
@@ -112,7 +113,7 @@
         form: {
           customerId: '',
           deliveryDate: '',
-          customerOrderCode: '11111',
+          customerOrderCode: null,
           customerOrderProductList: [
             {
               productCode: "",
@@ -153,6 +154,7 @@
     created() {
       this.getDate()
       this.form.username = this.$store.state.user.user.username
+      this.initCustomerOrderCode();
     },
     methods: {
       checkPermission,
@@ -180,6 +182,11 @@
       },
       handleFocus() {
         this.focus = true
+      },
+      initCustomerOrderCode() {
+        initCustomerOrderCode().then(res => {
+          this.form.customerOrderCode = res
+        })
       }
     }
   }
