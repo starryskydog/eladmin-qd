@@ -3,18 +3,6 @@
     <eForm ref="form" :is-add="isAdd" />
     <!--工具栏-->
     <div class="head-container">
-      <!-- 搜索 -->
-      <!--<el-input v-model="query.value" clearable placeholder="输入名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />-->
-      <!--<el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>-->
-      <!-- 新增 -->
-      <!--<div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">-->
-        <!--<router-link to="/file/supplierInfo">-->
-        <!--<el-button-->
-          <!--class="filter-item"-->
-          <!--size="mini"-->
-          <!--type="primary"-->
-          <!--icon="el-icon-plus">新增</el-button>-->
-        <!--</router-link>-->
       <!--</div>-->
       <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
           <el-button
@@ -26,7 +14,7 @@
       </div>
     </div>
     <el-row :gutter="5">
-      <!--供应商管理-->
+      <!--订单管理-->
       <el-col >
         <el-card class="box-card" shadow="never">
           <el-table v-loading="loading" :data="data" border highlight-current-row size="small" style="width: 100%;" @current-change="handleCurrentChange" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
