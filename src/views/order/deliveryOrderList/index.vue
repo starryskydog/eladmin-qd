@@ -12,14 +12,17 @@
     <el-form ref="form" :inline="true" :model="form" size="large" label-width="80px" label-position='left'>
       <p class="form-title" style="text-align: center; font-size: 18px">
         无锡市海星船舶动力有限公司
+        <span style="position: absolute;right: 30px;font-size: 12px;color: #666">
+          单据编号：112121212112
+        </span>
       </p>
       <p class="form-sub-title" style="text-align: center;">
-        客户订单
+        销售发货单
       </p>
       <p>
-        订单日期：{{date}}
+        发货日期：{{date}}
       </p>
-      <el-form-item label="客户" prop="customerId" label-width="50px">
+      <el-form-item label="订单号" prop="customerId" label-width="50px">
         <el-input v-model="customerName" size="small" @focus="handleFocus()">
           <span class="el-tag  el-tag--mini" v-if="focus" slot="suffix" style="cursor: pointer;"
                 @click="addCode()">
@@ -40,7 +43,7 @@
       <el-form-item label="单据编号:" prop="customerOrderCode">
         {{form.customerOrderCode}}
       </el-form-item>
-      <Contact @setContacts="updateContact" :dataList="form.customerOrderProductList"></Contact>
+      <Contact :dataList="form.customerOrderProductList"></Contact>
       <el-form-item label="制单人:" prop="username" style="margin: 20px auto">
         {{form.username}}
       </el-form-item>
@@ -98,7 +101,6 @@
   import initData from '@/mixins/initData'
   import eForm from './form'
   import Contact from './module/contact'
-  import {initCustomerOrderCode, add } from '@/api/customerOrder'
 
   export default {
     mixins: [initData],
@@ -113,7 +115,7 @@
         form: {
           customerId: '',
           deliveryDate: '',
-          customerOrderCode: null,
+          customerOrderCode: '11111',
           customerOrderProductList: [
             {
               productCode: "",
@@ -154,30 +156,15 @@
     created() {
       this.getDate()
       this.form.username = this.$store.state.user.user.username
-      this.initCustomerOrderCode()
     },
     methods: {
       checkPermission,
       add() {
-        console.log(this.form.customerOrderProductList)
-        const productList= this.form.customerOrderProductList
-        for (var i in productList){
-          if(!productList[i].productCode){
-            productList.splice(i, 1);
-          }
-        }
-        add(this.form).then(res => {
-          this.$notify({
-            title: '添加成功',
-            type: 'success',
-            duration: 2500
-          })
-        })
+        console.log(this.form)
       },
       handleRadio(radio) {
-        console.log("radio" + JSON.stringify(radio))
         this.customerName = radio.customerName
-        this.form.customerId = radio.id
+        this.form.customerId = radio.customerCode
         this.form.deliveryAddress = radio.firstContactAddress
         this.form.deliveryUser = radio.customerName
         this.form.deliveryUserContact = radio.firstContactMobile
@@ -194,16 +181,8 @@
         this.$refs.eform.dialog = true
         this.$refs.eform.dataType = 'custom'
       },
-      updateContact(data) {
-        this.form.customerOrderProductList = data
-      },
       handleFocus() {
         this.focus = true
-      },
-      initCustomerOrderCode() {
-        initCustomerOrderCode().then(res => {
-          this.form.customerOrderCode = res
-        })
       }
     }
   }
