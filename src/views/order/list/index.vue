@@ -40,7 +40,7 @@
       <el-form-item label="单据编号:" prop="customerOrderCode">
         {{form.customerOrderCode}}
       </el-form-item>
-      <Contact :dataList="form.customerOrderProductList"></Contact>
+      <Contact @setContacts="updateContact" :dataList="form.customerOrderProductList"></Contact>
       <el-form-item label="制单人:" prop="username" style="margin: 20px auto">
         {{form.username}}
       </el-form-item>
@@ -159,7 +159,13 @@
     methods: {
       checkPermission,
       add() {
-        console.log(JSON.stringify(this.form))
+        console.log(this.form.customerOrderProductList)
+        const productList= this.form.customerOrderProductList
+        for (var i in productList){
+          if(!productList[i].productCode){
+            productList.splice(i, 1);
+          }
+        }
         add(this.form).then(res => {
           this.$notify({
             title: '添加成功',
@@ -187,6 +193,9 @@
       addCode() {
         this.$refs.eform.dialog = true
         this.$refs.eform.dataType = 'custom'
+      },
+      updateContact(data) {
+        this.form.customerOrderProductList = data
       },
       handleFocus() {
         this.focus = true
