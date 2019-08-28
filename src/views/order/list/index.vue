@@ -98,7 +98,7 @@
   import initData from '@/mixins/initData'
   import eForm from './form'
   import Contact from './module/contact'
-  import {initCustomerOrderCode} from '@/api/customerOrder'
+  import {initCustomerOrderCode, add } from '@/api/customerOrder'
 
   export default {
     mixins: [initData],
@@ -154,16 +154,24 @@
     created() {
       this.getDate()
       this.form.username = this.$store.state.user.user.username
-      this.initCustomerOrderCode();
+      this.initCustomerOrderCode()
     },
     methods: {
       checkPermission,
       add() {
-        console.log(this.form)
+        console.log(JSON.stringify(this.form))
+        add(this.form).then(res => {
+          this.$notify({
+            title: '添加成功',
+            type: 'success',
+            duration: 2500
+          })
+        })
       },
       handleRadio(radio) {
+        console.log("radio" + JSON.stringify(radio))
         this.customerName = radio.customerName
-        this.form.customerId = radio.customerCode
+        this.form.customerId = radio.id
         this.form.deliveryAddress = radio.firstContactAddress
         this.form.deliveryUser = radio.customerName
         this.form.deliveryUserContact = radio.firstContactMobile
