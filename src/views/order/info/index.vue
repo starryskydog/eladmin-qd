@@ -57,8 +57,7 @@
 
 <script>
   import checkPermission from '@/utils/permission'
-  import { del, getCustomerOrderInfo, edit, queryCustomerOrderPage } from '@/api/supplier'
-  import { del,getSupplierInfoById } from '@/api/customerOrder'
+  import { del, getSupplierInfoById } from '@/api/customerOrder'
   import initData from '@/mixins/initData'
   import eForm from './form'
   export default {

@@ -35,6 +35,14 @@ export function queryProductInfoPage(params) {
   })
 }
 
+// 查询产品列表
+export function  queryProductInfoList() {
+  return request({
+    url: 'api/queryProductInfoList',
+    method: 'get'
+  })
+}
+
 // 删除产品资料
 export function deleteProductInfoById(id) {
   return request({
