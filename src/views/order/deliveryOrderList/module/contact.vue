@@ -51,12 +51,12 @@
         master_user: {
           sel: null,//选中行
           columns: [
-            {field: "productCode", title: "产品编号", width: 220},
-            {field: "productName", title: "产品名称", width: 120},
+            {field: "product_code", title: "产品编号", width: 220},
+            {field: "product_name", title: "产品名称", width: 120},
             {field: "specifications", title: "规格", width: 160},
-            {field: "unitPrice", title: "*单价", width: 100},
-            {field: "productNumber", title: "*数量", width: 100,},
-            {field: "allMoney", title: "销售金额", width: 120, disabled: true},
+            {field: "customer_order_number", title: "订单数量", width: 100,},
+            {field: "acutal_invoice_number", title: "实发数量", width: 120,},
+            {field: "sale_price", title: "销售金额", width: 120,},
             {field: "remark", title: "备注"},
           ],
           data: [],

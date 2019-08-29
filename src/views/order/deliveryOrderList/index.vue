@@ -19,79 +19,45 @@
       <p class="form-sub-title" style="text-align: center;">
         销售发货单
       </p>
-      <p>
-        发货日期：{{date}}
-      </p>
-      <el-form-item label="订单号" prop="customerId" label-width="50px">
-        <el-input v-model="customerName" size="small" @focus="handleFocus()">
+      <el-form-item label="订单号：" label-width="80px">
+        <el-input v-model="form.customerOrderCode" size="small" @focus="handleFocus()">
           <span class="el-tag  el-tag--mini" v-if="focus" slot="suffix" style="cursor: pointer;"
                 @click="addCode()">
                                 选择
                             </span>
         </el-input>
       </el-form-item>
-      <el-form-item label="交货日期" prop="deliveryDate">
-        <el-date-picker
-          v-model="form.deliveryDate"
-          type="date"
-          size="small"
-          format="yyyy 年 MM 月 dd 日"
-          value-format="yyyy-MM-dd"
-          placeholder="选择日期">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="单据编号:" prop="customerOrderCode">
-        {{form.customerOrderCode}}
-      </el-form-item>
-      <Contact :dataList="form.customerOrderProductList"></Contact>
-      <el-form-item label="制单人:" prop="username" style="margin: 20px auto">
-        {{form.username}}
-      </el-form-item>
-      <p class="tips">
-        交货信息
-      </p>
-      <el-form-item label="交货方式" style="margin: 20px 20px 20px 0">
-        <el-select v-model="form.deliveryWayCode" placeholder="请选择" size="mini">
-          <el-option
-            v-for="item in deliveryWayOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="付款方式" style="margin: 20px 20px 20px 0">
-        <el-select v-model="form.payWayCode" placeholder="请选择" size="mini">
-          <el-option
-            v-for="item in payWayOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="账期" prop="deliveryDate" style="display: block">
-        <el-date-picker
-          v-model="form.orderDate"
-          type="date"
-          size="mini"
-          format="yyyy 年 MM 月 dd 日"
-          value-format="yyyy-MM-dd"
-          placeholder="选择日期">
-        </el-date-picker>
+      <el-form-item label="客户：">
+        <el-input v-model="customerName" size="small" placeholder="请选择客户">
+        </el-input>
       </el-form-item>
       <el-form-item label="收货地址" style="margin: 0 20px 20px 0">
-        <el-input v-model="form.deliveryAddress" size="mini" placeholder="请填写收货地址">
+        <el-input v-model="form.deliveryAddress" size="small" placeholder="请填写收货地址">
         </el-input>
       </el-form-item>
       <el-form-item label="收货人" style="margin: 0 20px 20px 0">
-        <el-input v-model="form.deliveryUser" size="mini" placeholder="请填写收货人">
+        <el-input v-model="form.consignee" size="small" placeholder="请填写收货人">
         </el-input>
       </el-form-item>
       <el-form-item label="联系方式" style="margin: 0 20px 20px 0">
-        <el-input v-model="form.deliveryUserContact" size="mini" placeholder="请填写联系方式">
+        <el-input v-model="form.contactWay" size="small" placeholder="请填写联系方式">
         </el-input>
       </el-form-item>
+      <el-form-item label="发票号" style="margin: 0 20px 20px 0">
+        <el-input v-model="form.invoiceNumber" size="small" placeholder="请填写发票号">
+        </el-input>
+      </el-form-item>
+      <Contact :dataList="form.customerOrderProductList"></Contact>
+        <el-form-item prop="username" style="margin: 20px auto">
+          <el-input
+            v-model="form.deliveryUserContact"
+            placeholder="请填写备注"
+            type="textarea"
+            :rows="4"
+            style="width: 500px;margin-top: 20px"
+          >
+          </el-input>
+        </el-form-item>
     </el-form>
   </div>
 </template>
@@ -114,8 +80,8 @@
         customerName: '',
         form: {
           customerId: '',
-          deliveryDate: '',
-          customerOrderCode: '11111',
+          customerOrderCode:'',
+          contactWay:'',
           customerOrderProductList: [
             {
               productCode: "",
@@ -127,35 +93,10 @@
               remark: "",
             }
           ],
-          username: ''
         },
-        date: '',
-        type: 'custom',
-        deliveryWayOptions: [
-          {
-            label: '物流',
-            value: '0',
-          },
-          {
-            label: '自提',
-            value: '1',
-          }
-        ],
-        payWayOptions: [
-          {
-            label: '支付宝',
-            value: '0',
-          },
-          {
-            label: '微信',
-            value: '1',
-          },
-        ]
       }
     },
     created() {
-      this.getDate()
-      this.form.username = this.$store.state.user.user.username
     },
     methods: {
       checkPermission,
@@ -163,19 +104,15 @@
         console.log(this.form)
       },
       handleRadio(radio) {
-        this.customerName = radio.customerName
-        this.form.customerId = radio.customerCode
-        this.form.deliveryAddress = radio.firstContactAddress
-        this.form.deliveryUser = radio.customerName
-        this.form.deliveryUserContact = radio.firstContactMobile
+        this.form.customerOrderCode=radio.customerOrderCode
+        this.customerName=radio.customerName
+        this.form.deliveryAddress=radio.deliveryAddress
+        this.form.consignee=radio.deliveryUser
+        this.form.contactWay=radio.deliveryUserContact
+        this.form.customerOrderProductList=radio.customerOrderProductList
       },
       changeType(type) {
         this.type = type
-      },
-      getDate() {
-        const date = new Date();
-        const today = date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日'
-        this.date = today
       },
       addCode() {
         this.$refs.eform.dialog = true

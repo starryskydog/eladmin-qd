@@ -42,13 +42,13 @@
       </el-form-item>
       <Contact @setContacts="updateContact" :dataList="form.customerOrderProductList"></Contact>
       <el-form-item label="制单人:" prop="username" style="margin: 20px auto">
-        {{form.username}}
+        {{form.customerOrderMakerName}}
       </el-form-item>
       <p class="tips">
         交货信息
       </p>
       <el-form-item label="交货方式" style="margin: 20px 20px 20px 0">
-        <el-select v-model="form.deliveryWayCode" placeholder="请选择" size="mini">
+        <el-select v-model="form.deliveryWayCode" placeholder="请选择" size="mini" @change="selectName($event,'deliveryWay')">
           <el-option
             v-for="item in deliveryWayOptions"
             :key="item.value"
@@ -58,7 +58,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="付款方式" style="margin: 20px 20px 20px 0">
-        <el-select v-model="form.payWayCode" placeholder="请选择" size="mini">
+        <el-select v-model="form.payWayCode" placeholder="请选择" size="mini" @change="selectName($event,'payWay')">
           <el-option
             v-for="item in payWayOptions"
             :key="item.value"
@@ -98,6 +98,7 @@
   import initData from '@/mixins/initData'
   import eForm from './form'
   import Contact from './module/contact'
+  import store from '@/store'
   import {initCustomerOrderCode, add } from '@/api/customerOrder'
 
   export default {
@@ -125,7 +126,7 @@
               remark: "",
             }
           ],
-          username: ''
+          customerOrderMakerName: ''
         },
         date: '',
         type: 'custom',
@@ -153,29 +154,63 @@
     },
     created() {
       this.getDate()
-      this.form.username = this.$store.state.user.user.username
+      this.form.customerOrderMakerName = store.getters.user.username
       this.initCustomerOrderCode()
     },
     methods: {
       checkPermission,
       add() {
-        console.log(this.form.customerOrderProductList)
         const productList= this.form.customerOrderProductList
-        for (var i in productList){
-          if(!productList[i].productCode){
+        for (let i=0;i<productList.length;i++){
+          if(productList[i].productCode===''){
             productList.splice(i, 1);
+            i=i-1
           }
         }
-        add(this.form).then(res => {
+        if(productList.length>0){
+          this.form.customerOrderProductList=productList
+          console.log(this.form)
+          add(this.form).then(res => {
+            this.$notify({
+              title: '添加成功',
+              type: 'success',
+              duration: 2500
+            })
+            setTimeout(()=>{ this.$router.replace({ path: '/order/info' }) }, 2500);
+          })
+        }else{
+          this.form.customerOrderProductList=[{
+            productCode: "",
+            productName: "",
+            specifications: "",
+            unitPrice: "",
+            productNumber: "",
+            allMoney: "",
+            remark: "",
+          }]
           this.$notify({
-            title: '添加成功',
-            type: 'success',
+            title: '请至少选择一个产品',
+            type: 'warning',
             duration: 2500
           })
-        })
+        }
+
+      },
+      selectName(id,type){
+        let selectedName = {};
+        if(type==='deliveryWay'){
+          selectedName = this.deliveryWayOptions.find((item)=>{
+            return item.value === id;
+          });
+          this.form.deliveryWayName=selectedName.label
+        }else{
+          selectedName = this.payWayOptions.find((item)=>{
+            return item.value === id;
+          });
+          this.form.payWayName=selectedName.label
+        }
       },
       handleRadio(radio) {
-        console.log("radio" + JSON.stringify(radio))
         this.customerName = radio.customerName
         this.form.customerId = radio.id
         this.form.deliveryAddress = radio.firstContactAddress
@@ -204,6 +239,9 @@
         initCustomerOrderCode().then(res => {
           this.form.customerOrderCode = res
         })
+      },
+      resetForm(){
+
       }
     }
   }
