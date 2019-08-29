@@ -42,7 +42,7 @@ export function del(id) {
   })
 }
 
-// 查询供应商资料
+// 查询客户订单详情
 export function getCustomerOrderInfo(id) {
   return request({
     url: 'api/customerOrder/' + id,

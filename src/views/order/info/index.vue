@@ -35,13 +35,11 @@
                 </el-popover>
               </template>
             </el-table-column>
-            <el-table-column prop="supplierCategoryName" label="类别"/>
-            <el-table-column prop="supplierCode" label="供应商编号"/>
-            <el-table-column prop="supplierName" label="供应商名称"/>
-            <el-table-column prop="firstContactName" label="首要联系人"/>
-            <el-table-column prop="firstContactMobile" label="手机"/>
-            <!--<el-table-column prop="supplierName" label="联系地址"/>-->
-            <el-table-column prop="initialPreMoney" label="应付款余额"/>
+            <el-table-column prop="createTime" label="订单日期"/>
+            <el-table-column prop="customerOrderCode" label="订单编号"/>
+            <el-table-column prop="customerName" label="客户名称"/>
+            <el-table-column prop="payWayName" label="付款方式"/>
+            <el-table-column prop="totalMoney" label="销售金额"/>
           </el-table>
           <!--分页组件-->
           <el-pagination
@@ -59,7 +57,7 @@
 
 <script>
   import checkPermission from '@/utils/permission'
-  import { del,getSupplierInfoById } from '@/api/supplier'
+  import { del, getSupplierInfoById } from '@/api/customerOrder'
   import initData from '@/mixins/initData'
   import eForm from './form'
   export default {
@@ -81,7 +79,7 @@
       checkPermission,
       beforeInit() {
         this.showButton = false
-        this.url = 'api/querySupplierInfoPage'
+        this.url = 'api/queryCustomerOrderPage'
         const query = this.query
         const value = query.value
         this.params = { page: this.page, size: this.size }
@@ -92,7 +90,7 @@
         this.$router.push({ path: '/orders/list' })
       },
       edit(data) {
-        getSupplierInfoById(data.id).then(res=>{
+        getCustomerOrderInfo(data.id).then(res=>{
           this.isAdd = false
           this.id=data.id
           const _this = this.$refs.form
