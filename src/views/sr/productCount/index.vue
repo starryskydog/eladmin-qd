@@ -40,7 +40,8 @@
                 </el-popover>
               </template>
             </el-table-column>
-            <el-table-column prop="name" label="名称"/>
+            <el-table-column prop="productName" label="产品名称"/>
+            <el-table-column prop="totalNumber" label="数量"/>
           </el-table>
           <!--分页组件-->
           <el-pagination

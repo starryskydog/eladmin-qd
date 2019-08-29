@@ -2,7 +2,16 @@
   <el-dialog :visible.sync="dialog" :title="isAdd ? '新增产品统计' : '编辑产品统计'" append-to-body width="500px">
     <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
       <el-form-item label="产品" prop="name">
-        <el-input v-model="form.name" style="width: 370px;"/>
+        <el-select v-model="form.productId" style="width: 150px;" placeholder="请选择" size="small">
+        <el-option
+          v-for="(item, index) in productList"
+          :key="item.name + index"
+          :label="item.name"
+          :value="item.id"/>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="个数" prop="totalNumber">
+        <el-input v-model="form.totalNumber" size="small"/>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
