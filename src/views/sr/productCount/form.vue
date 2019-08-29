@@ -24,7 +24,7 @@
 <script>
 import { getDepts } from '@/api/dept'
 import { add, edit } from '@/api/productCount'
-import { queryProductList } from '@/api/productInfos'
+import { queryProductList } from '@/api/productInfo'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 export default {
   props: {
