@@ -85,7 +85,6 @@
         this.master_user.data[this.index].productName=data.name
         this.master_user.data[this.index].specifications=data.specifications
         this.master_user.data[this.index].unitPrice=data.unitPrice
-        this.master_user.data[this.index].productId=data.id
       },
       handleFocus(field) {
         if (field === 'productCode') {

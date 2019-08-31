@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialog" title="选择客户名称" append-to-body width="800px"
+  <el-dialog :visible.sync="dialog" :title="formType==='custom' ? '选择客户名称' : '选择产品'" append-to-body width="800px"
              :show-close=false>
     <el-form ref="form" :inline="true" :model="form" size="small" label-width="100px">
       <el-table v-loading="loading" :data="data" size="small" style="width: 100%;"
@@ -11,7 +11,7 @@
             <el-radio v-model="form.radio" :label="scope.row">&nbsp;</el-radio>
           </template>
         </el-table-column>
-        <el-table-column v-for="(v,i) in customColumns" :key="v.field" :prop="v.field" :label="v.title"></el-table-column>
+        <el-table-column v-for="(v,i) in formType==='custom' ?customColumns:productColumns" :key="v.field" :prop="v.field" :label="v.title"></el-table-column>
       </el-table>
       <el-pagination
         :total="total"
@@ -30,6 +30,7 @@
 
 <script>
   import {queryCustomerOrderPage} from '@/api/customerOrder'
+  import { queryProductInfoPage } from '@/api/productInfo'
 
   export default {
     components: {},
@@ -57,6 +58,14 @@
           {field: "deliveryUser", title: "联系人", width: 100},
           {field: "deliveryUserContact", title: "手机号", width: 100,},
         ],
+        productColumns:[
+          {field: "productCode", title: "产品编号", width: 220},
+          {field: "name", title: "产品名称", width: 120},
+          {field: "specifications", title: "规格", width: 160},
+          {field: "unitPrice", title: "单价", width: 100},
+          {field: "measureUnitName", title: "单位", width: 100},
+          {field: "productCategoryName", title: "类别", width: 100},
+        ],
       }
     },
     created() {
@@ -72,7 +81,11 @@
         const params={
           page:this.page, size:this.size
         }
+        if(this.dataType==='custom'){
           this.queryCustom(params)
+        }else{
+          this.queryProduct(params)
+        }
 
       },
       queryCustom(params) {
@@ -91,11 +104,24 @@
         this.size = e
         this.getData()
       },
+      queryProduct(params) {
+        queryProductInfoPage(params).then(res => {
+          this.data = res.content
+          this.total = res.totalElements
+          this.loading = false
+        })
+      },
       cancel() {
         this.resetForm()
       },
       doSubmit() {
-        this.$emit('setRadio',this.form.radio)
+        if (this.form.radio) {
+          if(this.dataType==='product'){
+            this.$emit('setContact',this.form.radio)
+          }else{
+            this.$emit('setRadio',this.form.radio)
+          }
+        }
         this.resetForm()
       },
       resetForm() {

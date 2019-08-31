@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <eForm ref="eform" @setRadio="handleRadio" @setType="changeType"/>
+    <eForm ref="eform" @setRadio="handleRadio" :formType="type" @setType="changeType"/>
     <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
       <el-button
         class="filter-item"
@@ -20,7 +20,7 @@
         销售发货单
       </p>
       <el-form-item label="订单号：" label-width="80px">
-        <el-input v-model="form.customerOrderCode" size="small" @focus="handleFocus()">
+        <el-input v-model="form.customerOrderCode" size="small" @focus="handleFocus()" placeholder="请选择订单号">
           <span class="el-tag  el-tag--mini" v-if="focus" slot="suffix" style="cursor: pointer;"
                 @click="addCode()">
                                 选择
@@ -48,7 +48,7 @@
         </el-input>
       </el-form-item>
       <Contact :dataList="form.customerOrderProductList"></Contact>
-        <el-form-item prop="username" style="margin: 20px auto">
+        <el-form-item prop="username" style="margin: 20px auto;display: block;">
           <el-input
             v-model="form.deliveryUserContact"
             placeholder="请填写备注"
@@ -58,6 +58,14 @@
           >
           </el-input>
         </el-form-item>
+      <el-form-item label="物流公司" style="margin: 0 20px 20px 0">
+        <el-input v-model="form.logisticsCompany" size="small" placeholder="请填写公司名称">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="单号" style="margin: 0 20px 20px 0">
+        <el-input v-model="form.saleInvoiceCode" size="small" placeholder="请填写单号">
+        </el-input>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -78,8 +86,11 @@
         id: '',
         focus: false,
         customerName: '',
+        type:'custom',
         form: {
           customerId: '',
+          saleInvoiceCode:'',
+          logisticsCompany:'',
           customerOrderCode:'',
           contactWay:'',
           customerOrderProductList: [
