@@ -1,8 +1,8 @@
 <template>
   <el-dialog :visible.sync="dialog" :title="isAdd ? '新增供应商资料' : '编辑供应商资料'" append-to-body width="1000px" :show-close=false>
-    <el-form ref="form" :inline="true" :model="form" size="large" label-width="100px">
+    <el-form ref="form" :inline="true" :model="form" :rules="rules" size="large" label-width="100px">
       <el-form-item label="供应商编号" prop="supplierCode">
-        <el-input v-model="form.supplierCode" disabled size="small"/>
+        <el-input v-model="form.supplierCode" size="small"/>
       </el-form-item>
       <el-form-item label="供应商名称" prop="supplierName">
         <el-input v-model="form.supplierName" size="small"/>
@@ -17,7 +17,7 @@
         </el-select>
       </el-form-item>
       <Address @setAddress="updateAddress" :propList="form.supplierAddress"></Address>
-      <el-form-item label="期初应付款" prop="initialPreMoney" style="display:block;margin-top: 20px">
+      <el-form-item label="期初应付款(元)" prop="initialPreMoney" style="display:block;margin-top: 20px">
         <el-input v-model="form.initialPreMoney" size="small" placeholder="请输入"/>
       </el-form-item>
       <contact @setContacts="updateContact" :contactList="form.supplierContact"></contact>
@@ -39,13 +39,13 @@
 </template>
 
 <script>
-import {del, initCode, add, edit,getSupplierInfoById} from '@/api/supplier'
-import {queryAllCategoryList} from '@/api/supplierCategory'
+import { del, initCode, add, edit, getSupplierInfoById} from '@/api/supplier'
+import { queryAllCategoryList } from '@/api/supplierCategory'
 import contact from './module/contact'
 import Address from './module/address'
 
 export default {
-  components: {contact, Address},
+  components: { contact, Address },
   props: {
     isAdd: {
       type: Boolean,
@@ -65,7 +65,7 @@ export default {
             email: '',
             weixin: '',
             qq: '',
-            firstTag: '',
+            firstTag: ''
           }
         ],
         supplierName: '',
@@ -84,63 +84,72 @@ export default {
       },
       rules: {
         supplierName: [
-          { required: true, message: '请输入用户名', trigger: 'blur'},
-          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur'}
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
         ],
         supplierCategoryId: [
-          {required: true, message: '请选择供应商类型', trigger: 'change', type: 'number'},
+          { required: true, message: '请选择供应商类型', trigger: 'change', type: 'number' }
         ],
+
+        supplierCode: [
+          { required: true, message: '供应商编号不能为空', trigger: 'change'}
+        ]
+      }
+    }
+  },
+  watch: {
+    dialog: function(val) {
+      if (val && this.isAdd) {
+        this.initCode()
       }
     }
   },
   created() {
     this.queryAllCategoryList()
   },
-  watch: {
-    dialog:function (val) {
-      if(val&&this.isAdd){
-        this.initCode()
-      }
-    }
-  },
   methods: {
     cancel() {
       this.dialog = false
     },
     doSubmit() {
-      if(this.form.supplierContact){
-        const length1 = this.form.supplierContact.length
-        if (length1 > 0 && !this.form.supplierContact[length1 - 1].name) {
-          this.form.supplierContact.pop()
+      this.$refs['form'].validate((valid) => {
+        console.log(valid)
+        if (valid) {
+          if(this.form.supplierContact){
+            const length1 = this.form.supplierContact.length
+            if (length1 > 0 && !this.form.supplierContact[length1 - 1].name) {
+              this.form.supplierContact.pop()
+            }
+          }
+          if(this.form.supplierAddress){
+            const length2 = this.form.supplierAddress.length
+            if (length2 > 0 && !this.form.supplierAddress[length2 - 1].province) {
+              this.form.supplierAddress.pop()
+            }
+          }
+          if (this.isAdd) {
+            add(this.form).then(res => {
+              this.$notify({
+                title: '添加成功',
+                type: 'success',
+                duration: 2500
+              })
+            })
+          }else{
+            edit(this.form).then(res => {
+              this.$notify({
+                title: '修改成功',
+                type: 'success',
+                duration: 2500
+              })
+            })
+          }
+          this.loading = false
+          this.resetForm()
+          this.dialog = false
+          this.$parent.init()
         }
-      }
-      if(this.form.supplierAddress){
-        const length2 = this.form.supplierAddress.length
-        if (length2 > 0 && !this.form.supplierAddress[length2 - 1].province) {
-          this.form.supplierAddress.pop()
-        }
-      }
-      if(this.isAdd){
-        add(this.form).then(res => {
-          this.$notify({
-            title: '添加成功',
-            type: 'success',
-            duration: 2500
-          })
-        })
-      }else{
-        edit(this.form).then(res => {
-          this.$notify({
-            title: '修改成功',
-            type: 'success',
-            duration: 2500
-          })
-        })
-      }
-      this.loading = false
-      this.resetForm()
-      this.dialog = false
-      this.$parent.init()
+      })
     },
     initCode() {
       initCode().then(res => {
