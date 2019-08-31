@@ -1,24 +1,15 @@
 import request from '@/utils/request'
 
-// 分页查询客户订单列表
-export function queryCustomerOrderPage() {
+// 分页查询发货单 列表
+export function queryInvoicePage() {
   return request({
-    url: 'api/queryCustomerOrderPage',
+    url: 'api/queryInvoicePage',
     method: 'get'
   })
 }
 
-// 添加客户订单
+// 添加发货单
 export function add(data) {
-  return request({
-    url: 'api/customerOrder',
-    method: 'post',
-    data
-  })
-}
-
-// 添加发货订单
-export function addInvoice(data) {
   return request({
     url: 'api/invoice',
     method: 'post',
@@ -26,27 +17,27 @@ export function addInvoice(data) {
   })
 }
 
-// 修改客户订单
+// 修改发货单
 export function edit(data) {
   return request({
-    url: 'api/customerOrder',
+    url: 'api/invoice',
     method: 'put',
     data
   })
 }
 
-// 删除客户订单
+// 删除发货单
 export function del(id) {
   return request({
-    url: 'api/customerOrder/' + id,
+    url: 'api/invoice/' + id,
     method: 'delete'
   })
 }
 
-// 查询客户订单详情
-export function getCustomerOrderInfo(id) {
+// 查询发货单详情
+export function getInvoiceInfo(id) {
   return request({
-    url: 'api/customerOrder/' + id,
+    url: 'api/invoice/' + id,
     method: 'get'
   })
 }
