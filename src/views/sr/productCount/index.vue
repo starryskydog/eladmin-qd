@@ -25,7 +25,7 @@
           <el-table v-loading="loading" :data="data" border highlight-current-row size="small" style="width: 100%;" @current-change="handleCurrentChange" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
             <el-table-column v-if="checkPermission(['ADMIN','ROLES_ALL','ROLES_EDIT','ROLES_DELETE'])" label="操作" width="130px" align="center">
               <template slot-scope="scope">
-                <!--<el-button v-permission="['ADMIN','ROLES_ALL','ROLES_EDIT']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>-->
+                <el-button v-permission="['ADMIN','ROLES_ALL','ROLES_EDIT']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
                 <el-popover
                   v-permission="['ADMIN','ROLES_ALL','ROLES_DELETE']"
                   :ref="scope.row.id"
@@ -59,10 +59,10 @@
 
 <script>
 import checkPermission from '@/utils/permission'
-import { queryProductCountPage } from '@/api/productCount'
+import { queryProductCountPage, del } from '@/api/productCount'
 import initData from '@/mixins/initData'
 import eForm from './form'
-import { del } from '@/api/measureUnit'
+
 export default {
   name:'productCount',
   components: { eForm },
@@ -96,10 +96,7 @@ export default {
     edit(data) {
       this.isAdd = false
       const _this = this.$refs.form
-      _this.form = { id: data.id, name: data.name }
-      if (_this.form.dataScope === '自定义') {
-        _this.getDepts()
-      }
+      _this.form = { id: data.id, productId: data.productId, totalNumber: data.totalNumber }
       _this.dialog = true
     },
     handleCurrentChange(val) {

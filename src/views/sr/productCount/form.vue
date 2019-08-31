@@ -11,7 +11,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="个数" prop="totalNumber">
-        <el-input v-model="form.totalNumber" size="small"/>
+        <el-input-number v-model="form.totalNumber" :min="1" label="描述文字"></el-input-number>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -24,7 +24,7 @@
 <script>
 import { getDepts } from '@/api/dept'
 import { add, edit } from '@/api/productCount'
-import { queryProductList } from '@/api/productInfo'
+import { queryProductInfoList } from '@/api/productInfo'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 export default {
   props: {
@@ -43,21 +43,22 @@ export default {
         productId: null
       },
       rules: {
-        name: [
-          { required: true, message: '请输入名称', trigger: 'blur' }
+        productId: [
+          { required: true, message: '请选择产品名称', trigger: 'blur' }
         ]
       }
     }
   },
   created() {
-    this.queryProductList()
+    this.queryProductInfoList()
   },
   methods: {
     cancel() {
       this.resetForm()
     },
-    queryProductList() {
-      queryProductList().then(res => {
+    queryProductInfoList() {
+      queryProductInfoList().then(res => {
+        console.log(JSON.stringify('productList' + res))
         this.productList = res
       })
     },
