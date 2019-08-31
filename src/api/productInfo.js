@@ -36,7 +36,7 @@ export function queryProductInfoPage(params) {
 }
 
 // 查询产品列表
-export function  queryProductInfoList() {
+export function queryProductInfoList() {
   return request({
     url: 'api/queryProductInfoList',
     method: 'get'
