@@ -66,7 +66,7 @@
               email: '',
               weixin: '',
               qq: '',
-              firstTag: ''
+              firstTag: 1
             }
           ],
           supplierName: '',
@@ -174,7 +174,7 @@
               email: '',
               weixin: '',
               qq: '',
-              firstTag: '',
+              firstTag: 1,
             }
           ],
           supplierName: '',
@@ -209,7 +209,7 @@
               email: "",
               weixin: "",
               qq: "",
-              firstTag: "",
+              firstTag: 1,
             }
           ],
           supplierName: '',
