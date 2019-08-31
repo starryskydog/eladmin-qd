@@ -47,7 +47,7 @@
         <el-input v-model="form.invoiceNumber" size="small" placeholder="请填写发票号">
         </el-input>
       </el-form-item>
-      <Contact :dataList="form.customerOrderProductList"></Contact>
+      <Contact :dataList="form.invoiceProductList"></Contact>
       <el-form-item prop="username" style="margin: 20px auto;display: block;">
         <el-input
           v-model="form.deliveryUserContact"
@@ -75,7 +75,7 @@
   import initData from '@/mixins/initData'
   import eForm from './form'
   import Contact from './module/contact'
-  import {addInvoice} from '@/api/invoice'
+  import {add} from '@/api/invoice'
 
   export default {
     mixins: [initData],
@@ -94,7 +94,7 @@
           logisticsCompany: '',
           customerOrderCode: '',
           contactWay: '',
-          customerOrderProductList: [
+          invoiceProductList: [
             {
               productCode: "",
               productName: "",
@@ -113,7 +113,7 @@
     methods: {
       checkPermission,
       add() {
-        addInvoice(this.form).then(res => {
+        add(this.form).then(res => {
           this.$notify({
             title: '添加成功',
             type: 'success',
@@ -131,7 +131,7 @@
         this.form.deliveryAddress = radio.deliveryAddress
         this.form.consignee = radio.deliveryUser
         this.form.contactWay = radio.deliveryUserContact
-        this.form.customerOrderProductList = radio.customerOrderProductList
+        this.form.invoiceProductList = radio.customerOrderProductList
       },
       changeType(type) {
         this.type = type
