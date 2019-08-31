@@ -13,7 +13,7 @@
       <p class="form-title" style="text-align: center; font-size: 18px">
         无锡市海星船舶动力有限公司
         <span style="position: absolute;right: 30px;font-size: 12px;color: #666">
-          单据编号：112121212112
+          单据编号：{{form.saleInvoiceCode}}
         </span>
       </p>
       <p class="form-sub-title" style="text-align: center;">
@@ -75,7 +75,7 @@
   import initData from '@/mixins/initData'
   import eForm from './form'
   import Contact from './module/contact'
-  import {add} from '@/api/invoice'
+  import {add,initInvoiceCode} from '@/api/invoice'
 
   export default {
     mixins: [initData],
@@ -109,6 +109,7 @@
       }
     },
     created() {
+      this.initInvoiceCode()
     },
     methods: {
       checkPermission,
@@ -122,6 +123,11 @@
           setTimeout(() => {
             this.$router.replace({path: '/order/deliveryOrder'})
           }, 2500);
+        })
+      },
+      initInvoiceCode(){
+        initInvoiceCode().then(res=>{
+          this.form.saleInvoiceCode=res
         })
       },
       handleRadio(radio) {

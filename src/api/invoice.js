@@ -8,6 +8,14 @@ export function queryInvoicePage() {
   })
 }
 
+// 初始化发货单编号
+export function initInvoiceCode() {
+  return request({
+    url: 'api/initInvoiceCode',
+    method: 'get'
+  })
+}
+
 // 添加发货单
 export function add(data) {
   return request({

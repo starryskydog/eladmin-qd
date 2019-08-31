@@ -93,7 +93,7 @@
       checkPermission,
       beforeInit() {
         this.showButton = false
-        this.url = 'api/querySupplierInfoPage'
+        this.url = 'api/queryInvoicePage'
         const query = this.query
         const value = query.value
         this.params = { page: this.page, size: this.size }
