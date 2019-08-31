@@ -48,16 +48,16 @@
         </el-input>
       </el-form-item>
       <Contact :dataList="form.customerOrderProductList"></Contact>
-        <el-form-item prop="username" style="margin: 20px auto;display: block;">
-          <el-input
-            v-model="form.deliveryUserContact"
-            placeholder="请填写备注"
-            type="textarea"
-            :rows="4"
-            style="width: 500px;margin-top: 20px"
-          >
-          </el-input>
-        </el-form-item>
+      <el-form-item prop="username" style="margin: 20px auto;display: block;">
+        <el-input
+          v-model="form.deliveryUserContact"
+          placeholder="请填写备注"
+          type="textarea"
+          :rows="4"
+          style="width: 500px;margin-top: 20px"
+        >
+        </el-input>
+      </el-form-item>
       <el-form-item label="物流公司" style="margin: 0 20px 20px 0">
         <el-input v-model="form.logisticsCompany" size="small" placeholder="请填写公司名称">
         </el-input>
@@ -75,6 +75,7 @@
   import initData from '@/mixins/initData'
   import eForm from './form'
   import Contact from './module/contact'
+  import {addInvoice} from '@/api/invoice'
 
   export default {
     mixins: [initData],
@@ -86,13 +87,13 @@
         id: '',
         focus: false,
         customerName: '',
-        type:'custom',
+        type: 'custom',
         form: {
           customerId: '',
-          saleInvoiceCode:'',
-          logisticsCompany:'',
-          customerOrderCode:'',
-          contactWay:'',
+          saleInvoiceCode: '',
+          logisticsCompany: '',
+          customerOrderCode: '',
+          contactWay: '',
           customerOrderProductList: [
             {
               productCode: "",
@@ -112,15 +113,25 @@
     methods: {
       checkPermission,
       add() {
-        console.log(this.form)
+        addInvoice(this.form).then(res => {
+          this.$notify({
+            title: '添加成功',
+            type: 'success',
+            duration: 2500
+          })
+          setTimeout(() => {
+            this.$router.replace({path: '/order/deliveryOrder'})
+          }, 2500);
+        })
       },
       handleRadio(radio) {
-        this.form.customerOrderCode=radio.customerOrderCode
-        this.customerName=radio.customerName
-        this.form.deliveryAddress=radio.deliveryAddress
-        this.form.consignee=radio.deliveryUser
-        this.form.contactWay=radio.deliveryUserContact
-        this.form.customerOrderProductList=radio.customerOrderProductList
+        this.form.customerOrderCode = radio.customerOrderCode
+        this.customerName = radio.customerName
+        this.form.customerId = radio.customerId
+        this.form.deliveryAddress = radio.deliveryAddress
+        this.form.consignee = radio.deliveryUser
+        this.form.contactWay = radio.deliveryUserContact
+        this.form.customerOrderProductList = radio.customerOrderProductList
       },
       changeType(type) {
         this.type = type
