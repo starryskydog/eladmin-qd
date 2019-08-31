@@ -1,8 +1,8 @@
 <template>
   <el-dialog :visible.sync="dialog" :title="isAdd ? '新增委外公司资料' : '编辑委外公司资料'" append-to-body width="1000px" :show-close=false>
-    <el-form ref="form" :inline="true" :model="form" size="large" label-width="100px">
+    <el-form ref="form" :inline="true" :model="form" :rules="rules" size="large" label-width="100px">
       <el-form-item label="委外公司编号" prop="outSourceCompanyCode">
-        <el-input v-model="form.outSourceCompanyCode" disabled size="small"/>
+        <el-input v-model="form.outSourceCompanyCode" size="small"/>
       </el-form-item>
       <el-form-item label="委外公司名称" prop="outSourceCompanyName">
         <el-input v-model="form.outSourceCompanyName" size="small"/>
@@ -78,14 +78,14 @@ export default {
       }
     }
   },
-  created() {
-  },
   watch: {
     dialog: function(val) {
       if (val && this.isAdd) {
         this.initCode()
       }
     }
+  },
+  created() {
   },
   methods: {
     cancel() {
