@@ -2,12 +2,12 @@
   <el-row>
     <el-col>
       <eForm ref="eform" :formType="type" @setContact="handleSet"/>
-      <el-table size="mini" :data="master_user.data" border style="width: 100%" highlight-current-row
-                :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" show-summary
-                :summary-method="getSummaries">
-        <el-table-column v-for="(v,i) in master_user.columns" :key="v.field" :prop="v.field" :label="v.title"
-                         :width="v.width">
-          <template slot-scope="scope">
+        <el-table size="mini" :data="master_user.data" border style="width: 100%" highlight-current-row
+                  :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" show-summary
+                  :summary-method="getSummaries">
+          <el-table-column v-for="(v,i) in master_user.columns" :key="v.field" :prop="v.field" :label="v.title"
+                           :width="v.width">
+            <template slot-scope="scope">
                             <span>
                               <span v-if="v.field==='allMoney'">
                                 {{dataList[scope.$index].allMoney}}
@@ -23,20 +23,20 @@
                             </span>
                                 </el-input>
                             </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="100" fixed>
-          <template slot-scope="scope">
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="100" fixed>
+            <template slot-scope="scope">
             <span class="el-tag el-tag--danger el-tag--mini" style="cursor: pointer;" @click="del(scope.$index)">
                                 删除
                             </span>
-            <span class="el-tag  el-tag--mini" style="cursor: pointer;"
-                  @click="addMasterUser()">
+              <span class="el-tag  el-tag--mini" style="cursor: pointer;"
+                    @click="addMasterUser()">
                                 添加
                             </span>
-          </template>
-        </el-table-column>
-      </el-table>
+            </template>
+          </el-table-column>
+        </el-table>
     </el-col>
   </el-row>
 </template>
@@ -51,12 +51,12 @@
         master_user: {
           sel: null,//选中行
           columns: [
-            {field: "product_code", title: "产品编号", width: 220},
-            {field: "product_name", title: "产品名称", width: 120},
+            {field: "productCode", title: "产品编号", width: 220},
+            {field: "productName", title: "产品名称", width: 120},
             {field: "specifications", title: "规格", width: 160},
-            {field: "customer_order_number", title: "订单数量", width: 100,},
-            {field: "acutal_invoice_number", title: "实发数量", width: 120,},
-            {field: "sale_price", title: "销售金额", width: 120,},
+            {field: "productNumber", title: "订单数量", width: 100,},
+            {field: "actualInvoiceNumber", title: "实发数量", width: 120,},
+            {field: "salePrice", title: "销售金额", width: 120,},
             {field: "remark", title: "备注"},
           ],
           data: [],
@@ -124,7 +124,7 @@
         columns.forEach((column, index) => {
           if (index === 0) {
             sums[index] = '总计'
-          } else if (index === 5 || index === 6) {
+          } else if (index === 4 || index === 5 || index === 6) {
             const values = data.map(item => Number(item[column.property]))
             if (!values.every(value => isNaN(value))) {
               sums[index] = values.reduce((prev, curr) => {

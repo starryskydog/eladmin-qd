@@ -51,7 +51,8 @@
             {field: "qq", title: "QQ", width: 120},
             {field: "firstTag", title: "首要联系人", width: 120, type: 'select'},
           ],
-          data: [],
+          data: [
+          ],
           options: [
             {
               id: 1,
@@ -87,7 +88,7 @@
           email: "",
           weixin: "",
           qq: "",
-          firstTag: "",
+          firstTag: 1,
         };
         this.master_user.data.push(j);
         this.master_user.sel = JSON.parse(JSON.stringify(j));
