@@ -39,158 +39,155 @@
 </template>
 
 <script>
-  import {del, initCode, add, edit,getSupplierInfoById} from '@/api/supplier'
-  import {queryAllCategoryList} from '@/api/supplierCategory'
-  import contact from './module/contact'
-  import Address from './module/address'
+import {del, initCode, add, edit,getSupplierInfoById} from '@/api/supplier'
+import {queryAllCategoryList} from '@/api/supplierCategory'
+import contact from './module/contact'
+import Address from './module/address'
 
-  export default {
-    components: {contact, Address},
-    props: {
-      isAdd: {
-        type: Boolean,
-        required: true
-      },
-      uid: {
-        type: Number,
-      }
-    },
-    data() {
-      return {
-        dialog: false,
-        categoryList: [],
-        form: {
-          supplierContact: [
-            {
-              name: "",
-              phone: "",
-              mobile: "",
-              email: "",
-              weixin: "",
-              qq: "",
-              firstTag: "",
-            }
-          ],
-          supplierName: '',
-          initialPreMoney: null,
-          supplierCode: null,
-          supplierAddress: [
-            {
-              province: '',
-              city: '',
-              area: '',
-              addressDetail: ''
-            }
-          ],
-          supplierCategoryId: null,
-          remark: ''
-        },
-        rules: {
-          supplierName: [
-            {required: true, message: '请输入用户名', trigger: 'blur'},
-            {min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur'}
-          ],
-          supplierCategoryId: [
-            {required: true, message: '请选择供应商类型', trigger: 'change', type: 'number'},
-          ],
-        }
-      }
-    },
-    created() {
-      this.queryAllCategoryList()
-    },
-    watch: {
-      dialog:function (val) {
-        if(val&&this.isAdd){
-          this.initCode()
-        }
-      }
-    },
-    methods: {
-      cancel() {
-        this.dialog = false
-      },
-      doSubmit() {
-        if(this.form.supplierContact){
-          const length1 = this.form.supplierContact.length
-          if (length1 > 0 && !this.form.supplierContact[length1 - 1].name) {
-            this.form.supplierContact.pop()
+export default {
+  components: {contact, Address},
+  props: {
+    isAdd: {
+      type: Boolean,
+      required: true
+    }
+  },
+  data() {
+    return {
+      dialog: false,
+      categoryList: [],
+      form: {
+        supplierContact: [
+          {
+            name: '',
+            phone: '',
+            mobile: '',
+            email: '',
+            weixin: '',
+            qq: '',
+            firstTag: '',
           }
-        }
-        if(this.form.supplierAddress){
-          const length2 = this.form.supplierAddress.length
-          if (length2 > 0 && !this.form.supplierAddress[length2 - 1].province) {
-            this.form.supplierAddress.pop()
+        ],
+        supplierName: '',
+        initialPreMoney: null,
+        supplierCode: null,
+        supplierAddress: [
+          {
+            province: '',
+            city: '',
+            area: '',
+            addressDetail: ''
           }
-        }
-        if(this.isAdd){
-          add(this.form).then(res => {
-            this.$notify({
-              title: '添加成功',
-              type: 'success',
-              duration: 2500
-            })
-          })
-        }else{
-          edit(this.form).then(res=>{
-            this.$notify({
-              title: '修改成功',
-              type: 'success',
-              duration: 2500
-            })
-          })
-        }
-        this.loading = false
-        this.resetForm()
-        this.dialog = false
-        this.$parent.init()
+        ],
+        supplierCategoryId: null,
+        remark: ''
       },
-      initCode() {
-        initCode().then(res => {
-          this.resetForm()
-          this.form.supplierCode=res
-        })
-      },
-      queryAllCategoryList() {
-        queryAllCategoryList().then(res => {
-          this.categoryList = res
-        })
-      },
-      resetForm() {
-        this.form = {
-          supplierContact: [
-            {
-              name: "",
-              phone: "",
-              mobile: "",
-              email: "",
-              weixin: "",
-              qq: "",
-              firstTag: "",
-            }
-          ],
-          supplierName: '',
-          initialPreMoney: null,
-          supplierAddress: [
-            {
-              province: '',
-              city: '',
-              area: '',
-              addressDetail: ''
-            }
-          ],
-          supplierCategoryId: null,
-          remark: ''
-        }
-      },
-      updateContact(data) {
-        this.form.supplierContact = data
-      },
-      updateAddress(data) {
-        this.form.supplierAddress = data
+      rules: {
+        supplierName: [
+          { required: true, message: '请输入用户名', trigger: 'blur'},
+          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur'}
+        ],
+        supplierCategoryId: [
+          {required: true, message: '请选择供应商类型', trigger: 'change', type: 'number'},
+        ],
       }
     }
+  },
+  created() {
+    this.queryAllCategoryList()
+  },
+  watch: {
+    dialog:function (val) {
+      if(val&&this.isAdd){
+        this.initCode()
+      }
+    }
+  },
+  methods: {
+    cancel() {
+      this.dialog = false
+    },
+    doSubmit() {
+      if(this.form.supplierContact){
+        const length1 = this.form.supplierContact.length
+        if (length1 > 0 && !this.form.supplierContact[length1 - 1].name) {
+          this.form.supplierContact.pop()
+        }
+      }
+      if(this.form.supplierAddress){
+        const length2 = this.form.supplierAddress.length
+        if (length2 > 0 && !this.form.supplierAddress[length2 - 1].province) {
+          this.form.supplierAddress.pop()
+        }
+      }
+      if(this.isAdd){
+        add(this.form).then(res => {
+          this.$notify({
+            title: '添加成功',
+            type: 'success',
+            duration: 2500
+          })
+        })
+      }else{
+        edit(this.form).then(res => {
+          this.$notify({
+            title: '修改成功',
+            type: 'success',
+            duration: 2500
+          })
+        })
+      }
+      this.loading = false
+      this.resetForm()
+      this.dialog = false
+      this.$parent.init()
+    },
+    initCode() {
+      initCode().then(res => {
+        this.resetForm()
+        this.form.supplierCode=res
+      })
+    },
+    queryAllCategoryList() {
+      queryAllCategoryList().then(res => {
+        this.categoryList = res
+      })
+    },
+    resetForm() {
+      this.form = {
+        supplierContact: [
+          {
+            name: '',
+            phone: '',
+            mobile: '',
+            email: '',
+            weixin: '',
+            qq: '',
+            firstTag: '',
+          }
+        ],
+        supplierName: '',
+        initialPreMoney: null,
+        supplierAddress: [
+          {
+            province: '',
+            city: '',
+            area: '',
+            addressDetail: ''
+          }
+        ],
+        supplierCategoryId: null,
+        remark: ''
+      }
+    },
+    updateContact(data) {
+      this.form.supplierContact = data
+    },
+    updateAddress(data) {
+      this.form.supplierAddress = data
+    }
   }
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
