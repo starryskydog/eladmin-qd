@@ -9,7 +9,7 @@
         @click="add">保存
       </el-button>
     </div>
-    <el-form ref="form" :inline="true" :model="form" size="large" label-width="80px" label-position='left'>
+    <el-form ref="form" :inline="true" :model="form" :rules="rules" size="large" label-width="80px" label-position='left'>
       <p class="form-title" style="text-align: center; font-size: 18px">
         无锡市海星船舶动力有限公司
         <span style="position: absolute;right: 30px;font-size: 12px;color: #666">
@@ -21,36 +21,33 @@
       </p>
       <el-form-item label="订单号：" label-width="80px">
         <el-input v-model="form.customerOrderCode" size="small" @focus="handleFocus()" placeholder="请选择订单号">
-          <span class="el-tag  el-tag--mini" v-if="focus" slot="suffix" style="cursor: pointer;"
-                @click="addCode()">
-                                选择
-                            </span>
+          <span v-if="focus" slot="suffix" lass="el-tag  el-tag--mini" style="cursor: pointer;" @click="addCode()">选择</span>
         </el-input>
       </el-form-item>
-      <el-form-item label="客户：">
+      <el-form-item label="客户：" prop="customerName">
         <el-input v-model="customerName" size="small" placeholder="请选择客户">
         </el-input>
       </el-form-item>
-      <el-form-item label="收货地址" style="margin: 0 20px 20px 0">
+      <el-form-item label="收货地址" style="margin: 0 20px 20px 0" prop="deliveryAddress">
         <el-input v-model="form.deliveryAddress" size="small" placeholder="请填写收货地址">
         </el-input>
       </el-form-item>
-      <el-form-item label="收货人" style="margin: 0 20px 20px 0">
+      <el-form-item label="收货人" style="margin: 0 20px 20px 0" prop="consignee">
         <el-input v-model="form.consignee" size="small" placeholder="请填写收货人">
         </el-input>
       </el-form-item>
-      <el-form-item label="联系方式" style="margin: 0 20px 20px 0">
+      <el-form-item label="联系方式" style="margin: 0 20px 20px 0" prop="contactWay">
         <el-input v-model="form.contactWay" size="small" placeholder="请填写联系方式">
         </el-input>
       </el-form-item>
-      <el-form-item label="发票号" style="margin: 0 20px 20px 0">
+      <el-form-item label="发票号" style="margin: 0 20px 20px 0" prop="invoiceNumber">
         <el-input v-model="form.invoiceNumber" size="small" placeholder="请填写发票号">
         </el-input>
       </el-form-item>
       <Contact :dataList="form.invoiceProductList"></Contact>
-      <el-form-item prop="username" style="margin: 20px auto;display: block;">
+      <el-form-item prop="remark" style="margin: 20px auto;display: block;">
         <el-input
-          v-model="form.deliveryUserContact"
+          v-model="form.remark"
           placeholder="请填写备注"
           type="textarea"
           :rows="4"
@@ -58,12 +55,12 @@
         >
         </el-input>
       </el-form-item>
-      <el-form-item label="物流公司" style="margin: 0 20px 20px 0">
+      <el-form-item label="物流公司" style="margin: 0 20px 20px 0" prop="logisticsCompany">
         <el-input v-model="form.logisticsCompany" size="small" placeholder="请填写公司名称">
         </el-input>
       </el-form-item>
-      <el-form-item label="单号" style="margin: 0 20px 20px 0">
-        <el-input v-model="form.saleInvoiceCode" size="small" placeholder="请填写单号">
+      <el-form-item label="物流单号" style="margin: 0 20px 20px 0" prop="logisticsCode">
+        <el-input v-model="form.logisticsCode" size="small" placeholder="请填写单号">
         </el-input>
       </el-form-item>
     </el-form>
@@ -71,86 +68,119 @@
 </template>
 
 <script>
-  import checkPermission from '@/utils/permission'
-  import initData from '@/mixins/initData'
-  import eForm from './form'
-  import Contact from './module/contact'
-  import {add,initInvoiceCode} from '@/api/invoice'
+import checkPermission from '@/utils/permission'
+import initData from '@/mixins/initData'
+import eForm from './form'
+import Contact from './module/contact'
+import {add,initInvoiceCode} from '@/api/invoice'
 
-  export default {
-    mixins: [initData],
-    components: {eForm, Contact},
-    data() {
-      return {
-        isAdd: false,
-        delLoading: false,
-        id: '',
-        focus: false,
-        customerName: '',
-        type: 'custom',
-        form: {
-          customerId: '',
-          saleInvoiceCode: '',
-          logisticsCompany: '',
-          customerOrderCode: '',
-          contactWay: '',
-          invoiceProductList: [
-            {
-              productCode: "",
-              productName: "",
-              specifications: "",
-              unitPrice: "",
-              productNumber: "",
-              allMoney: "",
-              remark: "",
-            }
-          ],
-        },
-      }
-    },
-    created() {
-      this.initInvoiceCode()
-    },
-    methods: {
-      checkPermission,
-      add() {
-        add(this.form).then(res => {
-          this.$notify({
-            title: '添加成功',
-            type: 'success',
-            duration: 2500
-          })
-          setTimeout(() => {
-            this.$router.replace({path: '/order/deliveryOrder'})
-          }, 2500);
-        })
+export default {
+  mixins: [initData],
+  components: { eForm, Contact },
+  data() {
+    return {
+      isAdd: false,
+      delLoading: false,
+      id: '',
+      focus: false,
+      customerName: '',
+      type: 'custom',
+      form: {
+        customerId: '',
+        saleInvoiceCode: '',
+        logisticsCompany: '',
+        logisticsCode: '',
+        customerOrderCode: '',
+        contactWay: '',
+        remark: '',
+        invoiceProductList: [
+          {
+            productCode: '',
+            productName: '',
+            specifications: '',
+            unitPrice: '',
+            productNumber: '',
+            allMoney: '',
+            remark: '',
+          }
+        ],
       },
-      initInvoiceCode(){
-        initInvoiceCode().then(res=>{
-          this.form.saleInvoiceCode=res
-        })
-      },
-      handleRadio(radio) {
-        this.form.customerOrderCode = radio.customerOrderCode
-        this.customerName = radio.customerName
-        this.form.customerId = radio.customerId
-        this.form.deliveryAddress = radio.deliveryAddress
-        this.form.consignee = radio.deliveryUser
-        this.form.contactWay = radio.deliveryUserContact
-        this.form.invoiceProductList = radio.customerOrderProductList
-      },
-      changeType(type) {
-        this.type = type
-      },
-      addCode() {
-        this.$refs.eform.dialog = true
-        this.$refs.eform.dataType = 'custom'
-      },
-      handleFocus() {
-        this.focus = true
+      rules: {
+        customerName: [
+          { required: true, message: '客户名称不能为空', trigger: 'blur' }
+        ],
+        deliveryAddress: [
+          { required: true, message: '收货地址不能为空', trigger: 'blur' }
+        ],
+        consignee: [
+          { required: true, message: '收货人不能为空', trigger: 'blur' }
+        ],
+        contactWay: [
+          { required: true, message: '联系方式不能为空', trigger: 'blur' }
+        ],
+        invoiceNumber: [
+          { required: true, message: '发票号不能为空', trigger: 'blur' }
+        ],
+        remark: [
+          { required: true, message: '备注不能为空', trigger: 'blur' }
+        ],
+        logisticsCompany: [
+          { required: true, message: '物流公司不能为空', trigger: 'blur' }
+        ],
+        logisticsCode: [
+          { required: true, message: '物流单号不能为空', trigger: 'blur' }
+        ]
       }
     }
+  },
+  created() {
+    this.initInvoiceCode()
+  },
+  methods: {
+    checkPermission,
+    add() {
+      this.$refs['form'].validate((valid) => {
+        console.log(valid)
+        if (valid) {
+          add(this.form).then(res => {
+            this.$notify({
+              title: '添加成功',
+              type: 'success',
+              duration: 2500
+            })
+            setTimeout(() => {
+              this.$router.replace({ path: '/order/deliveryOrder' })
+            }, 2500);
+          })
+        }
+      })
+    },
+    initInvoiceCode() {
+      initInvoiceCode().then(res => {
+        this.form.saleInvoiceCode = res
+      })
+    },
+    handleRadio(radio) {
+      this.form.customerOrderCode = radio.customerOrderCode
+      this.customerName = radio.customerName
+      this.form.customerId = radio.customerId
+      this.form.deliveryAddress = radio.deliveryAddress
+      this.form.consignee = radio.deliveryUser
+      this.form.contactWay = radio.deliveryUserContact
+      this.form.invoiceProductList = radio.customerOrderProductList
+    },
+    changeType(type) {
+      this.type = type
+    },
+    addCode() {
+      this.$refs.eform.dialog = true
+      this.$refs.eform.dataType = 'custom'
+    },
+    handleFocus() {
+      this.focus = true
+    }
   }
+}
 </script>
 
 <style scoped>

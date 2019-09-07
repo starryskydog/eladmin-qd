@@ -49,3 +49,4 @@ export function getInvoiceInfo(id) {
     method: 'get'
   })
 }
+

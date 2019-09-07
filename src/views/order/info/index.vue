@@ -57,7 +57,7 @@
 
 <script>
   import checkPermission from '@/utils/permission'
-  import { del, getSupplierInfoById } from '@/api/customerOrder'
+  import { del, getCustomerOrderInfo } from '@/api/customerOrder'
   import initData from '@/mixins/initData'
   import eForm from './form'
   export default {
@@ -90,6 +90,7 @@
         this.$router.push({ path: '/orders/list' })
       },
       edit(data) {
+        this.$router.push({ path: '/orders/list' })
         getCustomerOrderInfo(data.id).then(res=>{
           this.isAdd = false
           this.id=data.id

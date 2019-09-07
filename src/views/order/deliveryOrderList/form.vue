@@ -29,111 +29,110 @@
 </template>
 
 <script>
-  import {queryCustomerOrderPage} from '@/api/customerOrder'
-  import { queryProductInfoPage } from '@/api/productInfo'
+import { queryCustomerOrderPage } from '@/api/customerOrder'
+import { queryProductInfoPage } from '@/api/productInfo'
 
-  export default {
-    components: {},
-    props: {
-      formType: {
-        type: String
+export default {
+  components: {},
+  props: {
+    formType: {
+      type: String
+    }
+  },
+  data() {
+    return {
+      dialog: false,
+      page: 0, size: 10,
+      loading: false,
+      categoryList: [],
+      form: {
+        radio: ''
       },
+      url: '',
+      data: [],
+      total: 0,
+      dataType:'',
+      customColumns: [
+        {field: "customerOrderCode", title: "订单编号", width: 220},
+        {field: "customerName", title: "客户名称", width: 120},
+        {field: "deliveryUser", title: "联系人", width: 100},
+        {field: "deliveryUserContact", title: "手机号", width: 100,},
+      ],
+      productColumns:[
+        {field: "productCode", title: "产品编号", width: 220},
+        {field: "name", title: "产品名称", width: 120},
+        {field: "specifications", title: "规格", width: 160},
+        {field: "unitPrice", title: "单价", width: 100},
+        {field: "measureUnitName", title: "单位", width: 100},
+        {field: "productCategoryName", title: "类别", width: 100},
+      ],
+    }
+  },
+  created() {
+  },
+  watch: {
+    dataType: function (val) {
+      this.loading = true
+      this.getData()
     },
-    data() {
-      return {
-        dialog: false,
-        page: 0, size: 10,
-        loading: false,
-        categoryList: [],
-        form: {
-          radio: ''
-        },
-        url: '',
-        data: [],
-        total: 0,
-        dataType:'',
-        customColumns: [
-          {field: "customerOrderCode", title: "订单编号", width: 220},
-          {field: "customerName", title: "客户名称", width: 120},
-          {field: "deliveryUser", title: "联系人", width: 100},
-          {field: "deliveryUserContact", title: "手机号", width: 100,},
-        ],
-        productColumns:[
-          {field: "productCode", title: "产品编号", width: 220},
-          {field: "name", title: "产品名称", width: 120},
-          {field: "specifications", title: "规格", width: 160},
-          {field: "unitPrice", title: "单价", width: 100},
-          {field: "measureUnitName", title: "单位", width: 100},
-          {field: "productCategoryName", title: "类别", width: 100},
-        ],
+  },
+  methods: {
+    getData() {
+      const params = {
+        page: this.page, size:this.size
+      }
+      if( this.dataType === 'custom') {
+        this.queryCustom(params)
+      } else {
+        this.queryProduct(params)
       }
     },
-    created() {
+    queryCustom(params) {
+      queryCustomerOrderPage(params).then(res => {
+        this.data = res.content
+        this.total = res.totalElements
+        this.loading = false
+      })
     },
-    watch: {
-      dataType: function (val) {
-        this.loading = true
-        this.getData()
-      },
+    pageChange(e) {
+      this.page = e - 1
+      this.getData()
     },
-    methods: {
-      getData(){
-        const params={
-          page:this.page, size:this.size
+    sizeChange(e) {
+      this.page = 0
+      this.size = e
+      this.getData()
+    },
+    queryProduct(params) {
+      queryProductInfoPage(params).then(res => {
+        this.data = res.content
+        this.total = res.totalElements
+        this.loading = false
+      })
+    },
+    cancel() {
+      this.resetForm()
+    },
+    doSubmit() {
+      if (this.form.radio) {
+        if (this.dataType === 'product'){
+          this.$emit('setContact', this.form.radio)
+        } else {
+          this.$emit('setRadio', this.form.radio)
         }
-        if(this.dataType==='custom'){
-          this.queryCustom(params)
-        }else{
-          this.queryProduct(params)
-        }
-
-      },
-      queryCustom(params) {
-        queryCustomerOrderPage(params).then(res => {
-          this.data = res.content
-          this.total = res.totalElements
-          this.loading = false
-        })
-      },
-      pageChange(e) {
-        this.page = e - 1
-        this.getData()
-      },
-      sizeChange(e) {
-        this.page = 0
-        this.size = e
-        this.getData()
-      },
-      queryProduct(params) {
-        queryProductInfoPage(params).then(res => {
-          this.data = res.content
-          this.total = res.totalElements
-          this.loading = false
-        })
-      },
-      cancel() {
-        this.resetForm()
-      },
-      doSubmit() {
-        if (this.form.radio) {
-          if(this.dataType==='product'){
-            this.$emit('setContact',this.form.radio)
-          }else{
-            this.$emit('setRadio',this.form.radio)
-          }
-        }
-        this.resetForm()
-      },
-      resetForm() {
-        this.form = {
-          radio: ''
-        }
-        this.dialog = false
-        this.page=0;
-        this.size=10
-      },
+      }
+      this.resetForm()
+    },
+    resetForm() {
+      this.form = {
+        radio: ''
+      }
+      this.dialog = false
+      this.page = 0;
+      this.size = 10
     }
   }
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
