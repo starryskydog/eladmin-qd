@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialog" :title="formType==='custom' ? '选择客户名称' : '选择产品'" append-to-body width="800px"
+  <el-dialog :visible.sync="dialog" :title="formType==='custom' ? '选择订单' : '选择产品'" append-to-body width="800px"
              :show-close=false>
     <el-form ref="form" :inline="true" :model="form" size="small" label-width="100px">
       <el-table v-loading="loading" :data="data" size="small" style="width: 100%;"

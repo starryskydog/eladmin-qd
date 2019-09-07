@@ -137,7 +137,7 @@
                 }
               }, 0)
             } else {
-              sums[index] = 'N/A'
+              sums[index] = '0'
             }
           } else {
             sums[index] = '--'
