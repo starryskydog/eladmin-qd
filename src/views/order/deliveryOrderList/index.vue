@@ -106,9 +106,9 @@ export default {
         ],
       },
       rules: {
-        customerName: [
-          { required: true, message: '客户名称不能为空', trigger: 'blur' }
-        ],
+        // customerName: [
+        //   { required: true, message: '客户名称不能为空', trigger: 'blur' }
+        // ],
         deliveryAddress: [
           { required: true, message: '收货地址不能为空', trigger: 'blur' }
         ],
