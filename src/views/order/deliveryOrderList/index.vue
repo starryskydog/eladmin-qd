@@ -72,7 +72,7 @@ import checkPermission from '@/utils/permission'
 import initData from '@/mixins/initData'
 import eForm from './form'
 import Contact from './module/contact'
-import {add,initInvoiceCode} from '@/api/invoice'
+import { add,initInvoiceCode } from '@/api/invoice'
 
 export default {
   mixins: [initData],
