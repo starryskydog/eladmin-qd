@@ -86,6 +86,25 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/outSourceProcessSheet',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/outSourceProcessSheet/outSourceProcessList'),
+        name: '新增委外加工单',
+        meta: { title: '新增委外加工单', icon: 'add' }
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/outSourceProcessSheet/outSourceProcessList'),
+        name: '编辑委外加工单',
+        meta: { title: '编辑委外加工单', icon: 'add' }
+      }
+    ]
+  },
+  {
     path: '/user',
     component: Layout,
     hidden: true,
