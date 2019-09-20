@@ -90,8 +90,7 @@
         this.$router.push({ path: '/outSourceProcessSheet/list' })
       },
       edit(data) {
-        console.log(data)
-        this.$router.push({ name: '编辑委外加工单', params: { userId: 123 }});
+        this.$router.push({ path: `/outSourceProcessSheet/list/${data.id}`});
       },
       handleCurrentChange(val) {
       },

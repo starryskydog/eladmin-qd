@@ -56,7 +56,7 @@ import checkPermission from '@/utils/permission'
 import initData from '@/mixins/initData'
 import eForm from './form'
 import Contact from './module/contact'
-import { add,initOutSourceProcessSheetCode } from '@/api/outSourceProcessSheet'
+import { add,initOutSourceProcessSheetCode,checkProcessSheetById,edit } from '@/api/outSourceProcessSheet'
 import { queryOutSourceCompanyInfoList } from '@/api/outSourceCompanyInfo'
 
 export default {
@@ -97,30 +97,56 @@ export default {
     }
   },
   created() {
-    this.initInvoiceCode()
     this.queryOutSourceCompanyInfoList()
+    const id=this.$route.params.id
+    if(id){
+      this.checkProcessSheetById(id)
+      this.type='edit'
+    }else{
+      this.initInvoiceCode()
+    }
   },
   methods: {
     checkPermission,
     add() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          add(this.form).then(res => {
-            this.$notify({
-              title: '添加成功',
-              type: 'success',
-              duration: 2500
+          if(this.type==='edit'){
+            delete this.form.createTime
+            delete this.form.updateTime
+            edit(this.form).then(res => {
+              this.$notify({
+                title: '编辑成功',
+                type: 'success',
+                duration: 2500
+              })
+              setTimeout(() => {
+                this.$router.replace({ path: '/outSourceProcess/outSourceProcessSheet' })
+              }, 2500);
             })
-            setTimeout(() => {
-              this.$router.replace({ path: '/outSourceProcess/outSourceProcessSheet' })
-            }, 2500);
-          })
+          }else{
+            add(this.form).then(res => {
+              this.$notify({
+                title: '添加成功',
+                type: 'success',
+                duration: 2500
+              })
+              setTimeout(() => {
+                this.$router.replace({ path: '/outSourceProcess/outSourceProcessSheet' })
+              }, 2500);
+            })
+          }
         }
       })
     },
     initInvoiceCode() {
       initOutSourceProcessSheetCode().then(res => {
         this.form.outSourceProcessSheetCode = res
+      })
+    },
+    checkProcessSheetById(id) {
+      checkProcessSheetById(id).then(res => {
+        this.form=res
       })
     },
     queryOutSourceCompanyInfoList() {

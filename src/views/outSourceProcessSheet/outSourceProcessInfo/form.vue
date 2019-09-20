@@ -1,35 +1,7 @@
 <template>
   <el-dialog :visible.sync="dialog" :title="isAdd ? '新增供应商资料' : '编辑供应商资料'" append-to-body width="1000px" :show-close=false>
     <el-form ref="form" :inline="true" :model="form" size="large" label-width="100px">
-      <el-form-item label="供应商编号" prop="supplierCode">
-        <el-input v-model="form.supplierCode" disabled size="small"/>
-      </el-form-item>
-      <el-form-item label="供应商名称" prop="supplierName">
-        <el-input v-model="form.supplierName" size="small"/>
-      </el-form-item>
-      <el-form-item label="类型" prop="supplierCategoryId">
-        <el-select v-model="form.supplierCategoryId" style="width: 150px;" placeholder="请选择" size="small">
-          <el-option
-            v-for="(item, index) in categoryList"
-            :key="item.name + index"
-            :label="item.name"
-            :value="item.id"/>
-        </el-select>
-      </el-form-item>
-      <Address @setAddress="updateAddress" :propList="form.supplierAddress"></Address>
-      <el-form-item label="期初应付款" prop="initialPreMoney" style="display:block;margin-top: 20px">
-        <el-input v-model="form.initialPreMoney" size="small" placeholder="请输入"/>
-      </el-form-item>
-      <contact @setContacts="updateContact" :contactList="form.supplierContact"></contact>
-      <el-form-item prop="remark">
-        <el-input
-          type="textarea"
-          :rows="4"
-          style="width: 500px;margin-top: 20px"
-          placeholder="备注信息"
-          v-model="form.remark">
-        </el-input>
-      </el-form-item>
+
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>

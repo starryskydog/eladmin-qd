@@ -97,7 +97,7 @@ export const constantRouterMap = [
         meta: { title: '新增委外加工单', icon: 'add' }
       },
       {
-        path: 'list',
+        path: 'list/:id',
         component: () => import('@/views/outSourceProcessSheet/outSourceProcessList'),
         name: '编辑委外加工单',
         meta: { title: '编辑委外加工单', icon: 'add' }

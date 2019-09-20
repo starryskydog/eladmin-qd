@@ -3,13 +3,20 @@ import request from '@/utils/request'
 export function initOutSourceProcessSheetCode() {
   return request({
     url: 'api/initOutSourceProcessSheetCode',
-    method: 'get',
+    method: 'get'
   })
 }
 
 export function queryOutSourceProcessSheetPage() {
   return request({
     url: 'api/queryOutSourceProcessSheetPage',
+    method: 'get'
+  })
+}
+
+export function checkProcessSheetById(id) {
+  return request({
+    url: `api/outSourceProcessSheet/${id}`,
     method: 'get'
   })
 }
@@ -31,7 +38,7 @@ export function del(id) {
 
 export function edit(data) {
   return request({
-    url: 'api/dept',
+    url: 'api/outSourceProcessSheet',
     method: 'put',
     data
   })
