@@ -3,6 +3,7 @@
     <eForm ref="form" :is-add="isAdd" />
     <!--工具栏-->
     <div class="head-container">
+      <!--</div>-->
       <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
           <el-button
             class="filter-item"
@@ -13,7 +14,7 @@
       </div>
     </div>
     <el-row :gutter="5">
-      <!--发货单管理-->
+      <!--订单管理-->
       <el-col >
         <el-card class="box-card" shadow="never">
           <el-table v-loading="loading" :data="data" border highlight-current-row size="small" style="width: 100%;" @current-change="handleCurrentChange" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
@@ -35,11 +36,9 @@
               </template>
             </el-table-column>
             <el-table-column prop="createTimeStr" label="单据日期"/>
-            <el-table-column prop="saleInvoiceCode" label="单据编号"/>
-            <el-table-column prop="customerOrderCode" label="订单编号"/>
-            <el-table-column prop="customerName" label="客户名称"/>
-            <el-table-column prop="logisticsCompany" label="物流公司"/>
-            <el-table-column prop="logisticsCode" label="物流单号"/>
+            <el-table-column prop="outSourceCompanyName" label="委外公司"/>
+            <el-table-column prop="outSourceAdminName" label="委外负责人"/>
+            <el-table-column prop="contactWay" label="联系方式"/>
           </el-table>
           <!--分页组件-->
           <el-pagination
@@ -57,7 +56,7 @@
 
 <script>
   import checkPermission from '@/utils/permission'
-  import { del } from '@/api/invoice'
+  import { del, getCustomerOrderInfo } from '@/api/outSourceProcessSheet'
   import initData from '@/mixins/initData'
   import eForm from './form'
   export default {
@@ -79,7 +78,7 @@
       checkPermission,
       beforeInit() {
         this.showButton = false
-        this.url = 'api/queryInvoicePage'
+        this.url = 'api/queryOutSourceProcessSheetPage'
         const query = this.query
         const value = query.value
         this.params = { page: this.page, size: this.size }
@@ -87,15 +86,16 @@
         return true
       },
       add() {
-        this.$router.push({ path: '/deliveryOrders/list' })
+        this.$router.push({ path: '/outSourceProcessSheet/create' })
       },
       edit(data) {
-        getSupplierInfoById(data.id).then(res=>{
+        this.$router.push({ path: '/outSourceProcessSheet/create' })
+        getCustomerOrderInfo(data.id).then(res => {
           this.isAdd = false
-          this.id=data.id
+          this.id = data.id
           const _this = this.$refs.form
           _this.dialog = true
-          _this.form=res
+          _this.form = res
         })
       },
       handleCurrentChange(val) {
