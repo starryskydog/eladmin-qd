@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 
-// 初始化委外加工单单据编号
 export function initOutSourceProcessSheetCode() {
   return request({
     url: 'api/initOutSourceProcessSheetCode',
@@ -8,7 +7,6 @@ export function initOutSourceProcessSheetCode() {
   })
 }
 
-// 分页查询委外加工单列表
 export function queryOutSourceProcessSheetPage() {
   return request({
     url: 'api/queryOutSourceProcessSheetPage',
@@ -16,7 +14,13 @@ export function queryOutSourceProcessSheetPage() {
   })
 }
 
-// 添加委外加工单
+export function checkProcessSheetById(id) {
+  return request({
+    url: `api/outSourceProcessSheet/${id}`,
+    method: 'get'
+  })
+}
+
 export function add(data) {
   return request({
     url: 'api/outSourceProcessSheet',
@@ -25,16 +29,6 @@ export function add(data) {
   })
 }
 
-// 修改委外加工单
-export function edit(data) {
-  return request({
-    url: 'api/outSourceProcessSheet',
-    method: 'put',
-    data
-  })
-}
-
-// 删除委外加工单
 export function del(id) {
   return request({
     url: 'api/outSourceProcessSheet/' + id,
@@ -42,10 +36,10 @@ export function del(id) {
   })
 }
 
-// 查询委外加工单详情
-export function getCustomerOrderInfo(id) {
+export function edit(data) {
   return request({
-    url: 'api/outSourceProcessSheet/' + id,
-    method: 'get'
+    url: 'api/outSourceProcessSheet',
+    method: 'put',
+    data
   })
 }

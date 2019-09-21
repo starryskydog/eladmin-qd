@@ -65,7 +65,7 @@ export const constantRouterMap = [
     hidden: true,
     children: [
       {
-        path: 'create',
+        path: 'list',
         component: () => import('@/views/order/list'),
         name: '新增订单',
         meta: { title: '新增订单', icon: 'add' }
@@ -91,10 +91,16 @@ export const constantRouterMap = [
     hidden: true,
     children: [
       {
-        path: 'create',
-        component: () => import('@/views/outSourceProcess/outSourceProcessSheet/form'),
+        path: 'list',
+        component: () => import('@/views/outSourceProcessSheet/outSourceProcessList'),
         name: '新增委外加工单',
         meta: { title: '新增委外加工单', icon: 'add' }
+      },
+      {
+        path: 'list/:id',
+        component: () => import('@/views/outSourceProcessSheet/outSourceProcessList'),
+        name: '编辑委外加工单',
+        meta: { title: '编辑委外加工单', icon: 'add' }
       }
     ]
   },
