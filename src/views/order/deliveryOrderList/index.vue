@@ -25,7 +25,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="客户：" prop="customerName">
-        <el-input v-model="customerName" size="small" placeholder="请选择客户">
+        <el-input v-model="form.customerName" size="small" placeholder="请选择客户">
         </el-input>
       </el-form-item>
       <el-form-item label="收货地址" style="margin: 0 20px 20px 0" prop="deliveryAddress">
@@ -72,7 +72,7 @@ import checkPermission from '@/utils/permission'
 import initData from '@/mixins/initData'
 import eForm from './form'
 import Contact from './module/contact'
-import { add,initInvoiceCode } from '@/api/invoice'
+import { add,initInvoiceCode ,edit,getInvoiceInfo} from '@/api/invoice'
 
 export default {
   mixins: [initData],
@@ -134,7 +134,13 @@ export default {
     }
   },
   created() {
-    this.initInvoiceCode()
+    const id=this.$route.params.id
+    if(id){
+      this.getInvoiceInfo(id)
+      this.type='edit'
+    }else{
+      this.initInvoiceCode()
+    }
   },
   methods: {
     checkPermission,
@@ -142,16 +148,28 @@ export default {
       this.$refs['form'].validate((valid) => {
         console.log(valid)
         if (valid) {
-          add(this.form).then(res => {
-            this.$notify({
-              title: '添加成功',
-              type: 'success',
-              duration: 2500
+          if(this.type==='edit'){
+            delete this.form.createTime
+            delete this.form.updateTime
+            edit(this.form).then(res => {
+              this.$notify({
+                title: '编辑成功',
+                type: 'success',
+                duration: 2500
+              })
             })
-            setTimeout(() => {
-              this.$router.replace({ path: '/order/deliveryOrder' })
-            }, 2500);
-          })
+          }else{
+            add(this.form).then(res => {
+              this.$notify({
+                title: '添加成功',
+                type: 'success',
+                duration: 2500
+              })
+            })
+          }
+          setTimeout(() => {
+            this.$router.replace({ path: '/order/deliveryOrder' })
+          }, 2500);
         }
       })
     },
@@ -160,9 +178,15 @@ export default {
         this.form.saleInvoiceCode = res
       })
     },
+    getInvoiceInfo(id) {
+      getInvoiceInfo(id).then(res => {
+        this.form = res
+        this.form.invoiceProductList=res.invoiceProductDTOList
+      })
+    },
     handleRadio(radio) {
       this.form.customerOrderCode = radio.customerOrderCode
-      this.customerName = radio.customerName
+      this.form.customerName = radio.customerName
       this.form.customerId = radio.customerId
       this.form.deliveryAddress = radio.deliveryAddress
       this.form.consignee = radio.deliveryUser
