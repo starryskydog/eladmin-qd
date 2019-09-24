@@ -20,7 +20,7 @@
         订单日期：{{date}}
       </p>
       <el-form-item label="客户" prop="customerId" label-width="50px">
-        <el-input v-model="customerName" size="small" @focus="handleFocus()">
+        <el-input v-model="form.customerName" size="small" @focus="handleFocus()">
           <span class="el-tag  el-tag--mini" v-if="focus" slot="suffix" style="cursor: pointer;"
                 @click="addCode()">
                                 选择
@@ -99,7 +99,8 @@
   import eForm from './form'
   import Contact from './module/contact'
   import store from '@/store'
-  import {initCustomerOrderCode, add } from '@/api/customerOrder'
+  import { parseTime } from '@/utils/index'
+  import {initCustomerOrderCode, add ,edit,getCustomerOrderInfo} from '@/api/customerOrder'
 
   export default {
     mixins: [initData],
@@ -110,9 +111,9 @@
         delLoading: false,
         id: '',
         focus: false,
-        customerName: '',
         form: {
           customerId: '',
+          customerName: '',
           deliveryDate: '',
           customerOrderCode: null,
           customerOrderProductList: [
@@ -122,7 +123,7 @@
               specifications: "",
               unitPrice: "",
               productNumber: "",
-              allMoney: "",
+              totalPrice: "",
               remark: "",
             }
           ],
@@ -155,7 +156,13 @@
     created() {
       this.getDate()
       this.form.customerOrderMakerName = store.getters.user.username
-      this.initCustomerOrderCode()
+      const id=this.$route.params.id
+      if(id){
+        this.getCustomerOrderInfo(id)
+        this.type='edit'
+      }else{
+        this.initCustomerOrderCode()
+      }
     },
     methods: {
       checkPermission,
@@ -169,15 +176,26 @@
         }
         if(productList.length>0){
           this.form.customerOrderProductList=productList
-          console.log(this.form)
-          add(this.form).then(res => {
-            this.$notify({
-              title: '添加成功',
-              type: 'success',
-              duration: 2500
+          if(this.type==='edit'){
+            delete this.form.createTime
+            delete this.form.updateTime
+            edit(this.form).then(res => {
+              this.$notify({
+                title: '编辑成功',
+                type: 'success',
+                duration: 2500
+              })
             })
-            setTimeout(()=>{ this.$router.replace({ path: '/order/info' }) }, 2500);
-          })
+          }else{
+            add(this.form).then(res => {
+              this.$notify({
+                title: '添加成功',
+                type: 'success',
+                duration: 2500
+              })
+            })
+          }
+          setTimeout(()=>{ this.$router.replace({ path: '/order/info' }) }, 2500);
         }else{
           this.form.customerOrderProductList=[{
             productCode: "",
@@ -185,7 +203,7 @@
             specifications: "",
             unitPrice: "",
             productNumber: "",
-            allMoney: "",
+            totalPrice: "",
             remark: "",
           }]
           this.$notify({
@@ -211,7 +229,7 @@
         }
       },
       handleRadio(radio) {
-        this.customerName = radio.customerName
+        this.form.customerName = radio.customerName
         this.form.customerId = radio.id
         this.form.deliveryAddress = radio.firstContactAddress
         this.form.deliveryUser = radio.customerName
@@ -230,6 +248,7 @@
         this.$refs.eform.dataType = 'custom'
       },
       updateContact(data) {
+        console.log(data)
         this.form.customerOrderProductList = data
       },
       handleFocus() {
@@ -238,6 +257,13 @@
       initCustomerOrderCode() {
         initCustomerOrderCode().then(res => {
           this.form.customerOrderCode = res
+        })
+      },
+      getCustomerOrderInfo(id) {
+        getCustomerOrderInfo(id).then(res => {
+          this.form = res
+          this.form.orderDate=parseTime(res.orderDate)
+          this.form.deliveryDate=parseTime(res.deliveryDate)
         })
       },
       resetForm(){

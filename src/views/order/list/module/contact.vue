@@ -9,8 +9,8 @@
                          :width="v.width">
           <template slot-scope="scope">
                             <span>
-                              <span v-if="v.field==='allMoney'">
-                                {{dataList[scope.$index].allMoney}}
+                              <span v-if="v.field==='totalPrice'">
+                                {{dataList[scope.$index].totalPrice}}
                               </span>
                                 <el-input v-else size="mini" placeholder="请输入内容"
                                           v-model="dataList[scope.$index][v.field]"
@@ -56,7 +56,7 @@
             {field: "specifications", title: "规格", width: 160},
             {field: "unitPrice", title: "*单价", width: 100},
             {field: "productNumber", title: "*数量", width: 100,},
-            {field: "allMoney", title: "销售金额", width: 120, disabled: true},
+            {field: "totalPrice", title: "销售金额", width: 120, disabled: true},
             {field: "remark", title: "备注"},
           ],
           data: [],
@@ -73,10 +73,15 @@
         this.master_user.data = val
       },
     },
+    computed:{
+      totalPrice:function () {
+
+      }
+    },
     methods: {
       setContact(val, index, field) {
         if (field === 'unitPrice' || 'productNumber') {
-          this.master_user.data[index].allMoney = this.master_user.data[index].unitPrice * this.master_user.data[index].productNumber
+          this.master_user.data[index].totalPrice = this.master_user.data[index].unitPrice * this.master_user.data[index].productNumber
         }
         this.$emit('setContacts', this.master_user.data)
       },
@@ -101,7 +106,7 @@
           specifications: "",
           unitPrice: "",
           productNumber: "",
-          allMoney: "",
+          totalPrice: "",
           remark: "",
         };
         this.master_user.data.push(j);

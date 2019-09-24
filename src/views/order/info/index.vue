@@ -90,14 +90,7 @@
         this.$router.push({ path: '/orders/list' })
       },
       edit(data) {
-        this.$router.push({ path: '/orders/list' })
-        getCustomerOrderInfo(data.id).then(res=>{
-          this.isAdd = false
-          this.id=data.id
-          const _this = this.$refs.form
-          _this.dialog = true
-          _this.form=res
-        })
+        this.$router.push({ path: `/orders/list/${data.id}` })
       },
       handleCurrentChange(val) {
       },

@@ -69,6 +69,12 @@ export const constantRouterMap = [
         component: () => import('@/views/order/list'),
         name: '新增订单',
         meta: { title: '新增订单', icon: 'add' }
+      },
+      {
+        path: 'list/:id',
+        component: () => import('@/views/order/list'),
+        name: '编辑订单',
+        meta: { title: '编辑订单', icon: 'edit' }
       }
     ]
   },
@@ -82,6 +88,12 @@ export const constantRouterMap = [
         component: () => import('@/views/order/deliveryOrderList'),
         name: '新增发货单',
         meta: { title: '新增发货单', icon: 'add' }
+      },
+      {
+        path: 'list/:id',
+        component: () => import('@/views/order/deliveryOrderList'),
+        name: '编辑发货单',
+        meta: { title: '编辑发货单', icon: 'add' }
       }
     ]
   },
