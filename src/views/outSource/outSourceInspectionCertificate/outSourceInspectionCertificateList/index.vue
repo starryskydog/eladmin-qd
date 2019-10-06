@@ -19,7 +19,10 @@
       <p class="form-sub-title" style="text-align: center;">
         委外验收单
       </p>
-      <Contact :dataList="form.outSourceInspectionCertificateProductList"></Contact>
+      <Contact :dataList="form.outSourceInspectionCertificateProductList" @setContacts="handleData"></Contact>
+      <el-form-item label="制单人:" prop="makePeopleName" style="margin: 20px auto">
+        {{form.makePeopleName}}
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -29,7 +32,8 @@ import checkPermission from '@/utils/permission'
 import initData from '@/mixins/initData'
 import eForm from './form'
 import Contact from './module/contact'
-import { add,initOutSourceInspectionCertificateCode,checkProcessSheetById,edit } from '@/api/outSourceInspection'
+import store from '@/store'
+import { add,initOutSourceInspectionCertificateCode,queryOutSourceInspectionCertificateById,edit } from '@/api/outSourceInspection'
 
 export default {
   mixins: [initData],
@@ -44,14 +48,18 @@ export default {
       adminList:[],
       type: 'custom',
       form: {
+        makePeopleName:'',
         outSourceAdminId:'',
         outSourceInspectionCertificateCode:'',
         outSourceInspectionCertificateProductList: [
           {
+            outSourceProcessSheetCode:'',
             productCode: '',
             productName: '',
             productId: '',
             productNumber: '',
+            qualifiedNumber: "",
+            scrapNumber:'',
             remark: '',
           }
         ],
@@ -68,8 +76,10 @@ export default {
   },
   created() {
     const id=this.$route.params.id
+    this.form.makePeopleName=store.getters.user.username
+    this.form.makePeopleId=store.getters.user.id
     if(id){
-      this.checkProcessSheetById(id)
+      this.queryOutSourceInspectionCertificateById(id)
       this.type='edit'
     }else{
       this.initInvoiceCode()
@@ -77,6 +87,9 @@ export default {
   },
   methods: {
     checkPermission,
+    handleData(data){
+      this.form.outSourceInspectionCertificateProductList=data
+    },
     add() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
@@ -90,10 +103,11 @@ export default {
                 duration: 2500
               })
               setTimeout(() => {
-                this.$router.replace({ path: '/outSourceProcess/outSourceProcessSheet' })
+                this.$router.replace({ path: '/outSourceProcess/outSourceInspectionCertificate' })
               }, 2500);
             })
           }else{
+            console.log(this.form)
             add(this.form).then(res => {
               this.$notify({
                 title: '添加成功',
@@ -101,7 +115,7 @@ export default {
                 duration: 2500
               })
               setTimeout(() => {
-                this.$router.replace({ path: '/outSourceProcess/outSourceProcessSheet' })
+                this.$router.replace({ path: '/outSourceProcess/outSourceInspectionCertificate' })
               }, 2500);
             })
           }
@@ -113,8 +127,8 @@ export default {
         this.form.outSourceInspectionCertificateCode = res
       })
     },
-    checkProcessSheetById(id) {
-      checkProcessSheetById(id).then(res => {
+    queryOutSourceInspectionCertificateById(id) {
+      queryOutSourceInspectionCertificateById(id).then(res => {
         this.form=res
       })
     },

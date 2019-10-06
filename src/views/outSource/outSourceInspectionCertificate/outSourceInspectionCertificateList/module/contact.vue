@@ -9,20 +9,11 @@
                            :width="v.width">
             <template slot-scope="scope">
                             <span>
-                              <el-date-picker
-                                v-if="v.type==='date'"
-                                v-model="dataList[scope.$index][v.field]"
-                                type="date"
-                                size="mini"
-                                format="yyyy 年 MM 月 dd 日"
-                                value-format="yyyy-MM-dd"
-                                placeholder="选择日期">
-                              </el-date-picker>
-                                <el-input v-else size="mini" placeholder="请输入内容"
-                                          v-model="dataList[scope.$index][v.field]"
+                                <el-input size="mini" placeholder="请输入内容"
+                                          v-model="master_user.data[scope.$index][v.field]"
                                           @change="((val)=>{setContact(val,scope.$index,v.field)})"
                                           :disabled="v.disabled" @focus="handleFocus(v.field)">
-                                  <span class="el-tag  el-tag--mini" v-if="v.field==='productCode'&&showBtn"
+                                  <span class="el-tag  el-tag--mini" v-if="v.field==='outSourceProcessSheetCode'&&showBtn"
                                         slot="suffix" style="cursor: pointer;margin-top: 4px"
                                         @click="addCode(scope.$index)">
                                 选择
@@ -57,10 +48,12 @@
         master_user: {
           sel: null,//选中行
           columns: [
-            {field: "productCode", title: "货号", width: 220},
+            {field: "outSourceProcessSheetCode", title: "委外加工单编号", width: 220},
+            {field: "productCode", title: "产品编号", width: 220},
             {field: "productName", title: "名称", width: 160},
             {field: "productNumber", title: "产品数量", width: 80},
-            {field: "deliverDate", title: "委外交货日期", width: 220, type:'date'},
+            {field: "qualifiedNumber", title: "合格数量", width: 80},
+            {field: "scrapNumber", title: "报废数量", width: 80},
             {field: "remark", title: "备注"},
           ],
           data: [],
@@ -82,12 +75,17 @@
         this.$emit('setContacts', this.master_user.data)
       },
       handleSet(data){
-        this.master_user.data[this.index].productCode=data.productCode
-        this.master_user.data[this.index].productName=data.name
-        this.master_user.data[this.index].productId=data.id
+        const list=data.outSourceProcessSheetProductList;
+        let newList = list.map(v=>{
+          return {...v,outSourceProcessSheetCode:data.outSourceProcessSheetCode,qualifiedNumber:v.productNumber,scrapNumber:'0'}
+        })
+        this.master_user.data=this.master_user.data.concat(newList)
+        this.master_user.data.splice(this.master_user.data.findIndex(item => item.productCode === ''), 1)
+        console.log(this.master_user.data)
+        this.$emit('setContacts', this.master_user.data)
       },
       handleFocus(field) {
-        if (field === 'productCode') {
+        if (field === 'outSourceProcessSheetCode') {
           this.showBtn = true
         } else {
           this.showBtn = false
@@ -96,10 +94,11 @@
       //添加账号
       addMasterUser() {
         let j = {
+          outSourceProcessSheetCode:'',
           productCode: "",
           productName: "",
-          specifications: "",
-          unitPrice: "",
+          qualifiedNumber: "",
+          scrapNumber:'',
           productNumber: "",
           remark: "",
         };
@@ -123,7 +122,7 @@
         columns.forEach((column, index) => {
           if (index === 0) {
             sums[index] = '总计'
-          } else if (index === 3) {
+          } else if (index === 4||index === 5||index === 6) {
             const values = data.map(item => Number(item[column.property]))
             if (!values.every(value => isNaN(value))) {
               sums[index] = values.reduce((prev, curr) => {

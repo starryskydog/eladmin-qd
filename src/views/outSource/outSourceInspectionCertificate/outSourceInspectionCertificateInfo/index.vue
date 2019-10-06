@@ -34,11 +34,9 @@
                 </el-popover>
               </template>
             </el-table-column>
-            <el-table-column prop="createTime" label="单据日期"/>
-            <el-table-column prop="outSourceProcessSheetCode" label="单据编号"/>
-            <el-table-column prop="outSourceCompanyName" label="委外公司"/>
-            <el-table-column prop="outSourceAdminName" label="委外负责人"/>
-            <el-table-column prop="contactWay" label="联系方式"/>
+            <el-table-column prop="outSourceInspectionCertificateCode" label="单据编号"/>
+            <el-table-column prop="makePeopleName" label="制单人"/>
+            <el-table-column prop="createTime" label="制单日期"/>
           </el-table>
           <!--分页组件-->
           <el-pagination
@@ -57,7 +55,7 @@
 <script>
   import checkPermission from '@/utils/permission'
   import { getSupplierInfoById } from '@/api/invoice'
-  import { del } from '@/api/outSourceProcessSheet'
+  import { del } from '@/api/outSourceInspection'
   import initData from '@/mixins/initData'
   import eForm from './form'
   export default {

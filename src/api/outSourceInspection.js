@@ -14,9 +14,9 @@ export function queryOutSourceInspectionCertificatePageList() {
   })
 }
 
-export function checkProcessSheetById(id) {
+export function queryOutSourceInspectionCertificateById(id) {
   return request({
-    url: `api/outSourceProcessSheet/${id}`,
+    url: `api/outSourceInspectionCertificate/${id}`,
     method: 'get'
   })
 }
