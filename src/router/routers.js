@@ -104,15 +104,34 @@ export const constantRouterMap = [
     children: [
       {
         path: 'list',
-        component: () => import('@/views/outSourceProcess/outSourceProcess/outSourceProcessList'),
+        component: () => import('@/views/outSource/outSourceProcess/outSourceProcessList'),
         name: '新增委外加工单',
         meta: { title: '新增委外加工单', icon: 'add' }
       },
       {
         path: 'list/:id',
-        component: () => import('@/views/outSourceProcess/outSourceProcess/outSourceProcessList'),
+        component: () => import('@/views/outSource/outSourceProcess/outSourceProcessList'),
         name: '编辑委外加工单',
         meta: { title: '编辑委外加工单', icon: 'add' }
+      }
+    ]
+  },
+  {
+    path: '/outSourceInspectionCertificate',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/outSource/outSourceInspectionCertificate/outSourceInspectionCertificateList'),
+        name: '新增委外验收单',
+        meta: { title: '新增委外验收单', icon: 'add' }
+      },
+      {
+        path: 'list/:id',
+        component: () => import('@/views/outSource/outSourceInspectionCertificate/outSourceInspectionCertificateList'),
+        name: '编辑委外验收单',
+        meta: { title: '编辑委外验收单', icon: 'add' }
       }
     ]
   },

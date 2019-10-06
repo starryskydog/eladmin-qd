@@ -3,7 +3,6 @@
     <eForm ref="form" :is-add="isAdd" />
     <!--工具栏-->
     <div class="head-container">
-      <!--</div>-->
       <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
           <el-button
             class="filter-item"
@@ -14,7 +13,7 @@
       </div>
     </div>
     <el-row :gutter="5">
-      <!--订单管理-->
+      <!--发货单管理-->
       <el-col >
         <el-card class="box-card" shadow="never">
           <el-table v-loading="loading" :data="data" border highlight-current-row size="small" style="width: 100%;" @current-change="handleCurrentChange" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
@@ -35,7 +34,8 @@
                 </el-popover>
               </template>
             </el-table-column>
-            <el-table-column prop="createTimeStr" label="单据日期"/>
+            <el-table-column prop="createTime" label="单据日期"/>
+            <el-table-column prop="outSourceProcessSheetCode" label="单据编号"/>
             <el-table-column prop="outSourceCompanyName" label="委外公司"/>
             <el-table-column prop="outSourceAdminName" label="委外负责人"/>
             <el-table-column prop="contactWay" label="联系方式"/>
@@ -56,7 +56,8 @@
 
 <script>
   import checkPermission from '@/utils/permission'
-  import { del, getCustomerOrderInfo } from '@/api/outSourceProcessSheet'
+  import { getSupplierInfoById } from '@/api/invoice'
+  import { del } from '@/api/outSourceProcessSheet'
   import initData from '@/mixins/initData'
   import eForm from './form'
   export default {
@@ -78,7 +79,7 @@
       checkPermission,
       beforeInit() {
         this.showButton = false
-        this.url = 'api/queryOutSourceProcessSheetPage'
+        this.url = 'api/queryOutSourceInspectionCertificatePageList'
         const query = this.query
         const value = query.value
         this.params = { page: this.page, size: this.size }
@@ -86,17 +87,10 @@
         return true
       },
       add() {
-        this.$router.push({ path: '/outSourceProcessSheet/create' })
+        this.$router.push({ path: '/outSourceInspectionCertificate/list' })
       },
       edit(data) {
-        this.$router.push({ path: '/outSourceProcessSheet/create' })
-        getCustomerOrderInfo(data.id).then(res => {
-          this.isAdd = false
-          this.id = data.id
-          const _this = this.$refs.form
-          _this.dialog = true
-          _this.form = res
-        })
+        this.$router.push({ path: `/outSourceInspectionCertificate/list/${data.id}`});
       },
       handleCurrentChange(val) {
       },
