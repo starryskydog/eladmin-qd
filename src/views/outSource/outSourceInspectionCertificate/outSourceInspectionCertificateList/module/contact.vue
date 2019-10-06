@@ -12,12 +12,7 @@
                                 <el-input size="mini" placeholder="请输入内容"
                                           v-model="master_user.data[scope.$index][v.field]"
                                           @change="((val)=>{setContact(val,scope.$index,v.field)})"
-                                          :disabled="v.disabled" @focus="handleFocus(v.field)">
-                                  <span class="el-tag  el-tag--mini" v-if="v.field==='outSourceProcessSheetCode'&&showBtn"
-                                        slot="suffix" style="cursor: pointer;margin-top: 4px"
-                                        @click="addCode(scope.$index)">
-                                选择
-                            </span>
+                                          :disabled="v.disabled">
                                 </el-input>
                             </span>
             </template>
@@ -48,7 +43,6 @@
         master_user: {
           sel: null,//选中行
           columns: [
-            {field: "outSourceProcessSheetCode", title: "委外加工单编号", width: 220},
             {field: "productCode", title: "产品编号", width: 220},
             {field: "productName", title: "名称", width: 160},
             {field: "productNumber", title: "产品数量", width: 80},
@@ -77,24 +71,16 @@
       handleSet(data){
         const list=data.outSourceProcessSheetProductList;
         let newList = list.map(v=>{
-          return {...v,outSourceProcessSheetCode:data.outSourceProcessSheetCode,qualifiedNumber:v.productNumber,scrapNumber:'0'}
+          return {...v,qualifiedNumber:v.productNumber,scrapNumber:'0'}
         })
+        this.master_user.outSourceProcessSheetCode=data.outSourceProcessSheetCode
         this.master_user.data=this.master_user.data.concat(newList)
         this.master_user.data.splice(this.master_user.data.findIndex(item => item.productCode === ''), 1)
-        console.log(this.master_user.data)
         this.$emit('setContacts', this.master_user.data)
-      },
-      handleFocus(field) {
-        if (field === 'outSourceProcessSheetCode') {
-          this.showBtn = true
-        } else {
-          this.showBtn = false
-        }
       },
       //添加账号
       addMasterUser() {
         let j = {
-          outSourceProcessSheetCode:'',
           productCode: "",
           productName: "",
           qualifiedNumber: "",
@@ -111,18 +97,13 @@
           this.$message.warning("至少保留一项");
         }
       },
-      addCode(index) {
-        this.$refs.eform.dialog = true
-        this.$refs.eform.dataType = 'product'
-        this.index=index
-      },
       getSummaries(param) {
         const {columns, data} = param
         const sums = []
         columns.forEach((column, index) => {
           if (index === 0) {
             sums[index] = '总计'
-          } else if (index === 4||index === 5||index === 6) {
+          } else if (index === 4||index === 5||index === 3) {
             const values = data.map(item => Number(item[column.property]))
             if (!values.every(value => isNaN(value))) {
               sums[index] = values.reduce((prev, curr) => {

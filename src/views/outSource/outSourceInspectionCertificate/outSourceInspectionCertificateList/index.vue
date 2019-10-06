@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <eForm ref="eform" @setRadio="handleRadio" :formType="type" @setType="changeType"/>
+    <eForm ref="eform" @setContact="handleRadio"/>
     <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
       <el-button
         class="filter-item"
@@ -19,6 +19,18 @@
       <p class="form-sub-title" style="text-align: center;">
         委外验收单
       </p>
+      <el-form-item type="index" label-width="350"  align="center" label="委外加工单">
+        <el-input size="mini" placeholder="请输入内容"
+                  style="width: 200px"
+                  v-model="form.outSourceProcessSheetCode"
+                  @focus="handleFocus()">
+                                  <span class="el-tag  el-tag--mini" v-if="showBtn"
+                                        slot="suffix" style="cursor: pointer;margin-top: 4px"
+                                        @click="addCode()">
+                                选择
+                            </span>
+        </el-input>
+      </el-form-item>
       <Contact :dataList="form.outSourceInspectionCertificateProductList" @setContacts="handleData"></Contact>
       <el-form-item label="制单人:" prop="makePeopleName" style="margin: 20px auto">
         {{form.makePeopleName}}
@@ -44,16 +56,15 @@ export default {
       delLoading: false,
       id: '',
       focus: false,
+      showBtn:false,
       dateTime:'',
       adminList:[],
-      type: 'custom',
       form: {
         makePeopleName:'',
-        outSourceAdminId:'',
+        outSourceProcessSheetCode:'',
         outSourceInspectionCertificateCode:'',
         outSourceInspectionCertificateProductList: [
           {
-            outSourceProcessSheetCode:'',
             productCode: '',
             productName: '',
             productId: '',
@@ -87,6 +98,9 @@ export default {
   },
   methods: {
     checkPermission,
+    handleFocus(){
+      this.showBtn=true
+    },
     handleData(data){
       this.form.outSourceInspectionCertificateProductList=data
     },
@@ -133,7 +147,12 @@ export default {
       })
     },
     handleRadio(radio) {
-      this.form.outSourceProcessSheetProductList = radio.customerOrderProductList
+      this.form.outSourceProcessSheetCode=radio.outSourceProcessSheetCode
+      const list=radio.outSourceProcessSheetProductList;
+      let newList = list.map(v=>{
+        return {...v,qualifiedNumber:v.productNumber,scrapNumber:'0'}
+      })
+      this.form.outSourceInspectionCertificateProductList = newList
     },
     changeType(type) {
       this.type = type
@@ -142,9 +161,6 @@ export default {
       this.$refs.eform.dialog = true
       this.$refs.eform.dataType = 'custom'
     },
-    handleFocus() {
-      this.focus = true
-    }
   }
 }
 </script>

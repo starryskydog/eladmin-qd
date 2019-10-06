@@ -78,14 +78,7 @@ export default {
       const params = {
         page: this.page, size:this.size
       }
-      if( this.dataType === 'custom') {
-        this.queryCustom(params)
-      } else {
-        this.queryOutSourceProcessSheetPage(params)
-      }
-    },
-    queryCustom(params) {
-
+      this.queryOutSourceProcessSheetPage(params)
     },
     pageChange(e) {
       this.page = e - 1
@@ -108,11 +101,7 @@ export default {
     },
     doSubmit() {
       if (this.form.radio) {
-        if (this.dataType === 'product'){
-          this.$emit('setContact', this.form.radio)
-        } else {
-          this.$emit('setRadio', this.form.radio)
-        }
+        this.$emit('setContact', this.form.radio)
       }
       this.resetForm()
     },
