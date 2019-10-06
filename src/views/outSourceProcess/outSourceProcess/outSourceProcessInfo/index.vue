@@ -34,7 +34,7 @@
                 </el-popover>
               </template>
             </el-table-column>
-            <el-table-column prop="createTime" label="单据日期"/>
+            <el-table-column prop="createTimeStr" label="单据日期"/>
             <el-table-column prop="outSourceProcessSheetCode" label="单据编号"/>
             <el-table-column prop="outSourceCompanyName" label="委外公司"/>
             <el-table-column prop="outSourceAdminName" label="委外负责人"/>
