@@ -81,7 +81,7 @@
       checkPermission,
       beforeInit() {
         this.showButton = false
-        this.url = 'api/queryMeasureUnitPage'
+        this.url = 'api/queryConsumablesInfoPageList'
         const query = this.query
         const value = query.value
         this.params = { page: this.page, size: this.size }

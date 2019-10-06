@@ -1,10 +1,11 @@
 import request from '@/utils/request'
 
 // 分页查询耗材
-export function queryConsumablesInfoPageList() {
+export function queryConsumablesInfoPageList(params) {
   return request({
     url: 'api/queryConsumablesInfoPageList',
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 
