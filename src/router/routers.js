@@ -104,13 +104,13 @@ export const constantRouterMap = [
     children: [
       {
         path: 'list',
-        component: () => import('@/views/outSourceProcessSheet/outSourceProcessList'),
+        component: () => import('@/views/outSourceProcess/outSourceProcess/outSourceProcessList'),
         name: '新增委外加工单',
         meta: { title: '新增委外加工单', icon: 'add' }
       },
       {
         path: 'list/:id',
-        component: () => import('@/views/outSourceProcessSheet/outSourceProcessList'),
+        component: () => import('@/views/outSourceProcess/outSourceProcess/outSourceProcessList'),
         name: '编辑委外加工单',
         meta: { title: '编辑委外加工单', icon: 'add' }
       }
