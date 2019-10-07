@@ -13,7 +13,7 @@
                                           v-model="master_user.data[scope.$index][v.field]"
                                           @change="((val)=>{setContact(val,scope.$index,v.field)})"
                                           :disabled="v.disabled" @focus="handleFocus(v.field)">
-                                  <span class="el-tag  el-tag--mini" v-if="v.field==='productCode'&&showBtn"
+                                  <span class="el-tag  el-tag--mini" v-if="v.field==='consumablesCode'&&showBtn"
                                         slot="suffix" style="cursor: pointer;margin-top: 4px"
                                         @click="addCode(scope.$index)">
                                 选择
@@ -48,11 +48,10 @@
         master_user: {
           sel: null,//选中行
           columns: [
-            {field: "productCode", title: "产品编号", width: 220},
-            {field: "productName", title: "名称", width: 160},
-            {field: "productNumber", title: "产品数量", width: 80},
-            {field: "qualifiedNumber", title: "合格数量", width: 80},
-            {field: "scrapNumber", title: "报废数量", width: 80},
+            {field: "consumablesCode", title: "耗材编号", width: 220},
+            {field: "consumablesName", title: "名称", width: 160},
+            {field: "consumablesNumber", title: "耗材数量", width: 120},
+            {field: "unitPrice", title: "单价", width: 120},
             {field: "remark", title: "备注"},
           ],
           data: [],
@@ -74,14 +73,13 @@
         this.$emit('setContacts', this.master_user.data)
       },
       handleSet(data){
-        data.qualifiedNumber=data.productNumber
-        data.scrapNumber=0
+        data.consumablesId=data.id
         this.master_user.data.push(data)
-        this.master_user.data.splice(this.master_user.data.findIndex(item => item.productCode === ''), 1)
+        this.master_user.data.splice(this.master_user.data.findIndex(item => item.consumablesCode === ''), 1)
         this.$emit('setContacts', this.master_user.data)
       },
       handleFocus(field) {
-        if (field === 'productCode') {
+        if (field === 'consumablesCode') {
           this.showBtn = true
         } else {
           this.showBtn = false
@@ -90,11 +88,10 @@
       //添加账号
       addMasterUser() {
         let j = {
-          productCode: "",
-          productName: "",
-          qualifiedNumber: "",
-          scrapNumber:'',
-          productNumber: "",
+          consumablesCode: "",
+          consumablesName: "",
+          consumablesNumber: "",
+          unitPrice:'',
           remark: "",
         };
         this.master_user.data.push(j);
@@ -116,7 +113,7 @@
         columns.forEach((column, index) => {
           if (index === 0) {
             sums[index] = '总计'
-          } else if (index === 4||index === 5||index === 3) {
+          } else if (index === 6||index === 3) {
             const values = data.map(item => Number(item[column.property]))
             if (!values.every(value => isNaN(value))) {
               sums[index] = values.reduce((prev, curr) => {

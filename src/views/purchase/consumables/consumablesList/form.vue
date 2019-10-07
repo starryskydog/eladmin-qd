@@ -1,9 +1,9 @@
 <template>
-  <el-dialog :visible.sync="dialog" :title="dataType==='outSourceInspectionCertificate' ? '选择委外加工单' : '选择产品'" append-to-body width="800px"
+  <el-dialog :visible.sync="dialog" title="选择耗材" append-to-body width="600px"
              :show-close=false>
     <el-form ref="form" :inline="true" :model="form" size="small" label-width="100px">
-      <el-table v-loading="loading" :data="dataType==='outSourceInspectionCertificate' ? dataList : itemList" size="small" style="width: 100%;"
-                :header-cell-style="{'text-align':'center'}" border>
+      <el-table v-loading="loading" :data="dataList" size="small" style="width: 100%;"
+                :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" border>
         <el-table-column type="index" width="50" align="center" label="编号">
         </el-table-column>
         <el-table-column label="选择" width="50px" align="center">
@@ -11,7 +11,7 @@
             <el-radio v-model="form.radio" :label="scope.row">&nbsp;</el-radio>
           </template>
         </el-table-column>
-        <el-table-column v-for="(v,i) in formType==='product' ?customColumns:productColumns" :key="v.field" :prop="v.field" :label="v.title"></el-table-column>
+        <el-table-column v-for="(v,i) in productColumns" :key="v.field" :prop="v.field" :label="v.title"></el-table-column>
       </el-table>
       <el-pagination
         :total="total"
@@ -29,8 +29,7 @@
 </template>
 
 <script>
-import { queryOutSourceProcessSheetPage } from '@/api/outSourceProcessSheet'
-import { queryOutSourceInspectionCertificateById } from '@/api/outSourceInspection'
+import { queryConsumablesInfoList } from '@/api/consumables'
 
 export default {
   components: {},
@@ -38,49 +37,28 @@ export default {
   data() {
     return {
       dialog: false,
-      i:0,
       page: 0, size: 10,
       loading: false,
       dataList:[],
-      categoryList: [],
-      form: {
-        radio: ''
+      form:{
+        radio:''
       },
-      url: '',
       total: 0,
-      dataType:'',
-      customColumns: [
-        {field: "productCode", title: "产品编号", width: 220},
-        {field: "productName", title: "产品名称", width: 120},
-        {field: "remark", title: "备注", width: 100},
-      ],
       productColumns:[
-        {field: "outSourceProcessSheetCode", title: "编号", width: 220},
-        {field: "outSourceCompanyName", title: "公司名称", width: 120},
-        {field: "outSourceAdminName", title: "负责人", width: 160},
-        {field: "contactWay", title: "联系方式", width: 100},
+        {field: "consumablesCode", title: "耗材编号", width: 220},
+        {field: "consumablesName", title: "耗材名称", width: 120},
       ],
     }
   },
   created() {
-  },
-  watch: {
-    dataType: function (val) {
-      this.getData()
-    },
+    this.queryConsumablesInfoList()
   },
   methods: {
-    getData() {
-      const params = {
-        page: this.page, size:this.size
-      }
-      if( this.dataType === 'product') {
-      } else {
-        this.queryOutSourceProcessSheetPage(params)
-      }
-    },
-    queryCustom(params) {
-
+    queryConsumablesInfoList() {
+      queryConsumablesInfoList().then(res=>{
+        this.dataList=res.content
+        this.total=res.totalElements
+      })
     },
     pageChange(e) {
       this.page = e - 1
@@ -91,23 +69,12 @@ export default {
       this.size = e
       this.getData()
     },
-    queryOutSourceProcessSheetPage(params) {
-      queryOutSourceProcessSheetPage(params).then(res => {
-        this.dataList = res.content
-        this.total = res.totalElements
-        this.loading = false
-      })
-    },
     cancel() {
       this.resetForm()
     },
     doSubmit() {
       if (this.form.radio) {
-        if (this.dataType === 'outSourceInspectionCertificate'){
-          this.$emit('setIndex', this.form.radio)
-        } else {
-          this.$emit('setContact', this.form.radio)
-        }
+        this.$emit('setContact', this.form.radio)
       }
       this.resetForm()
     },

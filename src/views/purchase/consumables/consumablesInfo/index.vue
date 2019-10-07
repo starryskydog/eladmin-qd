@@ -34,11 +34,11 @@
                 </el-popover>
               </template>
             </el-table-column>
-            <el-table-column prop="outSourceInspectionCertificateCode" label="单据编号"/>
-            <el-table-column prop="makePeopleName" label="制单人"/>
+            <el-table-column prop="consumablesPurchaseOrderCode" label="单据编号"/>
+            <el-table-column prop="purchaseUserName" label="制单人"/>
             <el-table-column prop="createTime" label="制单日期">
               <template slot-scope="scope">
-                <span>{{ parseTime(scope.row.updateTime) }}</span>
+                <span>{{ parseTime(scope.row.createTime) }}</span>
               </template>
             </el-table-column>
           </el-table>
@@ -59,7 +59,7 @@
 <script>
   import checkPermission from '@/utils/permission'
   import { getSupplierInfoById } from '@/api/invoice'
-  import { del } from '@/api/outSourceInspection'
+  import { del } from '@/api/purchaseProduct'
   import initData from '@/mixins/initData'
   import { parseTime } from '@/utils/index'
   import eForm from './form'
@@ -79,11 +79,11 @@
       })
     },
     methods: {
-      checkPermission,
       parseTime,
+      checkPermission,
       beforeInit() {
         this.showButton = false
-        this.url = 'api/queryOutSourceInspectionCertificatePageList'
+        this.url = 'api/queryConsumablesPurchaseOrderPageList'
         const query = this.query
         const value = query.value
         this.params = { page: this.page, size: this.size }
@@ -91,10 +91,10 @@
         return true
       },
       add() {
-        this.$router.push({ path: '/outSourceInspectionCertificate/list' })
+        this.$router.push({ path: '/purchaseConsumables/list' })
       },
       edit(data) {
-        this.$router.push({ path: `/outSourceInspectionCertificate/list/${data.id}`});
+        this.$router.push({ path: `/purchaseConsumables/list/${data.id}`});
       },
       handleCurrentChange(val) {
       },
@@ -113,7 +113,6 @@
         }).catch(err => {
           this.delLoading = false
           this.$refs[id].doClose()
-          console.log(err.response.data.message)
         })
       },
     }

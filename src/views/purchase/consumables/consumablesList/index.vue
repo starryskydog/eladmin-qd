@@ -1,6 +1,5 @@
 <template>
   <div class="app-container">
-    <eForm ref="eform" @setIndex="handleRadio"/>
     <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
       <el-button
         class="filter-item"
@@ -13,27 +12,15 @@
       <p class="form-title" style="text-align: center; font-size: 18px">
         无锡市海星船舶动力有限公司
         <span style="position: absolute;right: 30px;font-size: 12px;color: #666">
-          单据编号：{{form.outSourceInspectionCertificateCode}}
+          单据编号：{{form.consumablesPurchaseOrderCode}}
         </span>
       </p>
       <p class="form-sub-title" style="text-align: center;">
-        委外验收单
+        耗材采购单
       </p>
-      <el-form-item type="index" label-width="350"  align="center" label="委外加工单">
-        <el-input size="mini" placeholder="请输入内容"
-                  style="width: 200px"
-                  v-model="form.outSourceProcessSheetCode"
-                  @focus="handleFocus()">
-                                  <span class="el-tag  el-tag--mini" v-if="showBtn"
-                                        slot="suffix" style="cursor: pointer;margin-top: 4px"
-                                        @click="addCode()">
-                                选择
-                            </span>
-        </el-input>
-      </el-form-item>
-      <Contact :dataList="form.outSourceInspectionCertificateProductList" :itemList="itemList" @setContacts="handleData"></Contact>
-      <el-form-item label="制单人:" prop="makePeopleName" style="margin: 20px auto">
-        {{form.makePeopleName}}
+      <Contact :dataList="form.consumablesPurchaseOrderProductList" :itemList="itemList" @setContacts="handleData"></Contact>
+      <el-form-item label="采购人:" prop="purchaseUserName" style="margin: 20px auto">
+        {{form.purchaseUserName}}
       </el-form-item>
     </el-form>
   </div>
@@ -42,14 +29,13 @@
 <script>
 import checkPermission from '@/utils/permission'
 import initData from '@/mixins/initData'
-import eForm from './form'
 import Contact from './module/contact'
 import store from '@/store'
-import { add,initOutSourceInspectionCertificateCode,queryOutSourceInspectionCertificateById,edit } from '@/api/outSourceInspection'
+import { add,initConsumablesPurchaseOrderCode,edit,queryConsumablesPurchaseOrderById } from '@/api/purchaseConsumables'
 
 export default {
   mixins: [initData],
-  components: { eForm, Contact },
+  components: { Contact },
   data() {
     return {
       isAdd: false,
@@ -61,18 +47,16 @@ export default {
       adminList:[],
       itemList:[],
       form: {
-        makePeopleName:'',
-        outSourceProcessSheetCode:'',
-        outSourceInspectionCertificateCode:'',
-        outSourceInspectionCertificateProductList: [
+        purchaseUserName:'',
+        consumablesPurchaseOrderCode:'',
+        consumablesPurchaseOrderProductList: [
           {
-            productCode: '',
-            productName: '',
-            productId: '',
-            productNumber: '',
-            qualifiedNumber: "",
-            scrapNumber:'',
-            remark: '',
+            productCode: "",
+            productName: "",
+            productNumber: "",
+            specifications:'',
+            unitPrice:'',
+            remark: "",
           }
         ],
       },
@@ -88,22 +72,19 @@ export default {
   },
   created() {
     const id=this.$route.params.id
-    this.form.makePeopleName=store.getters.user.username
-    this.form.makePeopleId=store.getters.user.id
     if(id){
-      this.queryOutSourceInspectionCertificateById(id)
+      this.queryConsumablesPurchaseOrderById(id)
       this.type='edit'
     }else{
       this.initInvoiceCode()
+      this.form.purchaseUserName=store.getters.user.username
+      this.form.purchaseUserId=store.getters.user.id
     }
   },
   methods: {
     checkPermission,
-    handleFocus(){
-      this.showBtn=true
-    },
     handleData(data){
-      this.form.outSourceInspectionCertificateProductList=data
+      this.form.consumablesPurchaseOrderProductList=data
     },
     add() {
       this.$refs['form'].validate((valid) => {
@@ -118,7 +99,7 @@ export default {
                 duration: 2500
               })
               setTimeout(() => {
-                this.$router.replace({ path: '/outSourceProcess/outSourceInspectionCertificate' })
+                this.$router.replace({ path: '/purchase/consumables' })
               }, 2500);
             })
           }else{
@@ -129,7 +110,7 @@ export default {
                 duration: 2500
               })
               setTimeout(() => {
-                this.$router.replace({ path: '/outSourceProcess/outSourceInspectionCertificate' })
+                this.$router.replace({ path: '/purchase/consumables' })
               }, 2500);
             })
           }
@@ -137,31 +118,17 @@ export default {
       })
     },
     initInvoiceCode() {
-      initOutSourceInspectionCertificateCode().then(res => {
-        this.form.outSourceInspectionCertificateCode = res
+      initConsumablesPurchaseOrderCode().then(res => {
+        this.form.consumablesPurchaseOrderCode = res
       })
     },
-    queryOutSourceInspectionCertificateById(id) {
-      queryOutSourceInspectionCertificateById(id).then(res => {
+    queryConsumablesPurchaseOrderById(id) {
+      queryConsumablesPurchaseOrderById(id).then(res=>{
         this.form=res
-
       })
-    },
-    handleRadio(radio) {
-      this.form.outSourceProcessSheetCode=radio.outSourceProcessSheetCode
-      const list=radio.outSourceProcessSheetProductList;
-      this.itemList=list
-      let newList = list.map(v=>{
-        return {...v,qualifiedNumber:v.productNumber,scrapNumber:'0'}
-      })
-      this.form.outSourceInspectionCertificateProductList = newList
     },
     changeType(type) {
       this.type = type
-    },
-    addCode() {
-      this.$refs.eform.dialog = true
-      this.$refs.eform.dataType = 'outSourceInspectionCertificate'
     },
   }
 }
