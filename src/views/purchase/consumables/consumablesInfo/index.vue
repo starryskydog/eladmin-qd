@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <eForm ref="form" :is-add="isAdd" />
+    <eForm ref="form" :is-add="isAdd" :checkData="checkData"/>
     <!--工具栏-->
     <div class="head-container">
       <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
@@ -19,7 +19,8 @@
           <el-table v-loading="loading" :data="data" border highlight-current-row size="small" style="width: 100%;" @current-change="handleCurrentChange" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
             <el-table-column v-if="checkPermission(['ADMIN','ROLES_ALL','ROLES_EDIT','ROLES_DELETE'])" label="操作" width="130px" align="center">
               <template slot-scope="scope">
-                <el-button v-permission="['ADMIN','ROLES_ALL','ROLES_EDIT']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
+                <el-button v-permission="['ADMIN','ROLES_ALL','ROLES_EDIT']" size="mini" type="primary" icon="el-icon-check" @click="handleCheck(scope.row)"/>
+                <!--<el-button v-permission="['ADMIN','ROLES_ALL','ROLES_EDIT']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>-->
                 <el-popover
                   v-permission="['ADMIN','ROLES_ALL','ROLES_DELETE']"
                   :ref="scope.row.id"
@@ -36,11 +37,7 @@
             </el-table-column>
             <el-table-column prop="consumablesPurchaseOrderCode" label="单据编号"/>
             <el-table-column prop="purchaseUserName" label="制单人"/>
-            <el-table-column prop="createTime" label="制单日期">
-              <template slot-scope="scope">
-                <span>{{ parseTime(scope.row.createTime) }}</span>
-              </template>
-            </el-table-column>
+            <el-table-column prop="status" label="审核状态" />
           </el-table>
           <!--分页组件-->
           <el-pagination
@@ -59,9 +56,10 @@
 <script>
   import checkPermission from '@/utils/permission'
   import { getSupplierInfoById } from '@/api/invoice'
-  import { del } from '@/api/purchaseProduct'
+  import { del,auditConsumablesPurchaseOrder } from '@/api/purchaseConsumables'
   import initData from '@/mixins/initData'
   import { parseTime } from '@/utils/index'
+  import store from '@/store'
   import eForm from './form'
   export default {
     mixins: [initData],
@@ -70,7 +68,8 @@
       return {
         isAdd:false,
         delLoading: false,
-        id:''
+        id:'',
+        checkData:{}
       }
     },
     created() {
@@ -95,6 +94,12 @@
       },
       edit(data) {
         this.$router.push({ path: `/purchaseConsumables/list/${data.id}`});
+      },
+      handleCheck(data){
+        this.checkData.id=data.id
+        this.checkData.auditUserName=store.getters.user.username
+        this.checkData.auditUserId=store.getters.user.id
+        this.$refs.form.dialog = true
       },
       handleCurrentChange(val) {
       },
