@@ -13,12 +13,14 @@ import App from './App'
 import router from './router/routers'
 import permission from './components/permission'
 import store from './store'
+import Print from 'vue-print-nb'
 
 import '@/icons' // icon
 import './router/index' // permission control
 
 Vue.use(mavonEditor)
 Vue.use(permission)
+Vue.use(Print)
 Vue.use(ElementUI, { locale })
 Vue.config.productionTip = false
 require('babel-polyfill')

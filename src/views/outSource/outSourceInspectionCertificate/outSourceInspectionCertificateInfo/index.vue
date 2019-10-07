@@ -34,7 +34,11 @@
                 </el-popover>
               </template>
             </el-table-column>
-            <el-table-column prop="outSourceInspectionCertificateCode" label="单据编号"/>
+            <el-table-column prop="outSourceInspectionCertificateCode" label="单据编号">
+              <template slot-scope="scope">
+                <router-link :to="{name:'委外验收单详情', params: { id: scope.row.id }}">{{scope.row.outSourceInspectionCertificateCode}}</router-link>
+              </template>
+            </el-table-column>
             <el-table-column prop="makePeopleName" label="制单人"/>
             <el-table-column prop="createTime" label="制单日期">
               <template slot-scope="scope">
