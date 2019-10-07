@@ -36,7 +36,11 @@
             </el-table-column>
             <el-table-column prop="outSourceInspectionCertificateCode" label="单据编号"/>
             <el-table-column prop="makePeopleName" label="制单人"/>
-            <el-table-column prop="createTime" label="制单日期"/>
+            <el-table-column prop="createTime" label="制单日期">
+              <template slot-scope="scope">
+                <span>{{ parseTime(scope.row.updateTime) }}</span>
+              </template>
+            </el-table-column>
           </el-table>
           <!--分页组件-->
           <el-pagination
@@ -58,6 +62,7 @@
   import { del } from '@/api/outSourceInspection'
   import initData from '@/mixins/initData'
   import eForm from './form'
+  import { parseTime } from '@/utils/index'
   export default {
     mixins: [initData],
     components: { eForm },
@@ -75,6 +80,7 @@
     },
     methods: {
       checkPermission,
+      parseTime,
       beforeInit() {
         this.showButton = false
         this.url = 'api/queryOutSourceInspectionCertificatePageList'

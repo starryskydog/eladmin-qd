@@ -136,6 +136,25 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/purchaseProduct',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/purchase/product/productList'),
+        name: '新增产品采购单',
+        meta: { title: '新增产品采购单', icon: 'add' }
+      },
+      {
+        path: 'list/:id',
+        component: () => import('@/views/purchase/product/productList'),
+        name: '编辑产品采购单',
+        meta: { title: '编辑产品采购单', icon: 'add' }
+      }
+    ]
+  },
+  {
     path: '/user',
     component: Layout,
     hidden: true,

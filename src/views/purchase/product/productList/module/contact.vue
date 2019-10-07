@@ -50,9 +50,9 @@
           columns: [
             {field: "productCode", title: "产品编号", width: 220},
             {field: "productName", title: "名称", width: 160},
-            {field: "productNumber", title: "产品数量", width: 80},
-            {field: "qualifiedNumber", title: "合格数量", width: 80},
-            {field: "scrapNumber", title: "报废数量", width: 80},
+            {field: "productNumber", title: "产品数量", width: 120},
+            {field: "specifications", title: "产品规格", width: 180},
+            {field: "unitPrice", title: "单价", width: 120},
             {field: "remark", title: "备注"},
           ],
           data: [],
@@ -74,8 +74,8 @@
         this.$emit('setContacts', this.master_user.data)
       },
       handleSet(data){
-        data.qualifiedNumber=data.productNumber
-        data.scrapNumber=0
+        data.productName=data.name
+        data.productId=data.id
         this.master_user.data.push(data)
         this.master_user.data.splice(this.master_user.data.findIndex(item => item.productCode === ''), 1)
         this.$emit('setContacts', this.master_user.data)
@@ -92,9 +92,9 @@
         let j = {
           productCode: "",
           productName: "",
-          qualifiedNumber: "",
-          scrapNumber:'',
           productNumber: "",
+          specifications:'',
+          unitPrice:'',
           remark: "",
         };
         this.master_user.data.push(j);
@@ -116,7 +116,7 @@
         columns.forEach((column, index) => {
           if (index === 0) {
             sums[index] = '总计'
-          } else if (index === 4||index === 5||index === 3) {
+          } else if (index === 6||index === 3) {
             const values = data.map(item => Number(item[column.property]))
             if (!values.every(value => isNaN(value))) {
               sums[index] = values.reduce((prev, curr) => {
