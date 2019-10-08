@@ -113,6 +113,12 @@ export const constantRouterMap = [
         component: () => import('@/views/outSource/outSourceProcess/outSourceProcessList'),
         name: '编辑委外加工单',
         meta: { title: '编辑委外加工单', icon: 'add' }
+      },
+      {
+        path: 'print/:id',
+        component: () => import('@/views/outSource/outSourceProcess/print'),
+        name: '委外加工单详情',
+        meta: { title: '委外加工单详情', icon: 'add' }
       }
     ]
   },
@@ -132,6 +138,12 @@ export const constantRouterMap = [
         component: () => import('@/views/outSource/outSourceInspectionCertificate/outSourceInspectionCertificateList'),
         name: '编辑委外验收单',
         meta: { title: '编辑委外验收单', icon: 'add' }
+      },
+      {
+        path: 'print/:id',
+        component: () => import('@/views/outSource/outSourceInspectionCertificate/print'),
+        name: '委外验收单详情',
+        meta: { title: '委外验收单详情', icon: 'add' }
       }
     ]
   },

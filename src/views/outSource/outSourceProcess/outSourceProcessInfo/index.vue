@@ -35,7 +35,11 @@
               </template>
             </el-table-column>
             <el-table-column prop="createTimeStr" label="单据日期"/>
-            <el-table-column prop="outSourceProcessSheetCode" label="单据编号"/>
+            <el-table-column prop="outSourceProcessSheetCode" label="单据编号">
+              <template slot-scope="scope">
+                <router-link :to="{name:'委外加工单详情', params: { id: scope.row.id }}">{{scope.row.outSourceProcessSheetCode}}</router-link>
+              </template>
+            </el-table-column>
             <el-table-column prop="outSourceCompanyName" label="委外公司"/>
             <el-table-column prop="outSourceAdminName" label="委外负责人"/>
             <el-table-column prop="contactWay" label="联系方式"/>
