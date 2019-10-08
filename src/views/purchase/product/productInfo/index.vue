@@ -36,12 +36,8 @@
               </template>
             </el-table-column>
             <el-table-column prop="productPurchaseOrderCode" label="单据编号"/>
-            <el-table-column prop="purchaseUserName" label="制单人"/>
-            <el-table-column prop="createTime" label="制单日期">
-              <template slot-scope="scope">
-                <span>{{ parseTime(scope.row.createTime) }}</span>
-              </template>
-            </el-table-column>
+            <el-table-column prop="purchaseUserName" label="申请人"/>
+            <el-table-column prop="auditStatusName" label="审核状态" />
           </el-table>
           <!--分页组件-->
           <el-pagination

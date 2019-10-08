@@ -36,8 +36,9 @@
               </template>
             </el-table-column>
             <el-table-column prop="consumablesPurchaseOrderCode" label="单据编号"/>
-            <el-table-column prop="purchaseUserName" label="制单人"/>
-            <el-table-column prop="status" label="审核状态" />
+            <el-table-column prop="purchaseUserName" label="采购申请人"/>
+            <el-table-column prop="purchaseUserName" label="采购申请日期"/>
+            <el-table-column prop="auditStatusName" label="审核状态" />
           </el-table>
           <!--分页组件-->
           <el-pagination
