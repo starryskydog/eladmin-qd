@@ -36,8 +36,11 @@
               </template>
             </el-table-column>
             <el-table-column prop="productPurchaseOrderCode" label="单据编号"/>
-            <el-table-column prop="purchaseUserName" label="申请人"/>
+            <el-table-column prop="purchaseUserName" label="采购申请人"/>
+            <el-table-column prop="createTimeStr" label="采购申请时间"/>
             <el-table-column prop="auditStatusName" label="审核状态" />
+            <el-table-column prop="auditTimeStr" label="审核时间" />
+            <el-table-column prop="auditUserName" label="审核人" />
           </el-table>
           <!--分页组件-->
           <el-pagination

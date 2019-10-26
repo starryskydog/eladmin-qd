@@ -195,7 +195,7 @@
               })
             })
           }
-          setTimeout(()=>{ this.$router.replace({ path: '/order/info' }) }, 2500);
+          setTimeout(()=>{ this.$router.replace({ path: '/order/customerOrder' }) }, 2500);
         }else{
           this.form.customerOrderProductList=[{
             productCode: "",
