@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div class="app-container">
     <!--表单组件-->
     <eForm ref="form" :is-add="isAdd"/>

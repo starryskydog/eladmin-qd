@@ -148,6 +148,31 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/qualityCheckSheet',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/productQuality/qualityCheckSheet/qualityCheckSheetList'),
+        name: '新增质量检验单',
+        meta: { title: '新增质量检验单', icon: 'add' }
+      },
+      {
+        path: 'list/:id',
+        component: () => import('@/views/outSource/outSourceInspectionCertificate/outSourceInspectionCertificateList'),
+        name: '编辑委外验收单',
+        meta: { title: '编辑委外验收单', icon: 'add' }
+      },
+      {
+        path: 'print/:id',
+        component: () => import('@/views/outSource/outSourceInspectionCertificate/print'),
+        name: '委外验收单详情',
+        meta: { title: '委外验收单详情', icon: 'add' }
+      }
+    ]
+  },
+  {
     path: '/purchaseProduct',
     component: Layout,
     hidden: true,
