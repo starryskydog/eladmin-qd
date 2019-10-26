@@ -135,6 +135,8 @@
                   type: 'success',
                   duration: 2500
                 })
+                this.resetForm()
+                this.dialog = false
                 this.$parent.init()
               })
             } else {
@@ -144,12 +146,11 @@
                   type: 'success',
                   duration: 2500
                 })
+                this.resetForm()
+                this.dialog = false
                 this.$parent.init()
               })
             }
-            this.loading = false
-            this.resetForm()
-            this.dialog = false
           }
         })
       },

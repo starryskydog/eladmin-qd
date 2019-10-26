@@ -117,6 +117,9 @@ export default {
             type: 'success',
             duration: 2500
           })
+          this.resetForm()
+          this.dialog = false
+          this.$parent.init()
         })
       } else {
         edit(this.form).then(res => {
@@ -125,12 +128,11 @@ export default {
             type: 'success',
             duration: 2500
           })
+          this.resetForm()
+          this.dialog = false
+          this.$parent.init()
         })
       }
-      this.loading = false
-      this.resetForm()
-      this.dialog = false
-      this.$parent.init()
     },
     initCode() {
       initCustomerCode().then(res => {
