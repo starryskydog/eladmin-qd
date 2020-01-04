@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 分页查询产品系列
-export function vs  () {
+export function queryProductSeriesPage() {
   return request({
     url: 'api/queryProductSeriesPage  ',
     method: 'get'
