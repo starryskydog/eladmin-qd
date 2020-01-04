@@ -91,7 +91,10 @@ export default {
         logisticsCompany: '',
         logisticsCode: '',
         customerOrderCode: '',
+        deliveryAddress: '',
+        consignee: '',
         contactWay: '',
+        invoiceNumber: '',
         remark: '',
         invoiceProductList: [
           {
@@ -101,9 +104,9 @@ export default {
             unitPrice: '',
             productNumber: '',
             allMoney: '',
-            remark: '',
+            remark: ''
           }
-        ],
+        ]
       },
       rules: {
         // customerName: [
@@ -121,9 +124,9 @@ export default {
         invoiceNumber: [
           { required: true, message: '发票号不能为空', trigger: 'blur' }
         ],
-        remark: [
-          { required: true, message: '备注不能为空', trigger: 'blur' }
-        ],
+        // remark: [
+        //   { required: true, message: '备注不能为空', trigger: 'blur' }
+        // ],
         logisticsCompany: [
           { required: true, message: '物流公司不能为空', trigger: 'blur' }
         ],
@@ -168,7 +171,7 @@ export default {
             })
           }
           setTimeout(() => {
-            this.$router.replace({ path: '/order/deliveryOrder' })
+            this.$router.replace({ path: '/order/deliveryOrderInfo' })
           }, 2500);
         }
       })

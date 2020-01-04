@@ -185,6 +185,7 @@
                 type: 'success',
                 duration: 2500
               })
+              setTimeout(()=>{ this.$router.replace({ path: '/order/customerOrder' }) }, 2500);
             })
           }else{
             add(this.form).then(res => {
@@ -193,9 +194,10 @@
                 type: 'success',
                 duration: 2500
               })
+              setTimeout(()=>{ this.$router.replace({ path: '/order/customerOrder' }) }, 2500);
             })
           }
-          setTimeout(()=>{ this.$router.replace({ path: '/order/customerOrder' }) }, 2500);
+
         }else{
           this.form.customerOrderProductList=[{
             productCode: "",
