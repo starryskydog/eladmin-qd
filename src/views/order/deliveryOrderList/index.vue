@@ -124,9 +124,9 @@ export default {
         invoiceNumber: [
           { required: true, message: '发票号不能为空', trigger: 'blur' }
         ],
-        remark: [
-          { required: true, message: '备注不能为空', trigger: 'blur' }
-        ],
+        // remark: [
+        //   { required: true, message: '备注不能为空', trigger: 'blur' }
+        // ],
         logisticsCompany: [
           { required: true, message: '物流公司不能为空', trigger: 'blur' }
         ],
