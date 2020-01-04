@@ -19,7 +19,7 @@
       <p class="form-sub-title" style="text-align: center;">
         质量检验单
       </p>
-      <Contact :dataList="form.outSourceInspectionCertificateProductList" :itemList="itemList" @setContacts="handleData"></Contact>
+      <Contact :dataList="form.qualityCheckSheetProductList" :itemList="itemList" @setContacts="handleData"></Contact>
       <el-form-item label="制单人:" prop="makePeopleName" style="margin: 20px auto">
         {{form.makePeopleName}}
       </el-form-item>
@@ -49,9 +49,8 @@ export default {
       adminList:[],
       itemList:[],
       form: {
-        makePeopleName:'',
         qualityCheekSheetCode:'',
-        outSourceInspectionCertificateProductList: [
+        qualityCheckSheetProductList: [
           {
             productCode: '',
             productName: '',
@@ -75,10 +74,9 @@ export default {
   },
   created() {
     const id=this.$route.params.id
-    this.form.makePeopleName=store.getters.user.username
-    this.form.makePeopleId=store.getters.user.id
+    this.form.makePeopleName = store.getters.user.username
     if(id){
-      this.queryOutSourceInspectionCertificateById(id)
+      this.qualityCheckSheet(id)
       this.type='edit'
     }else{
       this.initQualityCheekSheetCode()
@@ -90,36 +88,51 @@ export default {
       this.showBtn=true
     },
     handleData(data){
-      this.form.outSourceInspectionCertificateProductList=data
+      console.log(data)
+      this.form.qualityCheckSheetProductList=data
     },
     add() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          if(this.type==='edit'){
-            delete this.form.createTime
-            delete this.form.updateTime
-            edit(this.form).then(res => {
-              this.$notify({
-                title: '编辑成功',
-                type: 'success',
+          const list=this.form.qualityCheckSheetProductList;
+          const _this=this
+          list.forEach(function (item,k) {
+            if(!list[k].productCode){
+              _this.$notify({
+                title: '请选择产品',
+                type: 'warning',
                 duration: 2500
               })
-              setTimeout(() => {
-                this.$router.replace({ path: '/outSourceProcess/outSourceInspectionCertificate' })
-              }, 2500);
-            })
-          }else{
-            add(this.form).then(res => {
-              this.$notify({
-                title: '添加成功',
-                type: 'success',
-                duration: 2500
-              })
-              setTimeout(() => {
-                this.$router.replace({ path: '/outSourceProcess/outSourceInspectionCertificate' })
-              }, 2500);
-            })
-          }
+              return false;
+            }else{
+              if(_this.type==='edit'){
+                delete _this.form.createTime
+                delete _this.form.updateTime
+                edit(_this.form).then(res => {
+                  _this.$notify({
+                    title: '编辑成功',
+                    type: 'success',
+                    duration: 2500
+                  })
+                  setTimeout(() => {
+                    _this.$router.replace({ path: '/productQuality/qualityCheckSheet' })
+                  }, 2500);
+                })
+              }else{
+                add(_this.form).then(res => {
+                  _this.$notify({
+                    title: '添加成功',
+                    type: 'success',
+                    duration: 2500
+                  })
+                  setTimeout(() => {
+                    _this.$router.replace({ path: '/productQuality/qualityCheckSheet' })
+                  }, 2500);
+                })
+              }
+            }
+          })
+
         }
       })
     },
@@ -128,10 +141,9 @@ export default {
         this.form.qualityCheekSheetCode = res
       })
     },
-    queryOutSourceInspectionCertificateById(id) {
-      queryOutSourceInspectionCertificateById(id).then(res => {
+    qualityCheckSheet(id) {
+      qualityCheckSheet(id).then(res => {
         this.form=res
-
       })
     },
     handleRadio(radio) {

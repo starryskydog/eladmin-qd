@@ -33,7 +33,7 @@ import { queryProductInfoList } from '@/api/productInfo'
 
 export default {
   components: {},
-  props: ['formType','productList','itemList'],
+  props: ['formType','productList','itemList','checkedList'],
   data() {
     return {
       dialog: false,
@@ -52,6 +52,11 @@ export default {
   },
   created() {
     this.queryProduct()
+  },
+  watch:{
+    checkedList:function (val) {
+      console.log(this.dataList,val)
+    }
   },
   methods: {
     queryProduct() {

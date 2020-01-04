@@ -1,7 +1,7 @@
 <template>
   <el-row>
     <el-col>
-      <eForm ref="eform" :formType="type" :itemList="itemList" @setContact="handleSet" :productList="dataList"/>
+      <eForm ref="eform" :formType="type" :itemList="itemList" @setContact="handleSet" :productList="dataList" :checkedList="master_user.data"/>
         <el-table size="mini" :data="master_user.data" border style="width: 100%" highlight-current-row
                   :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" show-summary
                   :summary-method="getSummaries">

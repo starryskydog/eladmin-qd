@@ -89,6 +89,15 @@ export default {
     add() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
+          const productPurchaseOrderProductList=this.form.productPurchaseOrderProductList
+          if(productPurchaseOrderProductList){
+            for (var i = productPurchaseOrderProductList.length-1;i >= 0 ;i--) {
+              if (productPurchaseOrderProductList[i].productName === '') {
+                productPurchaseOrderProductList.splice(i,1);        //执行后aa.length会减一
+              }
+            }
+          }
+          this.form.productPurchaseOrderProductList=productPurchaseOrderProductList
           if(this.type==='edit'){
             delete this.form.createTime
             delete this.form.updateTime
