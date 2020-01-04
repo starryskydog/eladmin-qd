@@ -49,7 +49,7 @@
           sel: null,//选中行
           columns: [
             {field: "productCode", title: "产品编号", width: 220},
-            {field: "productName", title: "名称", width: 160},
+            {field: "productName", title: "产品名称", width: 160},
             {field: "productNumber", title: "产品数量", width: 80},
             {field: "qualifiedNumber", title: "合格数量", width: 80},
             {field: "scrapNumber", title: "报废数量", width: 80},

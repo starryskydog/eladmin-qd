@@ -1,36 +1,33 @@
 <template>
   <el-row>
     <el-col>
-      <eForm ref="eform" :formType="type" :itemList="itemList" @setContact="handleSet" :productList="dataList"/>
-        <el-table size="mini" :data="master_user.data" border style="width: 100%" highlight-current-row
-                  :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" show-summary
-                  :summary-method="getSummaries">
+        <el-table size="mini" :data="dataList" border style="width: 100%" highlight-current-row
+                  :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
           <el-table-column v-for="(v,i) in master_user.columns" :key="v.field" :prop="v.field" :label="v.title"
                            :width="v.width">
             <template slot-scope="scope">
-                            <span>
+
+                            <span v-if="v.field!='productName'&&v.field!='productCategoryName'&&v.field!='productSeriesName'">
                                 <el-input size="mini" placeholder="请输入内容"
                                           v-model="master_user.data[scope.$index][v.field]"
                                           @change="((val)=>{setContact(val,scope.$index,v.field)})"
                                           :disabled="v.disabled" @focus="handleFocus(v.field)">
-                                  <span class="el-tag  el-tag--mini" v-if="v.field==='productCode'&&showBtn"
-                                        slot="suffix" style="cursor: pointer;margin-top: 4px"
-                                        @click="addCode(scope.$index)">
-                                选择
-                            </span>
                                 </el-input>
+                            </span>
+                            <span v-else>
+                              {{master_user.data[scope.$index][v.field]}}
                             </span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="100" fixed>
             <template slot-scope="scope">
-            <span class="el-tag el-tag--danger el-tag--mini" style="cursor: pointer;" @click="del(scope.$index)">
-                                删除
-                            </span>
-              <span class="el-tag  el-tag--mini" style="cursor: pointer;"
-                    @click="addMasterUser()">
-                                添加
-                            </span>
+              <el-button
+                class="filter-item"
+                size="mini"
+                :disabled="scope.$index==key?false:true"
+                type="primary"
+                >保存
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -39,21 +36,24 @@
 </template>
 
 <script>
-  import eForm from '../form'
   export default {
-    props: ['dataList','itemList'],
-    components: {eForm},
+    props: ['dataList'],
     data() {
       return {
         master_user: {
           sel: null,//选中行
           columns: [
-            {field: "productCode", title: "产品编号", width: 220},
-            {field: "productName", title: "名称", width: 160},
-            {field: "productNumber", title: "产品数量", width: 80},
-            {field: "qualifiedNumber", title: "合格数量", width: 80},
-            {field: "scrapNumber", title: "报废数量", width: 80},
-            {field: "remark", title: "备注"},
+            {field: "productName", title: "产品名称"},
+            {field: "productCategoryName", title: "产品类别"},
+            {field: "productSeriesName", title: "产品系列"},
+            {field: "mpNumber", title: "毛坯数量"},
+            {field: "hjNumber", title: "焊接数量"},
+            {field: "bjcNumber", title: "半精车数量"},
+            {field: "cmNumber", title: "粗磨数量"},
+            {field: "jcNumber", title: "精车数量"},
+            {field: "jmNumber", title: "精磨数量"},
+            {field: "dphNumber", title: "动平衡数量"},
+            {field: "totalNumber", title: "总数量"},
           ],
           data: [],
         },
@@ -63,28 +63,17 @@
       }
     },
     created: function () {
-      this.master_user.data = this.dataList
     },
     watch: {
       dataList: function (val) {
-        this.master_user.data = val
+        this.$set(this.master_user,'data',val)
       }
     },
     methods: {
-      setContact(val,index,name) {
-        if(name==='productNumber'){
-          this.$set(this.master_user.data[index],'qualifiedNumber',val)
-          this.$set(this.master_user.data[index],'scrapNumber',0)
-        }
-        if(name==='qualifiedNumber'){
-          this.$set(this.master_user.data[index],'scrapNumber',parseInt(this.master_user.data[index].productNumber)-val)
-        }
-        if(name==='scrapNumber'){
-          this.$set(this.master_user.data[index],'qualifiedNumber',parseInt(this.master_user.data[index].productNumber)-val)
-        }
-        // this.master_user.data[index].qualifiedNumber=val
-        // this.master_user.data[index].scrapNumber=parseInt(this.master_user.data[index].productNumber)-parseInt(this.master_user.data[index].qualifiedNumber)
-        this.$emit('setContacts', this.master_user.data)
+      setContact(data,index,field) {
+        this.key=index
+        this.$set(this.master_user.data,field,data)
+
       },
       handleSet(data){
         data.productName=data.name;
@@ -97,56 +86,6 @@
         } else {
           this.showBtn = false
         }
-      },
-      //添加账号
-      addMasterUser() {
-        let j = {
-          productCode: "",
-          productName: "",
-          qualifiedNumber: "",
-          scrapNumber:'',
-          productNumber: "",
-          remark: "",
-        };
-        this.master_user.data.push(j);
-      },
-      del(index) {
-        if (this.master_user.data.length > 1) {
-          this.master_user.data.splice(index, 1);
-        } else {
-          this.$message.warning("至少保留一项");
-        }
-      },
-      addCode(index) {
-        this.key=index;
-        this.$refs.eform.dialog = true
-        this.$refs.eform.dataType = 'product'
-      },
-      getSummaries(param) {
-        const {columns, data} = param
-        const sums = []
-        columns.forEach((column, index) => {
-          if (index === 0) {
-            sums[index] = '总计'
-          } else if (index === 4||index === 5||index === 3) {
-            const values = data.map(item => Number(item[column.property]))
-            if (!values.every(value => isNaN(value))) {
-              sums[index] = values.reduce((prev, curr) => {
-                const value = Number(curr)
-                if (!isNaN(value)) {
-                  return prev + curr
-                } else {
-                  return prev
-                }
-              }, 0)
-            } else {
-              sums[index] = '0'
-            }
-          } else {
-            sums[index] = '--'
-          }
-        })
-        return sums
       }
     }
   }
