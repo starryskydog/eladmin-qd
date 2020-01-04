@@ -1,128 +1,175 @@
 <template>
   <div class="app-container">
-    <!--表单组件-->
-    <eForm ref="form" :is-add="isAdd"/>
-    <!--工具栏-->
-    <div class="head-container">
-      <!-- 搜索 -->
-      <!--<el-input v-model="query.value" clearable placeholder="输入名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />-->
-      <!--<el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>-->
-      <span>产品库存统计</span>
-      <!-- 新增 -->
-      <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
-        <el-button
-          class="filter-item"
-          size="mini"
-          type="primary"
-          icon="el-icon-plus"
-          @click="add">新增</el-button>
-      </div>
+    <eForm ref="eform" @setIndex="handleRadio"/>
+    <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
+      <el-button
+        class="filter-item"
+        size="small"
+        type="primary"
+        @click="add">保存
+      </el-button>
     </div>
-    <el-row :gutter="5">
-      <!--产品统计管理-->
-      <el-col :xs="8" :sm="8" :md="4" :lg="8" :xl="7">
-        <el-card class="box-card" shadow="never">
-          <el-table v-loading="loading" :data="data" border highlight-current-row size="small" style="width: 100%;" @current-change="handleCurrentChange" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
-            <el-table-column v-if="checkPermission(['ADMIN','ROLES_ALL','ROLES_EDIT','ROLES_DELETE'])" label="操作" width="130px" align="center">
-              <template slot-scope="scope">
-                <el-button v-permission="['ADMIN','ROLES_ALL','ROLES_EDIT']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
-                <el-popover
-                  v-permission="['ADMIN','ROLES_ALL','ROLES_DELETE']"
-                  :ref="scope.row.id"
-                  placement="top"
-                  width="180">
-                  <p>确定删除本条数据吗？</p>
-                  <div style="text-align: right; margin: 0">
-                    <el-button size="mini" type="text" @click="$refs[scope.row.id].doClose()">取消</el-button>
-                    <el-button :loading="delLoading" type="primary" size="mini" @click="subDelete(scope.row.id)">确定</el-button>
-                  </div>
-                  <el-button slot="reference" type="danger" icon="el-icon-delete" size="mini"/>
-                </el-popover>
-              </template>
-            </el-table-column>
-            <el-table-column prop="productName" label="产品名称"/>
-            <el-table-column prop="totalNumber" label="数量"/>
-          </el-table>
-          <!--分页组件-->
-          <el-pagination
-            :total="total"
-            :current-page="page + 1"
-            style="margin-top: 8px;"
-            layout="total, prev, pager, next, sizes"
-            @size-change="sizeChange"
-            @current-change="pageChange"/>
-        </el-card>
-      </el-col>
-    </el-row>
+    <el-form ref="form" :inline="true" :model="form" :rules="rules" size="large" label-width="80px" label-position='left'>
+      <p class="form-title" style="text-align: center; font-size: 18px">
+        无锡市海星船舶动力有限公司
+        <span style="position: absolute;right: 30px;font-size: 12px;color: #666">
+          单据编号：{{form.qualityCheekSheetCode}}
+        </span>
+      </p>
+      <p class="form-sub-title" style="text-align: center;">
+        质量检验单
+      </p>
+      <Contact :dataList="form.qualityCheckSheetProductList" :itemList="itemList" @setContacts="handleData"></Contact>
+      <el-form-item label="制单人:" prop="makePeopleName" style="margin: 20px auto">
+        {{form.makePeopleName}}
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
 import checkPermission from '@/utils/permission'
-import { queryProductCountPage, del } from '@/api/productCount'
 import initData from '@/mixins/initData'
 import eForm from './form'
+import Contact from './module/contact'
+import store from '@/store'
+import { add,initQualityCheckSheetCode,qualityCheckSheet,edit } from '@/api/productCheckSheet'
 
 export default {
-  name:'productCount',
-  components: { eForm },
   mixins: [initData],
+  components: { eForm, Contact },
   data() {
     return {
-      isAdd:false,
+      isAdd: false,
       delLoading: false,
+      id: '',
+      focus: false,
+      showBtn:false,
+      dateTime:'',
+      adminList:[],
+      itemList:[],
+      form: {
+        qualityCheekSheetCode:'',
+        qualityCheckSheetProductList: [
+          {
+            productCode: '',
+            productName: '',
+            productId: '',
+            productNumber: '',
+            qualifiedNumber: "",
+            scrapNumber:'',
+            remark: '',
+          }
+        ],
+      },
+      rules: {
+        contactWay: [
+          { required: true, message: '联系方式不能为空', trigger: 'blur' }
+        ],
+        remark: [
+          { required: true, message: '备注不能为空', trigger: 'blur' }
+        ],
+      }
     }
   },
   created() {
-    this.$nextTick(() => {
-      this.init()
-    })
+    const id=this.$route.params.id
+    this.form.makePeopleName = store.getters.user.username
+    if(id){
+      this.qualityCheckSheet(id)
+      this.type='edit'
+    }else{
+      this.initQualityCheekSheetCode()
+    }
   },
   methods: {
     checkPermission,
-    beforeInit() {
-      this.showButton = false
-      this.url = 'api/queryProductCountPage'
-      const query = this.query
-      const value = query.value
-      this.params = { page: this.page, size: this.size }
-      if (value) { this.params['name'] = value }
-      return true
+    handleFocus(){
+      this.showBtn=true
+    },
+    handleData(data){
+      console.log(data)
+      this.form.qualityCheckSheetProductList=data
     },
     add() {
-      this.isAdd = true
-      this.$refs.form.dialog = true
-    },
-    edit(data) {
-      this.isAdd = false
-      const _this = this.$refs.form
-      _this.form = { id: data.id, productId: data.productId, totalNumber: data.totalNumber }
-      _this.dialog = true
-    },
-    handleCurrentChange(val) {
-    },
-    subDelete(id) {
-      this.delLoading = true
-      del(id).then(res => {
-        this.delLoading = false
-        this.$refs[id].doClose()
-        this.dleChangePage()
-        this.init()
-        this.$notify({
-          title: '删除成功',
-          type: 'success',
-          duration: 2500
-        })
-      }).catch(err => {
-        this.delLoading = false
-        this.$refs[id].doClose()
-        console.log(err.response.data.message)
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          const list=this.form.qualityCheckSheetProductList;
+          const _this=this
+          list.forEach(function (item,k) {
+            if(!list[k].productCode){
+              _this.$notify({
+                title: '请选择产品',
+                type: 'warning',
+                duration: 2500
+              })
+              return false;
+            }else{
+              if(_this.type==='edit'){
+                delete _this.form.createTime
+                delete _this.form.updateTime
+                edit(_this.form).then(res => {
+                  _this.$notify({
+                    title: '编辑成功',
+                    type: 'success',
+                    duration: 2500
+                  })
+                  setTimeout(() => {
+                    _this.$router.replace({ path: '/productQuality/qualityCheckSheet' })
+                  }, 2500);
+                })
+              }else{
+                add(_this.form).then(res => {
+                  _this.$notify({
+                    title: '添加成功',
+                    type: 'success',
+                    duration: 2500
+                  })
+                  setTimeout(() => {
+                    _this.$router.replace({ path: '/productQuality/qualityCheckSheet' })
+                  }, 2500);
+                })
+              }
+            }
+          })
+
+        }
       })
-    }
+    },
+    initQualityCheekSheetCode() {
+      initQualityCheckSheetCode().then(res => {
+        this.form.qualityCheekSheetCode = res
+      })
+    },
+    qualityCheckSheet(id) {
+      qualityCheckSheet(id).then(res => {
+        this.form=res
+      })
+    },
+    handleRadio(radio) {
+      this.form.outSourceProcessSheetCode=radio.outSourceProcessSheetCode
+      const list=radio.outSourceProcessSheetProductList;
+      this.itemList=list
+      let newList = list.map(v=>{
+        return {...v,qualifiedNumber:v.productNumber,scrapNumber:'0'}
+      })
+      this.form.outSourceInspectionCertificateProductList = newList
+    },
+    changeType(type) {
+      this.type = type
+    },
+    addCode() {
+      this.$refs.eform.dialog = true
+      this.$refs.eform.dataType = 'outSourceInspectionCertificate'
+    },
   }
 }
 </script>
 
 <style scoped>
-
+  .tips {
+    background-color: #efefef;
+    height: 30px;
+    line-height: 30px;
+  }
 </style>
