@@ -36,7 +36,7 @@
             </el-table-column>
             <el-table-column prop="qualityCheekSheetCode" label="单据编号">
               <template slot-scope="scope">
-                <router-link :to="{name:'委外验收单详情', params: { id: scope.row.id }}">{{scope.row.outSourceInspectionCertificateCode}}</router-link>
+                <router-link :to="{name:'委外验收单详情', params: { id: scope.row.id }}">{{scope.row.qualityCheekSheetCode}}</router-link>
               </template>
             </el-table-column>
             <el-table-column prop="makePeopleName" label="制单人"/>
@@ -65,7 +65,7 @@
 <script>
   import checkPermission from '@/utils/permission'
   import { getSupplierInfoById } from '@/api/invoice'
-  import { del } from '@/api/outSourceInspection'
+  import { del } from '@/api/productCheckSheet'
   import initData from '@/mixins/initData'
   import eForm from './form'
   import { parseTime } from '@/utils/index'
@@ -89,7 +89,7 @@
       parseTime,
       beforeInit() {
         this.showButton = false
-        this.url = 'api/qualityCheckSheetPageList'
+        this.url = 'api/queryQualityCheckSheetPage'
         const query = this.query
         const value = query.value
         this.params = { page: this.page, size: this.size }
@@ -100,7 +100,7 @@
         this.$router.push({ path: '/qualityCheckSheet/list' })
       },
       edit(data) {
-        this.$router.push({ path: `/outSourceInspectionCertificate/list/${data.id}`});
+        this.$router.push({ path: `/qualityCheckSheet/list/${data.id}`});
       },
       handleCurrentChange(val) {
       },

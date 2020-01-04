@@ -1,8 +1,8 @@
 <template>
-  <el-dialog :visible.sync="dialog" :title="dataType==='outSourceInspectionCertificate' ? '选择委外加工单' : '选择产品'" append-to-body width="800px"
+  <el-dialog :visible.sync="dialog" :title="dataType==='product' ? '选择产品' : '选择委外加工单'" append-to-body width="800px"
              :show-close=false>
     <el-form ref="form" :inline="true" :model="form" size="small" label-width="100px">
-      <el-table v-loading="loading" :data="dataType==='outSourceInspectionCertificate' ? dataList : itemList" size="small" style="width: 100%;"
+      <el-table v-loading="loading" :data="dataList" size="small" style="width: 100%;"
                 :header-cell-style="{'text-align':'center'}" border>
         <el-table-column type="index" width="50" align="center" label="编号">
         </el-table-column>
@@ -29,8 +29,7 @@
 </template>
 
 <script>
-import { queryOutSourceProcessSheetPage } from '@/api/outSourceProcessSheet'
-import { queryOutSourceInspectionCertificateById } from '@/api/outSourceInspection'
+import { queryProductInfoPage } from '@/api/productInfo'
 
 export default {
   components: {},
@@ -49,11 +48,11 @@ export default {
       },
       url: '',
       total: 0,
-      dataType:'',
+      dataType:'product',
       customColumns: [
         {field: "productCode", title: "产品编号", width: 220},
-        {field: "productName", title: "产品名称", width: 120},
-        {field: "remark", title: "备注", width: 100},
+        {field: "name", title: "产品名称", width: 120},
+        {field: "productCategoryName", title: "产品类别", width: 100},
       ],
       productColumns:[
         {field: "outSourceProcessSheetCode", title: "编号", width: 220},
@@ -64,11 +63,7 @@ export default {
     }
   },
   created() {
-  },
-  watch: {
-    dataType: function (val) {
-      this.getData()
-    },
+    this.getData()
   },
   methods: {
     getData() {
@@ -76,12 +71,20 @@ export default {
         page: this.page, size:this.size
       }
       if( this.dataType === 'product') {
+        this.queryProduct(params)
       } else {
         this.queryOutSourceProcessSheetPage(params)
       }
     },
     queryCustom(params) {
 
+    },
+    queryProduct(params) {
+      queryProductInfoPage(params).then(res => {
+        this.dataList = res.content
+        this.total = res.totalElements
+        this.loading = false
+      })
     },
     pageChange(e) {
       this.page = e - 1
@@ -93,11 +96,7 @@ export default {
       this.getData()
     },
     queryOutSourceProcessSheetPage(params) {
-      queryOutSourceProcessSheetPage(params).then(res => {
-        this.dataList = res.content
-        this.total = res.totalElements
-        this.loading = false
-      })
+
     },
     cancel() {
       this.resetForm()

@@ -160,15 +160,15 @@ export const constantRouterMap = [
       },
       {
         path: 'list/:id',
-        component: () => import('@/views/outSource/outSourceInspectionCertificate/outSourceInspectionCertificateList'),
-        name: '编辑委外验收单',
-        meta: { title: '编辑委外验收单', icon: 'add' }
+        component: () => import('@/views/productQuality/qualityCheckSheet/qualityCheckSheetList'),
+        name: '编辑质量检验单',
+        meta: { title: '编辑质量检验单', icon: 'add' }
       },
       {
         path: 'print/:id',
         component: () => import('@/views/outSource/outSourceInspectionCertificate/print'),
-        name: '委外验收单详情',
-        meta: { title: '委外验收单详情', icon: 'add' }
+        name: '质量检验单详情',
+        meta: { title: '质量检验单详情', icon: 'add' }
       }
     ]
   },

@@ -57,6 +57,7 @@
           ],
           data: [],
         },
+        key:null,
         showBtn: false,
         type:'product',index:null,
       }
@@ -67,17 +68,27 @@
     watch: {
       dataList: function (val) {
         this.master_user.data = val
-      },
+      }
     },
     methods: {
-      setContact() {
+      setContact(val,index,name) {
+        if(name==='productNumber'){
+          this.$set(this.master_user.data[index],'qualifiedNumber',val)
+          this.$set(this.master_user.data[index],'scrapNumber',0)
+        }
+        if(name==='qualifiedNumber'){
+          this.$set(this.master_user.data[index],'scrapNumber',parseInt(this.master_user.data[index].productNumber)-val)
+        }
+        if(name==='scrapNumber'){
+          this.$set(this.master_user.data[index],'qualifiedNumber',parseInt(this.master_user.data[index].productNumber)-val)
+        }
+        // this.master_user.data[index].qualifiedNumber=val
+        // this.master_user.data[index].scrapNumber=parseInt(this.master_user.data[index].productNumber)-parseInt(this.master_user.data[index].qualifiedNumber)
         this.$emit('setContacts', this.master_user.data)
       },
       handleSet(data){
-        data.qualifiedNumber=data.productNumber
-        data.scrapNumber=0
-        this.master_user.data.push(data)
-        this.master_user.data.splice(this.master_user.data.findIndex(item => item.productCode === ''), 1)
+        data.productName=data.name;
+        this.$set(this.master_user.data, this.key, data)
         this.$emit('setContacts', this.master_user.data)
       },
       handleFocus(field) {
@@ -106,7 +117,8 @@
           this.$message.warning("至少保留一项");
         }
       },
-      addCode() {
+      addCode(index) {
+        this.key=index;
         this.$refs.eform.dialog = true
         this.$refs.eform.dataType = 'product'
       },
