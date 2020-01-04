@@ -49,6 +49,9 @@ export default {
     checkPermission,
     getAllList(){
       queryProductCountPage().then(res=>{
+        res.content.forEach(function (item) {
+          delete item.totalNumber
+        })
         this.form.productCountList=res.content
       })
     }

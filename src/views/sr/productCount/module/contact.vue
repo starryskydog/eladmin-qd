@@ -10,7 +10,7 @@
                             <span v-if="v.field!='productName'&&v.field!='productCategoryName'&&v.field!='productSeriesName'">
                                 <el-input size="mini" placeholder="请输入内容"
                                           v-model="master_user.data[scope.$index][v.field]"
-                                          @change="((val)=>{setContact(val,scope.$index,v.field)})"
+                                          @input="((val)=>{setContact(val,scope.$index,v.field)})"
                                           :disabled="v.disabled" @focus="handleFocus(v.field)">
                                 </el-input>
                             </span>
@@ -19,11 +19,17 @@
                             </span>
             </template>
           </el-table-column>
+          <el-table-column label="总数量" width="100">
+            <template slot-scope="scope">
+              {{totalNumber}}
+            </template>
+          </el-table-column>
           <el-table-column label="操作" width="100" fixed>
             <template slot-scope="scope">
               <el-button
                 class="filter-item"
                 size="mini"
+                @click="handleSave(scope.$index)"
                 :disabled="scope.$index==key?false:true"
                 type="primary"
                 >保存
@@ -36,6 +42,7 @@
 </template>
 
 <script>
+  import { edit } from '@/api/productCount'
   export default {
     props: ['dataList'],
     data() {
@@ -53,7 +60,6 @@
             {field: "jcNumber", title: "精车数量"},
             {field: "jmNumber", title: "精磨数量"},
             {field: "dphNumber", title: "动平衡数量"},
-            {field: "totalNumber", title: "总数量"},
           ],
           data: [],
         },
@@ -67,13 +73,21 @@
     watch: {
       dataList: function (val) {
         this.$set(this.master_user,'data',val)
+        console.log(val)
+      }
+    },
+    computed: {
+      // 计算属性的 getter
+      totalNumber: function () {
+        const num=this.master_user.data.map(
+          row=>Number(row.mpNumber)+Number(row.jcNumber)+Number(row.hjNumber)+Number(row.bjcNumber)+Number(row.cmNumber)+Number(row.jmNumber)+Number(row.dphNumber))[0]
+        return num;
       }
     },
     methods: {
       setContact(data,index,field) {
         this.key=index
         this.$set(this.master_user.data,field,data)
-
       },
       handleSet(data){
         data.productName=data.name;
@@ -86,6 +100,16 @@
         } else {
           this.showBtn = false
         }
+      },
+      handleSave(index){
+        edit(this.master_user.data[index]).then(res=>{
+          this.key=null
+          this.$notify({
+            title: '修改成功',
+            type: 'success',
+            duration: 2500
+          })
+        })
       }
     }
   }
