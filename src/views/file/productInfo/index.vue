@@ -38,6 +38,7 @@
               </template>
             </el-table-column>
             <el-table-column prop="productCategoryName" label="产品类别"/>
+            <el-table-column prop="productSeriesName" label="产品系列"/>
             <el-table-column prop="productCode" label="产品编号"/>
             <el-table-column prop="name" label="产品名称"/>
             <el-table-column prop="specifications" label="规格"/>

@@ -11,6 +11,15 @@
             :value="item.id"/>
         </el-select>
       </el-form-item>
+      <el-form-item label="产品系列" prop="productSeriesId">
+        <el-select v-model="form.productSeriesId" style="width: 150px;" placeholder="请选择" size="small">
+          <el-option
+            v-for="(item, index) in productSeriesList"
+            :key="item.productSeriesName + index"
+            :label="item.productSeriesName"
+            :value="item.id"/>
+        </el-select>
+      </el-form-item>
       <el-form-item label="产品编号" prop="productCode">
         <el-input v-model="form.productCode" size="small"/>
       </el-form-item>
@@ -49,6 +58,7 @@
 import { initProductCode, add, edit } from '@/api/productInfo'
 import { queryMeasureUnitList } from '@/api/measureUnit'
 import { queryProductCategoryList } from '@/api/productCategory'
+import { queryProductSeriesList } from '@/api/productSeries'
 import ProductInventoryWarning from './module/productInventoryWarning'
 
 export default {
@@ -64,12 +74,14 @@ export default {
       dialog: false,
       measureUnitList: [],
       productCategoryList: [],
+      productSeriesList: [],
       form: {
         productCode: null,
         name: '',
         specifications: '',
         unitPrice: null,
         productCategoryId: null,
+        productSeriesId: null,
         measureUnitId: null,
         productInventoryWarning: [
           {
@@ -84,6 +96,12 @@ export default {
         specifications: [
           { required: true, message: '规格不能为空!', trigger: 'blur' },
           { min: 1, max: 20, message: '长度在 1 到 20 个字符!', trigger: 'blur' }
+        ],
+        productCategoryId: [
+          { required: true, message: '产品类别不能为空!', trigger: 'blur' }
+        ],
+        productSeriesId: [
+          { required: true, message: '产品系列不能为空!', trigger: 'blur' }
         ]
       }
     }
@@ -101,6 +119,7 @@ export default {
     })
     this.queryMeasureUnitList()
     this.queryProductCategoryList()
+    this.queryProductSeriesList()
   },
   methods: {
     cancelAndGoList() {
@@ -115,7 +134,15 @@ export default {
     // 查询产品类别列表
     queryProductCategoryList() {
       queryProductCategoryList().then(res => {
+        console.log(res)
         this.productCategoryList = res
+      })
+    },
+    // 查询产品系列列表
+    queryProductSeriesList() {
+      queryProductSeriesList().then(res => {
+        console.log(res.content)
+        this.productSeriesList = res.content
       })
     },
     // 触发子组件城市选择-选择城市的事件
@@ -137,6 +164,7 @@ export default {
         specifications: '',
         unitPrice: null,
         productCategoryId: null,
+        productSeriesId: null,
         measureUnitId: null,
         productInventoryWarning: [
           {
@@ -149,35 +177,48 @@ export default {
       }
     },
     doSubmit() {
-      if (this.form.supplierContact) {
-        const productInventoryWarningLength = this.form.productInventoryWarning.length
-        if (productInventoryWarningLength > 0 && !this.form.supplierContact[productInventoryWarningLength - 1].name) {
-          this.form.productInventoryWarning.pop()
+      // if (this.form.supplierContact) {
+      //   const productInventoryWarningLength = this.form.productInventoryWarning.length
+      //   if (productInventoryWarningLength > 0 && !this.form.supplierContact[productInventoryWarningLength - 1].name) {
+      //     this.form.productInventoryWarning.pop()
+      //   }
+      // } else {
+      //   this.$notify({
+      //     title: '修改成功',
+      //     type: 'success',
+      //     duration: 2500
+      //   })
+      //   return false
+      // }
+
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          if (this.isAdd) {
+            add(this.form).then(res => {
+              this.$notify({
+                title: '添加成功',
+                type: 'success',
+                duration: 2500
+              })
+              this.resetForm()
+              this.dialog = false
+              this.$parent.init()
+            })
+          } else {
+            edit(this.form).then(res => {
+              console.log(this.form)
+              this.$notify({
+                title: '修改成功',
+                type: 'success',
+                duration: 2500
+              })
+              this.resetForm()
+              this.dialog = false
+              this.$parent.init()
+            })
+          }
         }
-      }
-      if (this.isAdd) {
-        add(this.form).then(res => {
-          this.$notify({
-            title: '添加成功',
-            type: 'success',
-            duration: 2500
-          })
-          this.resetForm()
-          this.dialog = false
-          this.$parent.init()
-        })
-      } else {
-        edit(this.form).then(res => {
-          this.$notify({
-            title: '修改成功',
-            type: 'success',
-            duration: 2500
-          })
-          this.resetForm()
-          this.dialog = false
-          this.$parent.init()
-        })
-      }
+      })
     }
   }
 }
