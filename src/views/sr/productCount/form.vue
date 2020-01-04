@@ -1,122 +1,123 @@
 <template>
-  <el-dialog :visible.sync="dialog" :title="isAdd ? '新增产品统计' : '编辑产品统计'" append-to-body width="500px">
-    <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
-      <el-form-item label="产品" prop="name">
-        <el-select v-model="form.productId" style="width: 150px;" placeholder="请选择" size="small">
-        <el-option
-          v-for="(item, index) in productList"
-          :key="item.name + index"
-          :label="item.name"
-          :value="item.id"/>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="个数" prop="totalNumber">
-        <el-input-number v-model="form.totalNumber" :min="1" label="描述文字"></el-input-number>
-      </el-form-item>
+  <el-dialog :visible.sync="dialog" :title="dataType==='product' ? '选择产品' : '选择委外加工单'" append-to-body width="800px"
+             :show-close=false>
+    <el-form ref="form" :inline="true" :model="form" size="small" label-width="100px">
+      <el-table v-loading="loading" :data="dataList" size="small" style="width: 100%;"
+                :header-cell-style="{'text-align':'center'}" border>
+        <el-table-column type="index" width="50" align="center" label="编号">
+        </el-table-column>
+        <el-table-column label="选择" width="50px" align="center">
+          <template slot-scope="scope">
+            <el-radio v-model="form.radio" :label="scope.row">&nbsp;</el-radio>
+          </template>
+        </el-table-column>
+        <el-table-column v-for="(v,i) in formType==='product' ?customColumns:productColumns" :key="v.field" :prop="v.field" :label="v.title"></el-table-column>
+      </el-table>
+      <el-pagination
+        :total="total"
+        :current-page="page + 1"
+        style="margin-top: 8px;"
+        layout="total, prev, pager, next, sizes"
+        @size-change="sizeChange"
+        @current-change="pageChange"/>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
+      <el-button type="primary" @click="doSubmit">确认</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
-import { getDepts } from '@/api/dept'
-import { add, edit } from '@/api/productCount'
-import { queryProductInfoList } from '@/api/productInfo'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import { queryProductInfoPage } from '@/api/productInfo'
+
 export default {
-  props: {
-    isAdd: {
-      type: Boolean,
-      required: true
-    }
-  },
+  components: {},
+  props: ['formType','productList','itemList'],
   data() {
     return {
-      loading: false,
       dialog: false,
-      productList: [],
+      i: 0,
+      page: 0,
+      size: 10,
+      loading: false,
+      dataList:[],
+      categoryList: [],
       form: {
-        totalNumber: 0,
-        productId: null
+        radio: ''
       },
-      rules: {
-        productId: [
-          { required: true, message: '请选择产品名称', trigger: 'blur' }
-        ]
-      }
+      url: '',
+      total: 0,
+      dataType:'product',
+      customColumns: [
+        {field: "productCode", title: "产品编号", width: 220},
+        {field: "name", title: "产品名称", width: 120},
+        {field: "productCategoryName", title: "产品类别", width: 100},
+      ],
+      productColumns:[
+        {field: "outSourceProcessSheetCode", title: "编号", width: 220},
+        {field: "outSourceCompanyName", title: "公司名称", width: 120},
+        {field: "outSourceAdminName", title: "负责人", width: 160},
+        {field: "contactWay", title: "联系方式", width: 100},
+      ],
     }
   },
   created() {
-    this.queryProductInfoList()
+    this.getData()
   },
   methods: {
+    getData() {
+      const params = {
+        page: this.page, size:this.size
+      }
+      if( this.dataType === 'product') {
+        this.queryProduct(params)
+      } else {
+        this.queryOutSourceProcessSheetPage(params)
+      }
+    },
+    queryCustom(params) {
+
+    },
+    queryProduct(params) {
+      queryProductInfoPage(params).then(res => {
+        this.dataList = res.content
+        this.total = res.totalElements
+        this.loading = false
+      })
+    },
+    pageChange(e) {
+      this.page = e - 1
+      this.getData()
+    },
+    sizeChange(e) {
+      this.page = 0
+      this.size = e
+      this.getData()
+    },
+    queryOutSourceProcessSheetPage(params) {
+
+    },
     cancel() {
       this.resetForm()
     },
-    queryProductInfoList() {
-      queryProductInfoList().then(res => {
-        console.log(JSON.stringify('productList' + res))
-        this.productList = res
-      })
-    },
     doSubmit() {
-      this.$refs['form'].validate((valid) => {
-        if (valid) {
-          this.loading = true
-          if (this.isAdd) {
-            this.doAdd()
-          } else this.doEdit()
+      if (this.form.radio) {
+        if (this.dataType === 'outSourceInspectionCertificate'){
+          this.$emit('setIndex', this.form.radio)
         } else {
-          return false
+          this.$emit('setContact', this.form.radio)
         }
-      })
-    },
-    doAdd() {
-      add(this.form).then(res => {
-        this.resetForm()
-        this.$notify({
-          title: '添加成功',
-          type: 'success',
-          duration: 2500
-        })
-        this.loading = false
-        this.$parent.init()
-      }).catch(err => {
-        this.loading = false
-      })
-    },
-    doEdit() {
-      edit(this.form).then(res => {
-        this.resetForm()
-        this.$notify({
-          title: '修改成功',
-          type: 'success',
-          duration: 2500
-        })
-        this.loading = false
-        this.$parent.init()
-      }).catch(err => {
-        this.loading = false
-        console.log(err.response.data.message)
-      })
+      }
+      this.resetForm()
     },
     resetForm() {
-      this.dialog = false
-      this.$refs['form'].resetFields()
-      this.form = { name: ''}
-    },
-    getDepts() {
-      getDepts({ enabled: true }).then(res => {
-        this.depts = res.content
-      })
-    },
-    changeScope() {
-      if (this.form.dataScope === '自定义') {
-        this.getDepts()
+      this.form = {
+        radio: ''
       }
+      this.dialog = false
+      this.page = 0;
+      this.size = 10
     }
   }
 }
