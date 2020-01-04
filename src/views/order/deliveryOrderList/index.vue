@@ -91,7 +91,10 @@ export default {
         logisticsCompany: '',
         logisticsCode: '',
         customerOrderCode: '',
+        deliveryAddress: '',
+        consignee: '',
         contactWay: '',
+        invoiceNumber: '',
         remark: '',
         invoiceProductList: [
           {
@@ -101,9 +104,9 @@ export default {
             unitPrice: '',
             productNumber: '',
             allMoney: '',
-            remark: '',
+            remark: ''
           }
-        ],
+        ]
       },
       rules: {
         // customerName: [
@@ -168,7 +171,7 @@ export default {
             })
           }
           setTimeout(() => {
-            this.$router.replace({ path: '/order/deliveryOrder' })
+            this.$router.replace({ path: '/order/deliveryOrderInfo' })
           }, 2500);
         }
       })
