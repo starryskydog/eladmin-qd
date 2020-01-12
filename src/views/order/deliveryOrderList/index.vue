@@ -160,6 +160,9 @@ export default {
                 type: 'success',
                 duration: 2500
               })
+              setTimeout(() => {
+                this.$router.replace({ path: '/order/deliveryOrderInfo' })
+              }, 2500);
             })
           }else{
             add(this.form).then(res => {
@@ -168,11 +171,11 @@ export default {
                 type: 'success',
                 duration: 2500
               })
+              setTimeout(() => {
+                this.$router.replace({ path: '/order/deliveryOrderInfo' })
+              }, 2500);
             })
           }
-          setTimeout(() => {
-            this.$router.replace({ path: '/order/deliveryOrderInfo' })
-          }, 2500);
         }
       })
     },
