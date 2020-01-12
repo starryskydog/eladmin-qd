@@ -50,7 +50,7 @@ export default {
     getAllList(){
       queryProductCountPage().then(res=>{
         res.content.forEach(function (item) {
-          delete item.totalNumber
+          item.totalNumber=Number(item.mpNumber)+Number(item.jcNumber)+Number(item.hjNumber)+Number(item.bjcNumber)+Number(item.cmNumber)+Number(item.jmNumber)+Number(item.dphNumber)
         })
         this.form.productCountList=res.content
       })
