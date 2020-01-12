@@ -1,7 +1,16 @@
 <template>
   <el-dialog :visible.sync="dialog" :title="dataType==='product' ? '选择产品' : '选择委外加工单'" append-to-body width="800px"
              :show-close=false>
-    <el-form ref="form" :inline="true" :model="form" size="small" label-width="100px">
+    <el-input v-model="productName" clearable placeholder="输入关键字搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="getData" size="mini"/>
+    <el-select v-model="productCategoryId" size="mini" @change="getData" clearable placeholder="产品类别" class="filter-item" style="width: 130px">
+      <el-option v-for="item in productCategoryList" :key="item.id" :label="item.name" :value="item.id"/>
+    </el-select>
+    <el-select v-model="productSeriesId" size="mini" clearable placeholder="产品系列" class="filter-item" style="width: 90px" @change="getData">
+      <el-option v-for="item in productSeriesList" :key="item.id" :label="item.productSeriesName" :value="item.id"/>
+    </el-select>
+    <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="getData">搜索</el-button>
+    <el-form ref="form" :inline="true" :model="form" size="small" style="margin-top: 20px" label-width="100px">
+
       <el-table v-loading="loading" :data="dataList" size="small" style="width: 100%;"
                 :header-cell-style="{'text-align':'center'}" border>
         <el-table-column type="index" width="50" align="center" label="编号">
@@ -30,6 +39,8 @@
 
 <script>
 import { queryProductInfoPage } from '@/api/productInfo'
+import { queryProductCategoryList } from '@/api/productCategory'
+import { queryProductSeriesList } from '@/api/productSeries'
 
 export default {
   components: {},
@@ -49,6 +60,11 @@ export default {
       url: '',
       total: 0,
       dataType:'product',
+      productName:'',
+      productCategoryId:null,
+      productCategoryList:[],
+      productSeriesId:null,
+      productSeriesList:[],
       customColumns: [
         {field: "productCode", title: "产品编号", width: 220},
         {field: "name", title: "产品名称", width: 120},
@@ -64,17 +80,30 @@ export default {
   },
   created() {
     this.getData()
+    this.queryAllCategoryList()
+    this.queryProductSeries()
   },
   methods: {
     getData() {
       const params = {
-        page: this.page, size:this.size
+        page: this.page, size:this.size,productName:this.productName,productCategoryId:this.productCategoryId,productSeriesId:this.productSeriesId
       }
       if( this.dataType === 'product') {
         this.queryProduct(params)
       } else {
         this.queryOutSourceProcessSheetPage(params)
       }
+    },
+    queryAllCategoryList() {
+      queryProductCategoryList().then(res => {
+        this.productCategoryList = res
+      })
+    },
+    queryProductSeries() {
+      queryProductSeriesList().then(res => {
+        console.log(res)
+        this.productSeriesList = res.content
+      })
     },
     queryCustom(params) {
 

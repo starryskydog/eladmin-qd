@@ -1,10 +1,11 @@
 import request from '@/utils/request'
 
 // 分页查询产品统计列表
-export function queryProductCountPage() {
+export function queryProductCountPage(params) {
   return request({
     url: 'api/queryProductCountPage',
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 
