@@ -51,12 +51,8 @@ export default {
         consumablesPurchaseOrderCode:'',
         consumablesPurchaseOrderProductList: [
           {
-            productCode: "",
-            productName: "",
-            productNumber: "",
-            specifications:'',
-            unitPrice:'',
-            remark: "",
+            consumablesCode: "",
+            consumablesName: "",
           }
         ],
       },
@@ -84,6 +80,7 @@ export default {
   methods: {
     checkPermission,
     handleData(data){
+      console.log(data)
       this.form.consumablesPurchaseOrderProductList=data
     },
     add() {
