@@ -55,7 +55,7 @@
             {field: "productName", title: "产品名称", width: 120},
             {field: "specifications", title: "规格", width: 160},
             {field: "unitPrice", title: "单价", width: 120},
-            {field: "customerOrderNumber", title: "订单数量", width: 100,},
+            {field: "productNumber", title: "订单数量", width: 100,},
             {field: "actualInvoiceNumber", title: "实发数量", width: 120,},
             {field: "salePrice", title: "销售金额", width: 120,},
             {field: "remark", title: "备注"},
