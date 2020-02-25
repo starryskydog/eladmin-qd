@@ -96,7 +96,7 @@ export default {
                 duration: 2500
               })
               setTimeout(() => {
-                this.$router.replace({ path: '/purchase/consumables' })
+                this.$router.replace({ path: '/purchase/consumablesPurchase' })
               }, 2500);
             })
           }else{
@@ -107,7 +107,7 @@ export default {
                 duration: 2500
               })
               setTimeout(() => {
-                this.$router.replace({ path: '/purchase/consumables' })
+                this.$router.replace({ path: '/purchase/consumablesPurchase' })
               }, 2500);
             })
           }

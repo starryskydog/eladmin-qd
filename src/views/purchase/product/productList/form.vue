@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { queryProductInfoList } from '@/api/productInfo'
+import { queryProductInfoPage } from '@/api/productInfo'
 
 export default {
   components: {},
@@ -60,18 +60,19 @@ export default {
   },
   methods: {
     queryProduct() {
-      queryProductInfoList().then(res=>{
-        this.dataList=res
+      queryProductInfoPage({page:this.page,size:this.size}).then(res=>{
+        this.dataList=res.content
+        this.total=res.totalElements
       })
     },
     pageChange(e) {
       this.page = e - 1
-      this.getData()
+      this.queryProduct()
     },
     sizeChange(e) {
       this.page = 0
       this.size = e
-      this.getData()
+      this.queryProduct()
     },
     cancel() {
       this.resetForm()

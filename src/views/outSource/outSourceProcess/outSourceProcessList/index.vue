@@ -121,7 +121,7 @@ export default {
                 duration: 2500
               })
               setTimeout(() => {
-                this.$router.replace({ path: '/outSourceProcess/outSourceProcessSheet' })
+                this.$router.replace({ path: '/outSource/outSourceProcess' })
               }, 2500);
             })
           }else{
@@ -132,7 +132,7 @@ export default {
                 duration: 2500
               })
               setTimeout(() => {
-                this.$router.replace({ path: '/outSourceProcess/outSourceProcessSheet' })
+                this.$router.replace({ path: '/outSource/outSourceProcess' })
               }, 2500);
             })
           }
