@@ -25,6 +25,7 @@
           <el-table
             :data="tableData"
             height="400"
+            @row-click="handdle"
             border
             style="width: 100%">
             <el-table-column
@@ -34,6 +35,7 @@
             <el-table-column
               prop="updateTime"
               label="发送日期"
+              header-align="center"
               width="180">
               <template slot-scope="scope">
                 {{parseTime(scope.row.updateTime)}}
@@ -75,7 +77,7 @@ import RaddarChart from './dashboard/RaddarChart'
 import PieChart from './dashboard/PieChart'
 import BarChart from './dashboard/BarChart'
 import { count } from '@/api/visits'
-import { queryMessageList } from '@/api/message'
+import { queryMessageList,deleteMessage } from '@/api/message'
 import store from '@/store'
 import { parseTime } from '@/utils/index'
 
@@ -93,12 +95,19 @@ export default {
   },
   created() {
     const _this=this
-    queryMessageList(this.user.id).then(function (res) {
+    queryMessageList({userIdAccept:this.user.id}).then(function (res) {
       _this.tableData=res
     })
   },
   methods: {
-    parseTime
+    parseTime,
+    handdle(row) {
+      deleteMessage(row.id).then(function (res) {
+        if(res.status==200){
+          location.href=row.modulePath
+        }
+      })
+    }
   },
   components: {
     PanelGroup,
