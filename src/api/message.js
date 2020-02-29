@@ -8,6 +8,7 @@ export function queryMessageList(params) {
   })
 }
 
+
 export function deleteMessage(id) {
   return request({
     url: `api/message/${id}`,

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <eForm ref="eform" @setRadio="handleRadio" :formType="type" @setType="changeType"/>
-    <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
+    <div v-permission="['ADMIN','OUT_SOURCE_PROCESS_SHEET_ALL','OUT_SOURCE_PROCESS_SHEET_CREATE']" style="display: inline-block;margin: 0px 2px;">
       <el-button
         class="filter-item"
         size="small"

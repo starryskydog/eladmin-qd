@@ -16,7 +16,7 @@
           <!--icon="el-icon-plus">新增</el-button>-->
         <!--</router-link>-->
       <!--</div>-->
-      <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
+      <div v-permission="['ADMIN','SUPPLIER_INFO_ALL','SUPPLIER_INFO_CREATE']" style="display: inline-block;margin: 0px 2px;">
           <el-button
             class="filter-item"
             size="mini"
@@ -30,11 +30,11 @@
       <el-col >
         <el-card class="box-card" shadow="never">
           <el-table v-loading="loading" :data="data" border highlight-current-row size="small" style="width: 100%;" @current-change="handleCurrentChange" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
-            <el-table-column v-if="checkPermission(['ADMIN','ROLES_ALL','ROLES_EDIT','ROLES_DELETE'])" label="操作" width="130px" align="center">
+            <el-table-column v-if="checkPermission(['ADMIN','SUPPLIER_INFO_ALL'])" label="操作" width="130px" align="center">
               <template slot-scope="scope">
-                <el-button v-permission="['ADMIN','ROLES_ALL','ROLES_EDIT']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
+                <el-button v-permission="['ADMIN','SUPPLIER_INFO_ALL','SUPPLIER_INFO_EDIT']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
                 <el-popover
-                  v-permission="['ADMIN','ROLES_ALL','ROLES_DELETE']"
+                  v-permission="['ADMIN','SUPPLIER_INFO_ALL','SUPPLIER_INFO_DELETE']"
                   :ref="scope.row.id"
                   placement="top"
                   width="180">

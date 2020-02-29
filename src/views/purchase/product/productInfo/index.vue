@@ -3,7 +3,7 @@
     <eForm ref="form" :is-add="isAdd" :checkData="checkData" :dataList="data"/>
     <!--工具栏-->
     <div class="head-container">
-      <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
+      <div v-permission="['ADMIN','PRODUCTPURCHASEORDER_ALL','PRODUCTPURCHASEORDER_CREATE']" style="display: inline-block;margin: 0px 2px;">
           <el-button
             class="filter-item"
             size="mini"
@@ -17,12 +17,12 @@
       <el-col >
         <el-card class="box-card" shadow="never">
           <el-table v-loading="loading" :data="data" border highlight-current-row size="small" style="width: 100%;" @current-change="handleCurrentChange" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
-            <el-table-column v-if="checkPermission(['ADMIN','ROLES_ALL','ROLES_EDIT','ROLES_DELETE'])" label="操作" width="220px" align="center">
+            <el-table-column v-if="checkPermission(['ADMIN','PRODUCTPURCHASEORDER_ALL'])" label="操作" width="220px" align="center">
               <template slot-scope="scope">
-                <el-button v-permission="['ADMIN','ROLES_ALL','ROLES_EDIT']" size="mini" type="primary" icon="el-icon-check" @click="handleCheck(scope.row)"/>
-                <el-button v-permission="['ADMIN','ROLES_ALL','ROLES_EDIT']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
+                <el-button v-permission="['ADMIN','PRODUCTPURCHASEORDER_ALL','PRODUCTPURCHASEORDER_EDIT']" size="mini" type="primary" icon="el-icon-check" @click="handleCheck(scope.row)"/>
+                <el-button v-permission="['ADMIN','PRODUCTPURCHASEORDER_ALL','PRODUCTPURCHASEORDER_DELETE']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
                 <el-popover
-                  v-permission="['ADMIN','ROLES_ALL','ROLES_DELETE']"
+                  v-permission="['ADMIN','PRODUCTPURCHASEORDER_AUDDIT']"
                   :ref="scope.row.id"
                   placement="top"
                   width="180">
