@@ -22,7 +22,7 @@
                 <el-button v-permission="['ADMIN','CONSUMABLESPURCHASEORDER_ALL','CONSUMABLESPURCHASEORDER_EDIT']" size="mini" type="primary" icon="el-icon-check" @click="handleCheck(scope.row)"/>
                 <el-button v-permission="['ADMIN','CONSUMABLESPURCHASEORDER_ALL','CONSUMABLESPURCHASEORDER_DELETE']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
                 <el-popover
-                  v-permission="['ADMIN','ROLES_ALL','ROLES_DELETE']"
+                  v-permission="['ADMIN','CONSUMABLESPURCHASEORDER_AUDIT']"
                   :ref="scope.row.id"
                   placement="top"
                   width="180">
