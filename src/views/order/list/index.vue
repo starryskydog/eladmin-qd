@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <eForm ref="eform" @setRadio="handleRadio" @setType="changeType"/>
-    <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
+    <div v-permission="['ADMIN','CUSTOMER_ORDER_ALL','CUSTOMER_ORDER_CREATE']" style="display: inline-block;margin: 0px 2px;">
       <el-button
         class="filter-item"
         size="small"
