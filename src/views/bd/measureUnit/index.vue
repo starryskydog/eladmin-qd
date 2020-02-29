@@ -9,7 +9,7 @@
       <!--<el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>-->
       <span>计量单位</span>
       <!-- 新增 -->
-      <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
+      <div v-permission="['ADMIN','MEASUREE_UNIT_ALL','MEASUREE_UNIT_CREATE']" style="display: inline-block;margin: 0px 2px;">
         <el-button
           class="filter-item"
           size="mini"
@@ -23,7 +23,7 @@
       <el-col :xs="8" :sm="8" :md="4" :lg="8" :xl="7">
         <el-card class="box-card" shadow="never">
           <el-table v-loading="loading" :data="data" border highlight-current-row size="small" style="width: 100%;" @current-change="handleCurrentChange" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
-            <el-table-column v-if="checkPermission(['ADMIN','ROLES_ALL','ROLES_EDIT','ROLES_DELETE'])" label="操作" width="130px" align="center">
+            <el-table-column v-if="checkPermission(['ADMIN','ROLES_ALL','MEASUREE_UNIT_ALL','MEASUREE_UNIT_DELETE'])" label="操作" width="130px" align="center">
               <template slot-scope="scope">
                 <!--<el-button v-permission="['ADMIN','ROLES_ALL','ROLES_EDIT']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>-->
                 <el-popover
