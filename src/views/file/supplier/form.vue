@@ -114,7 +114,6 @@
       },
       doSubmit() {
         this.$refs['form'].validate((valid) => {
-          console.log(valid)
           if (valid) {
             if (this.form.supplierContact) {
               const length1 = this.form.supplierContact.length

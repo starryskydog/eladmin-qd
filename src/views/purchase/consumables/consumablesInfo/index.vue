@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <eForm ref="form" :is-add="isAdd" :checkData="checkData"/>
+    <eForm ref="form" :is-add="isAdd" :checkData="checkData" :dataList="data"/>
     <!--工具栏-->
     <div class="head-container">
       <div v-permission="['ADMIN','ROLES_ALL','ROLES_CREATE']" style="display: inline-block;margin: 0px 2px;">
@@ -39,7 +39,11 @@
             <el-table-column prop="purchaseUserName" label="采购申请人"/>
             <el-table-column prop="createTimeStr" label="采购申请日期"/>
             <el-table-column prop="auditStatusName" label="审核状态" />
-            <el-table-column prop="auditTimeStr" label="审核时间" />
+            <el-table-column prop="auditTimeStr" label="审核时间">
+              <template slot-scope="scope">
+                {{parseTime(scope.row.auditTime)}}
+              </template>
+            </el-table-column>
             <el-table-column prop="auditUserName" label="审核人" />
           </el-table>
           <!--分页组件-->

@@ -2,7 +2,7 @@
   <el-dialog :visible.sync="dialog" title="审核耗材采购单" append-to-body width="600px" :show-close=false>
     <el-form ref="form" :model="form" size="large" label-width="100px">
       <el-form-item label="审核状态" prop="auditStatus">
-        <el-select v-model="form.auditStatus" placeholder="请选择">
+        <el-select v-model="form.auditStatus" placeholder="请选择" size="small">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -36,6 +36,9 @@
       },
       checkData:{
         type: Object,
+      },
+      dataList:{
+        type:Array,
       }
     },
     data() {
@@ -59,7 +62,16 @@
       }
     },
     created() {
-
+    },
+    watch: {
+      dialog(val) {
+        if(val){
+          let _this=this;
+          let msg=_this.dataList.filter((item)=>{return item.id==_this.checkData.id})[0]
+          _this.form.auditOpinion=msg.auditOpinion
+          _this.form.auditStatus=msg.auditStatus
+        }
+      }
     },
     methods: {
       cancel() {
@@ -73,11 +85,11 @@
               type: 'success',
               duration: 2500
             })
+            this.loading = false
+            this.resetForm()
+            this.dialog = false
+            this.$parent.init()
           })
-        this.loading = false
-        this.resetForm()
-        this.dialog = false
-        this.$parent.init()
       },
       resetForm() {
         this.form = {

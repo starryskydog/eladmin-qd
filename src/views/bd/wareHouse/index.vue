@@ -93,7 +93,6 @@
       add() {
         this.isAdd = true
         initWareHouseCode().then(res => {
-            console.log(res)
             const _this = this.$refs.form
             _this.form = { wareHouseCode: res }
           }

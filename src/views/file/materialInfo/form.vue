@@ -129,7 +129,6 @@ export default {
     // 触发子组件城市选择-选择城市的事件
     updateMaterialInventoryWarning(data) {
       // 改变了父组件的值
-      console.log('-------' + data)
       this.form.materialInventoryWarning = data
     },
     initCode() {
@@ -157,7 +156,6 @@ export default {
     },
     doSubmit() {
       this.$refs['form'].validate((valid) => {
-        console.log(valid)
         if (valid) {
           if (this.isAdd) {
             add(this.form).then(res => {
@@ -184,7 +182,6 @@ export default {
             })
           }
         } else {
-          console.log('false')
           return false
         }
       })
@@ -203,6 +200,10 @@ export default {
             type: 'success',
             duration: 2500
           })
+          this.loading = false
+          this.resetForm()
+          this.dialog = false
+          this.$parent.init()
         })
       } else {
         edit(this.form).then(res => {
@@ -211,12 +212,12 @@ export default {
             type: 'success',
             duration: 2500
           })
+          this.loading = false
+          this.resetForm()
+          this.dialog = false
+          this.$parent.init()
         })
       }
-      this.loading = false
-      this.resetForm()
-      this.dialog = false
-      this.$parent.init()
     }
   }
 }

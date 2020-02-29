@@ -80,7 +80,6 @@ export default {
   methods: {
     checkPermission,
     handleData(data){
-      console.log(data)
       this.form.consumablesPurchaseOrderProductList=data
     },
     add() {

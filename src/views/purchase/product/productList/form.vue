@@ -67,11 +67,6 @@ export default {
     this.queryProduct()
     this.queryProductSeries()
   },
-  watch:{
-    checkedList:function (val) {
-      console.log(this.dataList,val)
-    }
-  },
   methods: {
     queryProductSeries() {
       queryProductSeriesList().then(res=>{
