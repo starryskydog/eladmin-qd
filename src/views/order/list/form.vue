@@ -2,6 +2,11 @@
   <el-dialog :visible.sync="dialog" :title="dataType==='custom' ? '选择客户名称' : '选择产品'" append-to-body width="800px"
              :show-close=false>
     <el-form ref="form" :inline="true" :model="form" size="small" label-width="100px">
+      <el-input v-model="params.productCode " clearable placeholder="输入产品编号搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="queryProduct" size="small"/>
+      <el-select v-model="params.productSeriesId" clearable placeholder="产品系列" class="filter-item" style="width: 130px" size="small">
+        <el-option v-for="item in queryTypeOptions" :key="item.id" :label="item.productSeriesName" :value="item.id"/>
+      </el-select>
+      <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="queryProduct">搜索</el-button>
       <el-table v-loading="loading" :data="data" size="small" style="width: 100%;"
                 :header-cell-style="{'text-align':'center'}" border>
         <el-table-column type="index" width="50" align="center" label="编号">
@@ -31,6 +36,7 @@
 <script>
   import {queryCustomerInfoPage} from '@/api/customerInfo'
   import { queryProductInfoPage } from '@/api/productInfo'
+  import {queryProductSeriesList} from '@/api/productSeries'
 
   export default {
     components: {},
@@ -41,6 +47,13 @@
     },
     data() {
       return {
+        params:{
+          page: 0,
+          size: 10,
+          productCode:'',
+          productSeriesId:''
+        },
+        queryTypeOptions:[],
         dialog: false,
         page: 0, size: 10,
         loading: false,
@@ -69,6 +82,8 @@
       }
     },
     created() {
+      this.queryProduct()
+      this.queryProductSeries()
     },
     watch: {
       dataType: function (val) {
@@ -77,6 +92,19 @@
       },
     },
     methods: {
+      queryProductSeries() {
+        queryProductSeriesList().then(res=>{
+          this.queryTypeOptions=res.content
+        })
+      },
+      queryProduct() {
+        console.log("22222")
+        console.log("11111111" +JSON.stringify(this.params))
+        queryProductInfoPage(this.params).then(res=>{
+          this.data = res.content
+          this.total = res.totalElements
+        })
+      },
       getData(){
         const params={
           page:this.page, size:this.size
