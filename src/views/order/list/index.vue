@@ -250,7 +250,6 @@
         this.$refs.eform.dataType = 'custom'
       },
       updateContact(data) {
-        console.log(data)
         this.form.customerOrderProductList = data
       },
       handleFocus() {

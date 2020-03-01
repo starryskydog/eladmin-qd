@@ -88,7 +88,6 @@ export default {
     queryWareHouseList() {
       queryWareHouseList().then(res => {
         this.wareHouseList = res
-        console.log(this.wareHouseList)
       })
     }
   }

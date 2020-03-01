@@ -99,7 +99,6 @@ export default {
       })
     },
     print(){
-      console.log('print')
     },
     getSummaries(param) {
       const {columns, data} = param

@@ -149,7 +149,6 @@ export default {
     checkPermission,
     add() {
       this.$refs['form'].validate((valid) => {
-        console.log(valid)
         if (valid) {
           if(this.type==='edit'){
             delete this.form.createTime

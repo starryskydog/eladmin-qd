@@ -134,21 +134,18 @@ export default {
     // 查询产品类别列表
     queryProductCategoryList() {
       queryProductCategoryList().then(res => {
-        console.log(res)
         this.productCategoryList = res
       })
     },
     // 查询产品系列列表
     queryProductSeriesList() {
       queryProductSeriesList().then(res => {
-        console.log(res.content)
         this.productSeriesList = res.content
       })
     },
     // 触发子组件城市选择-选择城市的事件
     updateProductInventoryWarning(data) {
       // 改变了父组件的值
-      console.log('-------' + data)
       this.form.productInventoryWarning = data
     },
     initCode() {
@@ -206,7 +203,6 @@ export default {
             })
           } else {
             edit(this.form).then(res => {
-              console.log(this.form)
               this.$notify({
                 title: '修改成功',
                 type: 'success',

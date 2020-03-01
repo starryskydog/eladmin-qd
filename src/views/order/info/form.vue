@@ -130,7 +130,12 @@
               type: 'success',
               duration: 2500
             })
+            this.loading = false
+            this.resetForm()
+            this.dialog = false
+            this.$parent.init()
           })
+
         }else{
           edit(this.form).then(res=>{
             this.$notify({
@@ -138,12 +143,14 @@
               type: 'success',
               duration: 2500
             })
+            this.loading = false
+            this.resetForm()
+            this.dialog = false
+            this.$parent.init()
           })
+
         }
-        this.loading = false
-        this.resetForm()
-        this.dialog = false
-        this.$parent.init()
+
       },
       initCode() {
         initCode().then(res => {

@@ -101,7 +101,6 @@ export default {
     },
     queryProductSeries() {
       queryProductSeriesList().then(res => {
-        console.log(res)
         this.productSeriesList = res.content
       })
     },

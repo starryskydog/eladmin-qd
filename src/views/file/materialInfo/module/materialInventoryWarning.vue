@@ -64,7 +64,9 @@ export default {
       var list = this.wareHouseList.filter(item => {
         return item.wareHouseCode === val
       })
-      this.materialInventoryWarningList[i].wareHouseName = list[0].name
+      if(list.length>0){
+        this.materialInventoryWarningList[i].wareHouseName = list[0].name
+      }
       this.$emit('setMaterialInventoryWarning', this.material_inventory_warning.data)
     },
     addMaterialInventoryWarning() {
@@ -87,7 +89,6 @@ export default {
     queryWareHouseList() {
       queryWareHouseList().then(res => {
         this.wareHouseList = res
-        console.log(this.wareHouseList)
       })
     }
   }
