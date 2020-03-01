@@ -77,7 +77,7 @@ import RaddarChart from './dashboard/RaddarChart'
 import PieChart from './dashboard/PieChart'
 import BarChart from './dashboard/BarChart'
 import { count } from '@/api/visits'
-import { queryMessageList,deleteMessage } from '@/api/message'
+import { queryMessageList,deleteMessage, findById } from '@/api/message'
 import store from '@/store'
 import { parseTime } from '@/utils/index'
 
@@ -102,8 +102,9 @@ export default {
   methods: {
     parseTime,
     handdle(row) {
-      deleteMessage(row.id).then(function (res) {
-        if(res.status==200){
+      findById(row.id).then(function (res) {
+        console.log(JSON.stringify(res));
+        if(res.completeStatus == 1){
           location.href=row.modulePath
         }
       })

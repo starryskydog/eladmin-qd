@@ -15,3 +15,10 @@ export function deleteMessage(id) {
     method: 'delete'
   })
 }
+
+export function findById(id) {
+  return request({
+    url: `api/message/${id}`,
+    method: 'get'
+  })
+}
