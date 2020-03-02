@@ -2,11 +2,14 @@
   <el-dialog :visible.sync="dialog" :title="dataType==='custom' ? '选择客户名称' : '选择产品'" append-to-body width="800px"
              :show-close=false>
     <el-form ref="form" :inline="true" :model="form" size="small" label-width="100px">
-      <el-input v-model="params.productCode " clearable placeholder="输入产品编号搜索" style="width: 200px;" class="filter-item" size="small"/>
-      <el-select v-model="params.productSeriesId" clearable placeholder="产品系列" class="filter-item" style="width: 130px" size="small">
-        <el-option v-for="item in queryTypeOptions" :key="item.id" :label="item.productSeriesName" :value="item.id"/>
-      </el-select>
-      <el-button class="filter-item" size="small" type="success" icon="el-icon-search"  @click="queryProduct">搜索</el-button>
+      <div v-show = "showGroup">
+        <el-input v-model="params.productCode " clearable placeholder="输入产品编号搜索" style="width: 200px;" class="filter-item" size="small"/>
+        <el-select v-model="params.productSeriesId" clearable placeholder="产品系列" class="filter-item" style="width: 130px" size="small">
+          <el-option v-for="item in queryTypeOptions" :key="item.id" :label="item.productSeriesName" :value="item.id"/>
+        </el-select>
+        <el-button class="filter-item" size="small" type="success" icon="el-icon-search"  @click="queryProduct">搜索</el-button>
+      </div>
+
       <el-table v-loading="loading" :data="data" size="small" style="width: 100%;margin-top: 20px;"
                 :header-cell-style="{'text-align':'center'}" border>
         <el-table-column type="index" width="50" align="center" label="编号">
@@ -47,6 +50,7 @@
     },
     data() {
       return {
+        showGroup: false,
         params:{
           page: 0,
           size: 10,
@@ -103,8 +107,10 @@
         }
         if(this.dataType==='custom'){
           this.queryCustom(params)
+          this.showGroup = false
         }else{
           this.queryProduct(params)
+          this.showGroup = true
         }
       },
       queryCustom(params) {
