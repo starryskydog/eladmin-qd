@@ -2,12 +2,12 @@
   <el-dialog :visible.sync="dialog" :title="dataType==='custom' ? '选择客户名称' : '选择产品'" append-to-body width="800px"
              :show-close=false>
     <el-form ref="form" :inline="true" :model="form" size="small" label-width="100px">
-      <el-input v-model="params.productCode " clearable placeholder="输入产品编号搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="queryProduct" size="small"/>
+      <el-input v-model="params.productCode " clearable placeholder="输入产品编号搜索" style="width: 200px;" class="filter-item" size="small"/>
       <el-select v-model="params.productSeriesId" clearable placeholder="产品系列" class="filter-item" style="width: 130px" size="small">
         <el-option v-for="item in queryTypeOptions" :key="item.id" :label="item.productSeriesName" :value="item.id"/>
       </el-select>
-      <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="queryProduct">搜索</el-button>
-      <el-table v-loading="loading" :data="data" size="small" style="width: 100%;"
+      <el-button class="filter-item" size="small" type="success" icon="el-icon-search"  @click="queryProduct">搜索</el-button>
+      <el-table v-loading="loading" :data="data" size="small" style="width: 100%;margin-top: 20px;"
                 :header-cell-style="{'text-align':'center'}" border>
         <el-table-column type="index" width="50" align="center" label="编号">
         </el-table-column>
@@ -82,7 +82,7 @@
       }
     },
     created() {
-      this.queryProduct()
+      // this.queryProduct()
       this.queryProductSeries()
     },
     watch: {
@@ -95,14 +95,6 @@
       queryProductSeries() {
         queryProductSeriesList().then(res=>{
           this.queryTypeOptions=res.content
-        })
-      },
-      queryProduct() {
-        console.log("22222")
-        console.log("11111111" +JSON.stringify(this.params))
-        queryProductInfoPage(this.params).then(res=>{
-          this.data = res.content
-          this.total = res.totalElements
         })
       },
       getData(){
@@ -131,8 +123,8 @@
         this.size = e
         this.getData()
       },
-      queryProduct(params) {
-        queryProductInfoPage(params).then(res => {
+      queryProduct() {
+        queryProductInfoPage(this.params).then(res => {
           this.data = res.content
           this.total = res.totalElements
           this.loading = false

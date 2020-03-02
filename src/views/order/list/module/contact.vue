@@ -14,7 +14,7 @@
                               </span>
                                 <el-input v-else size="mini" placeholder="请输入内容"
                                           v-model="dataList[scope.$index][v.field]"
-                                          @change="((val)=>{setContact(val,scope.$index,v.field)})"
+                                          @input="((val)=>{setContact(val,scope.$index,v.field)})"
                                           :disabled="v.disabled" @focus="handleFocus(v.field)">
                                   <span class="el-tag  el-tag--mini" v-if="v.field==='productCode'&&showBtn"
                                         slot="suffix" style="cursor: pointer;margin-top: 4px"

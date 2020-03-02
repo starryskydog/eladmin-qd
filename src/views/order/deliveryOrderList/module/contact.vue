@@ -4,7 +4,7 @@
       <eForm ref="eform" :formType="type" @setContact="handleSet"/>
         <el-table size="mini" :data="master_user.data" border style="width: 100%" highlight-current-row
                   :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" show-summary
-                  :summary-method="getSummaries">
+                  :summary-method="getSummaries" :row-class-name="tableRowClassName">
           <el-table-column v-for="(v,i) in master_user.columns" :key="v.field" :prop="v.field" :label="v.title"
                            :width="v.width">
             <template slot-scope="scope">
@@ -40,7 +40,12 @@
     </el-col>
   </el-row>
 </template>
+<style>
+  .el-table .warning-row {
+    background: oldlace;
+  }
 
+</style>
 <script>
   import eForm from '../form'
   export default {
@@ -144,11 +149,15 @@
           }
         })
         return sums
+      },
+      tableRowClassName({row, rowIndex}) {
+        if (row.productNumber != row.actualInvoiceNumber) {
+          return 'warning-row';
+        }
+        return '';
       }
     }
   }
 </script>
 
-<style scoped>
 
-</style>
