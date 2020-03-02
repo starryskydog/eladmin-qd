@@ -118,7 +118,7 @@ export default {
                 duration: 2500
               })
               setTimeout(() => {
-                this.$router.replace({ path: '/outSourceProcess/outSourceInspectionCertificate' })
+                this.$router.replace({ path: '/outSource/outSourceInspectionCertificate' })
               }, 2500);
             })
           }else{
@@ -129,7 +129,7 @@ export default {
                 duration: 2500
               })
               setTimeout(() => {
-                this.$router.replace({ path: '/outSourceProcess/outSourceInspectionCertificate' })
+                this.$router.replace({ path: '/outSource/outSourceInspectionCertificate' })
               }, 2500);
             })
           }
