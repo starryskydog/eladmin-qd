@@ -83,7 +83,7 @@
     methods: {
       setContact(val, index, field) {
         if (field === 'unitPrice' || 'productNumber') {
-          this.$set(this.master_user.data[index],'salePrice',this.master_user.data[index].unitPrice * this.master_user.data[index].productNumber)
+          this.$set(this.master_user.data[index],'salePrice',this.master_user.data[index].unitPrice * this.master_user.data[index].actualInvoiceNumber)
         }
       },
       handleSet(data){
