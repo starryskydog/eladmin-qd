@@ -9,18 +9,19 @@
                            :width="v.width">
             <template slot-scope="scope">
                             <span>
-                              <span v-if="v.field==='allMoney'">
-                                {{dataList[scope.$index].allMoney}}
+                              <span v-if="v.field==='totalPrice'">
+                                {{dataList[scope.$index].totalPrice}}
                               </span>
                                 <el-input v-else size="mini" placeholder="请输入内容"
                                           v-model="dataList[scope.$index][v.field]"
-                                          @change="((val)=>{setContact(val,scope.$index,v.field)})"
+                                          @input="((val)=>{setContact(val,scope.$index,v.field)})"
+                                          class="diff_class"
                                           :disabled="v.disabled" @focus="handleFocus(v.field)">
                                   <span class="el-tag  el-tag--mini" v-if="v.field==='productCode'&&showBtn"
                                         slot="suffix" style="cursor: pointer;margin-top: 4px"
                                         @click="addCode(scope.$index)">
-                                选择
-                            </span>
+                                      选择
+                                  </span>
                                 </el-input>
                             </span>
             </template>
@@ -82,9 +83,8 @@
     methods: {
       setContact(val, index, field) {
         if (field === 'unitPrice' || 'productNumber') {
-          this.master_user.data[index].allMoney = this.master_user.data[index].unitPrice * this.master_user.data[index].productNumber
+          this.$set(this.master_user.data[index],'salePrice',this.master_user.data[index].unitPrice * this.master_user.data[index].productNumber)
         }
-        this.$emit('setContacts', this.master_user.data)
       },
       handleSet(data){
         this.master_user.data[this.index].productCode=data.productCode
@@ -107,7 +107,8 @@
           specifications: "",
           unitPrice: "",
           productNumber: "",
-          allMoney: "",
+          totalPrice: "",
+          actualInvoiceNumber:'',
           remark: "",
         };
         this.master_user.data.push(j);
@@ -130,7 +131,7 @@
         columns.forEach((column, index) => {
           if (index === 0) {
             sums[index] = '总计'
-          } else if (index === 4 || index === 5 || index === 6 || index === 7) {
+          } else if (index === 5 || index === 6 || index === 7) {
             const values = data.map(item => Number(item[column.property]))
             if (!values.every(value => isNaN(value))) {
               sums[index] = values.reduce((prev, curr) => {

@@ -103,7 +103,8 @@ export default {
             specifications: '',
             unitPrice: '',
             productNumber: '',
-            allMoney: '',
+            actualInvoiceNumber:'',
+            totalPrice: '',
             remark: ''
           }
         ]
@@ -150,6 +151,14 @@ export default {
     add() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
+          let list=this.form.invoiceProductList
+          list=list.filter((item)=>{
+            return item.productCode!=''
+          })
+          list.forEach(function (item) {
+            item.customerOrderNumber=item.productNumber
+          })
+          this.form.invoiceProductList=list
           if(this.type==='edit'){
             delete this.form.createTime
             delete this.form.updateTime
@@ -186,7 +195,14 @@ export default {
     getInvoiceInfo(id) {
       getInvoiceInfo(id).then(res => {
         this.form = res
-        this.form.invoiceProductList=res.invoiceProductDTOList
+        let list=res.invoiceProductDTOList
+        if(list.length>0){
+          list.forEach((item)=>{
+              item.productNumber=item.customerOrderNumber
+          })
+        }
+
+        this.form.invoiceProductList=list
       })
     },
     handleRadio(radio) {
