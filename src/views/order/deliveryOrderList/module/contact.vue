@@ -2,7 +2,7 @@
   <el-row>
     <el-col>
       <eForm ref="eform" :formType="type" @setContact="handleSet"/>
-        <el-table size="mini" :data="master_user.data" border style="width: 100%" highlight-current-row
+        <el-table size="mini" :data="master_user.data" border style="width: 100%"
                   :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}" show-summary
                   :summary-method="getSummaries" :row-class-name="tableRowClassName">
           <el-table-column v-for="(v,i) in master_user.columns" :key="v.field" :prop="v.field" :label="v.title"
@@ -42,9 +42,16 @@
   </el-row>
 </template>
 <style>
+  .el-table--enable-row-hover .el-table__body tr:hover>td{
+    background-color: transparent !important;
+  }
+  .hover-row>td{
+    background-color: transparent !important;
+  }
   .el-table .warning-row {
     background: oldlace;
   }
+
 
 </style>
 <script>
