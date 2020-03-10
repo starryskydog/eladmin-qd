@@ -9,10 +9,11 @@ export function initCustomerOrderCode() {
 }
 
 // 分页查询客户订单列表
-export function queryCustomerOrderPage() {
+export function queryCustomerOrderPage(params) {
   return request({
     url: 'api/queryCustomerOrderPage',
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 

@@ -12,7 +12,10 @@
           @click="add">新增</el-button>
       </div>
     </div>
-    <el-row :gutter="5">
+    <el-input v-model="query.customerOrderCode" clearable placeholder="输入订单编号搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" size="mini"/>
+    <el-input v-model="query.customerName" clearable placeholder="输入客户名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" size="mini"/>
+    <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
+    <el-row :gutter="5" style="margin-top: 20px;">
       <!--发货单管理-->
       <el-col >
         <el-card class="box-card" shadow="never">
@@ -67,7 +70,8 @@
       return {
         isAdd:false,
         delLoading: false,
-        id:''
+        id:'',
+        query:{}
       }
     },
     created() {
@@ -80,10 +84,7 @@
       beforeInit() {
         this.showButton = false
         this.url = 'api/queryInvoicePage'
-        const query = this.query
-        const value = query.value
-        this.params = { page: this.page, size: this.size }
-        if (value) { this.params['name'] = value }
+        this.params = Object.assign({ page: this.page, size: this.size },this.query)
         return true
       },
       add() {
