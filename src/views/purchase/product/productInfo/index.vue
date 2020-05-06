@@ -12,6 +12,8 @@
           @click="add">新增</el-button>
       </div>
     </div>
+    <el-input v-model="query.productPurchaseOrderCode" clearable placeholder="输入单据编号搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" size="mini"/>
+    <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
     <el-row :gutter="5">
       <!--耗材管理-->
       <el-col >
@@ -94,7 +96,7 @@
         this.url = 'api/queryProductPurchaseOrderPageList'
         const query = this.query
         const value = query.value
-        this.params = { page: this.page, size: this.size }
+        this.params = Object.assign({ page: this.page, size: this.size },this.query)
         if (value) { this.params['name'] = value }
         return true
       },

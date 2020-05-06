@@ -12,8 +12,12 @@
           @click="add">新增</el-button>
       </div>
     </div>
+    <el-input v-model="query.outSourceProcessSheetCode" clearable placeholder="输入单据编号搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" size="mini"/>
+    <el-input v-model="query.outSourceCompanyName" clearable placeholder="输入委外公司搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" size="mini"/>
+    <el-input v-model="query.outSourceAdminName" clearable placeholder="输入委外公司负责人搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" size="mini"/>
+    <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
     <el-row :gutter="5">
-      <!--发货单管理-->
+      <!--委外加工管理-->
       <el-col >
         <el-card class="box-card" shadow="never">
           <el-table v-loading="loading" :data="data" border highlight-current-row size="small" style="width: 100%;" @current-change="handleCurrentChange" :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'center'}">
@@ -86,7 +90,7 @@
         this.url = 'api/queryOutSourceProcessSheetPage'
         const query = this.query
         const value = query.value
-        this.params = { page: this.page, size: this.size }
+        this.params = Object.assign({ page: this.page, size: this.size },this.query)
         if (value) { this.params['name'] = value }
         return true
       },

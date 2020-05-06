@@ -94,7 +94,7 @@
         this.url = 'api/queryQualityCheckSheetPage'
         const query = this.query
         const value = query.value
-        this.params = { page: this.page, size: this.size }
+        this.params = Object.assign({ page: this.page, size: this.size },this.query)
         if (value) { this.params['name'] = value }
         return true
       },
