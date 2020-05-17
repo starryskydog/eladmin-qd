@@ -13,9 +13,7 @@
           @click="add">新增</el-button>
       </div>
     </div>
-    <el-input v-model="query.customerOrderCode" clearable placeholder="输入订单编号搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" size="mini"/>
-    <el-input v-model="query.customerName" clearable placeholder="输入客户名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" size="mini"/>
-    <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
+    <search :query="queryList" @handleChange="handleChange" @handleSearch="toQuery"></search>
     <el-row :gutter="5" style="margin-top: 20px;">
       <!--订单管理-->
       <el-col >
@@ -60,18 +58,29 @@
 
 <script>
   import checkPermission from '@/utils/permission'
+  import search from '@/components/Search'
   import { del, getCustomerOrderInfo } from '@/api/customerOrder'
   import initData from '@/mixins/initData'
   import eForm from './form'
   export default {
     mixins: [initData],
-    components: { eForm },
+    components: { eForm,search },
     data() {
       return {
         isAdd:false,
         delLoading: false,
         id:'',
-        query:{}
+        query:{},
+        queryList:[
+          {
+            name:'customerOrderCode',
+            placeholder:'输入订单编号搜索'
+          },
+          {
+            name:'customerName',
+            placeholder:'输入客户名称搜索'
+          }
+        ]
       }
     },
     created() {
@@ -86,6 +95,9 @@
         this.url = 'api/queryCustomerOrderPage'
         this.params = Object.assign({ page: this.page, size: this.size },this.query)
         return true
+      },
+      handleChange(params){
+        this.query=params
       },
       add() {
         this.$router.push({ path: '/orders/list' })

@@ -6,8 +6,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/zh-CN' // lang i18n
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
-
 import '@/styles/index.scss' // global css
+import VueVirtualScroller from "vue-virtual-scroller";
+Vue.use(VueVirtualScroller);
 
 import App from './App'
 import router from './router/routers'
