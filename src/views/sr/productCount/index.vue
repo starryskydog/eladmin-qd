@@ -12,7 +12,7 @@
       <p class="form-sub-title" style="text-align: center;">产品统计</p>
       <div style="margin:20px 0">
         <el-input
-          v-model="query.customerOrderCode"
+          v-model="query.productName"
           clearable
           placeholder="输入产品名称搜索"
           style="width: 200px;"
@@ -21,7 +21,7 @@
           size="mini"
         />
         <el-input
-          v-model="query.customerName"
+          v-model="query.productCategoryName"
           clearable
           placeholder="输入产品类别搜索"
           style="width: 200px;"
@@ -30,7 +30,7 @@
           size="mini"
         />
         <el-input
-          v-model="query.customerName"
+          v-model="query.productSeriesName"
           clearable
           placeholder="输入产品系列搜索"
           style="width: 200px;"
