@@ -38,6 +38,7 @@
             </el-table-column>
             <el-table-column prop="createTimeStr" label="订单日期"/>
             <el-table-column prop="customerOrderCode" label="订单编号"/>
+            <el-table-column prop="procStatusName" label="订单状态"/>
             <el-table-column prop="customerName" label="客户名称"/>
             <el-table-column prop="payWayName" label="付款方式"/>
             <el-table-column prop="totalMoney" label="销售金额"/>
