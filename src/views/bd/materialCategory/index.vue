@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!--表单组件-->
-    <eForm ref="test" :is-add="isAdd" />
+    <eForm ref="form" :is-add="isAdd" />
     <!--工具栏-->
     <div class="head-container">
       <!-- 搜索 -->
@@ -23,13 +23,6 @@
       </div>
     </div>
     <el-row :gutter="5">
-      <div class="viw" ref="view">
-        <div class="scroll-view" ref="viewContainer">
-          <el-tree :data="data3" show-checkbox node-key="id"></el-tree>
-        </div>
-      </div>
-    </el-row>
-    <el-row :gutter="5">
       <!--物料类别管理-->
       <el-col :xs="8" :sm="8" :md="4" :lg="8" :xl="7">
         <el-card class="box-card" shadow="never">
@@ -45,7 +38,7 @@
             :cell-style="{'text-align':'center'}"
           >
             <el-table-column
-              v-if="checkPermission(['ADMIN','MATERIAL_INFO_ALL','MATERIAL_INFO_DELETE'])"
+              v-if="checkPermission(['ADMIN','MATERIAL_INFO_ALL','MATERIAL_CATEGORY_DELETE'])"
               label="操作"
               width="130px"
               align="center"
@@ -121,7 +114,7 @@ export default {
       this.AllData.push(obj);
     }
     this.data3=this.AllData.slice(0,this.count)
-    this.$refs.view.addEventListener("scroll", this.handleScroll);
+    // this.$refs.view.addEventListener("scroll", this.handleScroll);
   },
   methods: {
     checkPermission,
